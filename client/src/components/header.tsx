@@ -21,11 +21,19 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <img 
-              src={logoImage} 
-              alt="No Shedding Logo" 
-              className="h-12 w-12 object-contain"
-            />
+            <div 
+              className="h-12 w-12 bg-navy rounded-lg flex items-center justify-center"
+              style={{ backgroundColor: '#0A2342' }}
+            >
+              <img 
+                src={logoImage} 
+                alt="No Shedding Logo" 
+                className="h-10 w-10 object-contain"
+                style={{ 
+                  filter: 'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(0deg) brightness(100%) contrast(100%)'
+                }}
+              />
+            </div>
             <span className="text-white text-xl font-bold">No Shedding</span>
           </div>
           
