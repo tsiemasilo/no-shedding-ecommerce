@@ -31,16 +31,12 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div 
-                className="h-10 w-10 bg-charcoal rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: '#333333' }}
+                className="h-10 w-10 bg-white rounded-lg flex items-center justify-center p-1"
               >
                 <img 
                   src={logoImage} 
                   alt="No Shedding Logo" 
-                  className="h-8 w-8 object-contain"
-                  style={{ 
-                    filter: 'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(0deg) brightness(100%) contrast(100%)'
-                  }}
+                  className="h-full w-full object-contain"
                 />
               </div>
               <span className="text-xl font-bold">No Shedding</span>
