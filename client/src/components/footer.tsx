@@ -1,4 +1,5 @@
-import { Bolt, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Facebook, Twitter, Instagram } from 'lucide-react';
+import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.41.41_1751136259841.jpeg';
 
 export function Footer() {
   const categories = [
@@ -29,7 +30,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Bolt className="text-electric text-2xl" />
+              <img 
+                src={logoImage} 
+                alt="No Shedding Logo" 
+                className="h-6 w-6 object-contain"
+              />
               <span className="text-xl font-bold">No Shedding</span>
             </div>
             <p className="text-gray-400 mb-4">Premium electrical solutions for modern living</p>

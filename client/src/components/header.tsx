@@ -1,8 +1,9 @@
-import { Search, User, ShoppingCart, Bolt } from 'lucide-react';
+import { Search, User, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.41.41_1751136259841.jpeg';
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +21,11 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Bolt className="text-electric text-2xl" />
+            <img 
+              src={logoImage} 
+              alt="No Shedding Logo" 
+              className="h-8 w-8 object-contain"
+            />
             <span className="text-white text-xl font-bold">No Shedding</span>
           </div>
           
