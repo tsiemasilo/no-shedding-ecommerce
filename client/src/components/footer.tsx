@@ -1,5 +1,5 @@
 import { Facebook, Twitter, Instagram } from 'lucide-react';
-import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.41.41_1751136259841.jpeg';
+import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Footer() {
   const categories = [
@@ -33,8 +33,11 @@ export function Footer() {
               <img 
                 src={logoImage} 
                 alt="No Shedding Logo" 
-                className="h-6 w-6 object-contain bg-charcoal rounded-full p-1"
-                style={{ backgroundColor: '#333333' }}
+                className="h-10 w-10 object-contain"
+                style={{ 
+                  filter: 'brightness(0) invert(1)',
+                  mixBlendMode: 'screen'
+                }}
               />
               <span className="text-xl font-bold">No Shedding</span>
             </div>

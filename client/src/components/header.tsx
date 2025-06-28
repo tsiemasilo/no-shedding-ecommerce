@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.41.41_1751136259841.jpeg';
+import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,8 +24,11 @@ export function Header() {
             <img 
               src={logoImage} 
               alt="No Shedding Logo" 
-              className="h-8 w-8 object-contain bg-navy rounded-full p-1"
-              style={{ backgroundColor: '#0A2342' }}
+              className="h-12 w-12 object-contain"
+              style={{ 
+                filter: 'brightness(0) invert(1)',
+                mixBlendMode: 'screen'
+              }}
             />
             <span className="text-white text-xl font-bold">No Shedding</span>
           </div>
