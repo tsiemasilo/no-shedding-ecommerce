@@ -24,7 +24,8 @@ export function Header() {
             <img 
               src={logoImage} 
               alt="No Shedding Logo" 
-              className="h-8 w-8 object-contain"
+              className="h-8 w-8 object-contain bg-navy rounded-full p-1"
+              style={{ backgroundColor: '#0A2342' }}
             />
             <span className="text-white text-xl font-bold">No Shedding</span>
           </div>

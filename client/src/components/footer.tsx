@@ -33,7 +33,8 @@ export function Footer() {
               <img 
                 src={logoImage} 
                 alt="No Shedding Logo" 
-                className="h-6 w-6 object-contain"
+                className="h-6 w-6 object-contain bg-charcoal rounded-full p-1"
+                style={{ backgroundColor: '#333333' }}
               />
               <span className="text-xl font-bold">No Shedding</span>
             </div>
