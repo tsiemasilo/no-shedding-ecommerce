@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(46, 87%, 97%);
+  --foreground: hsl(0, 0%, 20%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* No Shedding Brand Colors */
+  --navy: hsl(215, 91%, 15%);
+  --electric: hsl(48, 100%, 50%);
+  --sand: hsl(46, 87%, 97%);
+  --charcoal: hsl(0, 0%, 20%);
+  --bright-orange: hsl(25, 100%, 50%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-sand text-charcoal;
+    background-color: hsl(var(--sand));
+    color: hsl(var(--charcoal));
+  }
+}
+
+@layer utilities {
+  .text-navy {
+    color: hsl(var(--navy));
+  }
+  
+  .bg-navy {
+    background-color: hsl(var(--navy));
+  }
+  
+  .text-electric {
+    color: hsl(var(--electric));
+  }
+  
+  .bg-electric {
+    background-color: hsl(var(--electric));
+  }
+  
+  .text-sand {
+    color: hsl(var(--sand));
+  }
+  
+  .bg-sand {
+    background-color: hsl(var(--sand));
+  }
+  
+  .text-charcoal {
+    color: hsl(var(--charcoal));
+  }
+  
+  .bg-charcoal {
+    background-color: hsl(var(--charcoal));
+  }
+  
+  .text-bright-orange {
+    color: hsl(var(--bright-orange));
+  }
+  
+  .bg-bright-orange {
+    background-color: hsl(var(--bright-orange));
+  }
+  
+  .hover\:bg-bright-orange:hover {
+    background-color: hsl(var(--bright-orange));
+  }
+  
+  .border-navy {
+    border-color: hsl(var(--navy));
+  }
+  
+  .border-electric {
+    border-color: hsl(var(--electric));
+  }
+  
+  .hover\:border-electric:hover {
+    border-color: hsl(var(--electric));
+  }
+  
+  .hover\:text-electric:hover {
+    color: hsl(var(--electric));
+  }
+  
+  .focus\:ring-electric:focus {
+    --tw-ring-color: hsl(var(--electric));
+  }
+}
