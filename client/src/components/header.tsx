@@ -15,55 +15,50 @@ export function Header() {
   };
 
   return (
-    <header className="bg-navy shadow-2xl sticky top-0 z-50 border-b-4 border-electric">
+    <header className="bg-navy shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="bg-electric rounded-xl p-2">
-              <Bolt className="text-navy text-2xl" />
-            </div>
-            <div>
-              <span className="text-white text-2xl font-bold tracking-tight">No Shedding</span>
-              <div className="text-electric text-xs font-medium">ELECTRICAL SOLUTIONS</div>
-            </div>
+          <div className="flex items-center space-x-2">
+            <Bolt className="text-electric text-2xl" />
+            <span className="text-white text-xl font-bold">No Shedding</span>
           </div>
           
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8 hidden lg:block">
+          <div className="flex-1 max-w-2xl mx-8">
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
-                placeholder="Search for electrical solutions, tools, lighting..."
+                placeholder="Search for electrical solutions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 pl-12 pr-4 bg-white/95 backdrop-blur border-2 border-transparent focus:border-electric focus:ring-4 focus:ring-electric/20 rounded-xl text-lg shadow-lg"
+                className="w-full pl-10 pr-4 bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
               />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-charcoal w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-electric w-4 h-4" />
             </form>
           </div>
           
           {/* Navigation Links */}
-          <nav className="hidden xl:flex items-center space-x-8">
-            <a href="#" className="text-white hover:text-electric transition-colors font-medium text-lg">Categories</a>
-            <a href="#" className="text-white hover:text-electric transition-colors font-medium text-lg">About</a>
-            <a href="#" className="text-white hover:text-electric transition-colors font-medium text-lg">Support</a>
+          <nav className="hidden md:flex items-center space-x-6">
+            <a href="#" className="text-white hover:text-electric transition-colors">Categories</a>
+            <a href="#" className="text-white hover:text-electric transition-colors">About</a>
+            <a href="#" className="text-white hover:text-electric transition-colors">Support</a>
           </nav>
           
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-white hover:text-electric hover:bg-electric/10 w-12 h-12 rounded-xl">
-              <User className="w-6 h-6" />
+            <Button variant="ghost" size="icon" className="text-white hover:text-electric">
+              <User className="w-5 h-5" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="relative text-white hover:text-electric hover:bg-electric/10 w-12 h-12 rounded-xl"
+              className="relative text-white hover:text-electric"
               onClick={() => setIsOpen(true)}
             >
-              <ShoppingCart className="w-6 h-6" />
+              <ShoppingCart className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-bright-orange text-white text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-navy shadow-lg">
+                <span className="absolute -top-2 -right-2 bg-bright-orange text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {cartCount}
                 </span>
               )}

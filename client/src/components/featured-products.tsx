@@ -79,59 +79,41 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-sand/30">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-navy mb-6">Best Selling Products</h2>
-          <p className="text-charcoal text-lg max-w-2xl mx-auto">Professional-grade electrical solutions trusted by thousands of customers worldwide</p>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-navy mb-4">Featured Products</h2>
+          <p className="text-charcoal text-lg">Discover our most popular electrical solutions</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
             <div
               key={product.id}
-              className="group bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-gray-100 hover:border-electric hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300"
             >
-              <div className="relative overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute top-4 right-4">
-                  <span className="bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold">
-                    ⭐ {product.rating}
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-navy mb-3 text-lg group-hover:text-electric transition-colors duration-300">
-                  {product.name}
-                </h3>
-                <p className="text-charcoal text-sm mb-4 leading-relaxed line-clamp-2">
-                  {product.description}
-                </p>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-navy">${product.price}</span>
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-semibold text-navy mb-2">{product.name}</h3>
+                <p className="text-charcoal text-sm mb-3 line-clamp-2">{product.description}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xl font-bold text-navy">${product.price}</span>
                   {renderStars(product.rating)}
                 </div>
                 <Button
                   onClick={() => handleAddToCart(product)}
                   disabled={isAddingToCart || !product.inStock}
-                  className="w-full bg-bright-orange hover:bg-navy text-white font-bold py-3 rounded-xl transition-all duration-300 transform active:scale-95"
+                  className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
                 >
                   {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
                 </Button>
               </div>
             </div>
           ))}
-        </div>
-        
-        {/* Call to action */}
-        <div className="text-center mt-16">
-          <Button className="bg-navy hover:bg-electric hover:text-navy text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300">
-            View All Products
-          </Button>
         </div>
       </div>
     </section>
