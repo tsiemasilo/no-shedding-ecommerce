@@ -25,11 +25,11 @@
   --radius: 0.5rem;
   
   /* No Shedding Brand Colors */
-  --navy: hsl(215, 91%, 15%);
-  --electric: hsl(48, 100%, 50%);
-  --sand: hsl(46, 87%, 97%);
-  --charcoal: hsl(0, 0%, 20%);
-  --bright-orange: hsl(25, 100%, 50%);
+  --navy: #0A2342;
+  --electric: #FFC300;
+  --sand: #FDF6EC;
+  --charcoal: #333333;
+  --bright-orange: #FF6F00;
 }
 
 .dark {
@@ -62,73 +62,73 @@
 
   body {
     @apply font-sans antialiased bg-sand text-charcoal;
-    background-color: hsl(var(--sand));
-    color: hsl(var(--charcoal));
+    background-color: var(--sand);
+    color: var(--charcoal);
   }
 }
 
 @layer utilities {
   .text-navy {
-    color: hsl(var(--navy));
+    color: var(--navy);
   }
   
   .bg-navy {
-    background-color: hsl(var(--navy));
+    background-color: var(--navy);
   }
   
   .text-electric {
-    color: hsl(var(--electric));
+    color: var(--electric);
   }
   
   .bg-electric {
-    background-color: hsl(var(--electric));
+    background-color: var(--electric);
   }
   
   .text-sand {
-    color: hsl(var(--sand));
+    color: var(--sand);
   }
   
   .bg-sand {
-    background-color: hsl(var(--sand));
+    background-color: var(--sand);
   }
   
   .text-charcoal {
-    color: hsl(var(--charcoal));
+    color: var(--charcoal);
   }
   
   .bg-charcoal {
-    background-color: hsl(var(--charcoal));
+    background-color: var(--charcoal);
   }
   
   .text-bright-orange {
-    color: hsl(var(--bright-orange));
+    color: var(--bright-orange);
   }
   
   .bg-bright-orange {
-    background-color: hsl(var(--bright-orange));
+    background-color: var(--bright-orange);
   }
   
   .hover\:bg-bright-orange:hover {
-    background-color: hsl(var(--bright-orange));
+    background-color: var(--bright-orange);
   }
   
   .border-navy {
-    border-color: hsl(var(--navy));
+    border-color: var(--navy);
   }
   
   .border-electric {
-    border-color: hsl(var(--electric));
+    border-color: var(--electric);
   }
   
   .hover\:border-electric:hover {
-    border-color: hsl(var(--electric));
+    border-color: var(--electric);
   }
   
   .hover\:text-electric:hover {
-    color: hsl(var(--electric));
+    color: var(--electric);
   }
   
   .focus\:ring-electric:focus {
-    --tw-ring-color: hsl(var(--electric));
+    --tw-ring-color: var(--electric);
   }
 }
