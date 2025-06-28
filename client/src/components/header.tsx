@@ -25,10 +25,6 @@ export function Header() {
               src={logoImage} 
               alt="No Shedding Logo" 
               className="h-12 w-12 object-contain"
-              style={{ 
-                filter: 'brightness(0) invert(1)',
-                mixBlendMode: 'screen'
-              }}
             />
             <span className="text-white text-xl font-bold">No Shedding</span>
           </div>

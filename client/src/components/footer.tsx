@@ -34,10 +34,6 @@ export function Footer() {
                 src={logoImage} 
                 alt="No Shedding Logo" 
                 className="h-10 w-10 object-contain"
-                style={{ 
-                  filter: 'brightness(0) invert(1)',
-                  mixBlendMode: 'screen'
-                }}
               />
               <span className="text-xl font-bold">No Shedding</span>
             </div>
