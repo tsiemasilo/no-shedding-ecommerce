@@ -95,11 +95,18 @@ export function FeaturedProducts() {
               className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer transform hover:scale-105"
               onClick={() => setLocation(`/product/${product.id}`)}
             >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-64 object-cover"
-              />
+              <div className="relative">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-64 object-cover"
+                />
+                {!product.inStock && (
+                  <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                    OUT OF STOCK
+                  </div>
+                )}
+              </div>
               <div className="p-6">
                 <h3 className="font-semibold text-navy mb-3 text-lg">{product.name}</h3>
                 <p className="text-charcoal text-base mb-4 line-clamp-2">{product.description}</p>

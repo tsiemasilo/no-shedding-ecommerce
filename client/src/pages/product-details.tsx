@@ -138,11 +138,8 @@ export default function ProductDetails() {
                   </div>
                 )}
                 {!product.inStock && (
-                  <div className="absolute inset-8 bg-black/70 backdrop-blur-sm flex items-center justify-center rounded-xl">
-                    <div className="text-center">
-                      <span className="text-white font-bold text-3xl block">Out of Stock</span>
-                      <span className="text-gray-300 text-sm mt-2">Currently unavailable</span>
-                    </div>
+                  <div className="absolute top-12 right-12 bg-red-600 text-white px-4 py-2 rounded-tl-lg rounded-br-lg font-bold text-sm shadow-xl transform rotate-12 z-10">
+                    OUT OF STOCK
                   </div>
                 )}
               </div>

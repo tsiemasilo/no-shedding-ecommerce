@@ -150,8 +150,8 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                       </div>
                     )}
                     {!product.inStock && (
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <span className="text-white font-semibold">Out of Stock</span>
+                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                        OUT OF STOCK
                       </div>
                     )}
                   </div>
