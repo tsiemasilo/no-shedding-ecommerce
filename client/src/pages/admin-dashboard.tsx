@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { useLocation } from 'wouter';
 import { Loader2, Plus, Edit, Trash2, LogOut, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -281,13 +282,11 @@ function ProductDialog({ categories, product, onSubmit, isLoading }: ProductDial
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="image">Image URL</Label>
-          <Input
-            id="image"
-            type="url"
+          <Label htmlFor="image">Product Image</Label>
+          <ImageUpload
             value={formData.image}
-            onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
-            required
+            onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+            disabled={isLoading}
           />
         </div>
         
