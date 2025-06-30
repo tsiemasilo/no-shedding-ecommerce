@@ -99,6 +99,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- June 30, 2025: Enhanced subcategory functionality and Power Solutions expansion
+  - Fixed subcategory product browsing with proper navigation and empty states
+  - Added drag and drop image upload functionality for admin dashboard
+  - Expanded Power Solutions with two subcategories: Power Banks and UPS Devices
+  - Implemented appropriate icons (Smartphone for Power Banks, Shield for UPS Devices)
+  - Added comprehensive product listing views for all subcategories
+  - Enhanced empty state messaging: "No Products Yet - Products will be available soon"
+
 - June 28, 2025: Complete redesign with vibrant color palette
   - Applied exact brand colors: Navy Blue #0A2342, Electric Yellow #FFC300, Sand #FDF6EC, Charcoal #333333, Orange #FF6F00
   - Enhanced hero section with 5-column category layout and trust indicators

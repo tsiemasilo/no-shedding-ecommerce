@@ -114,8 +114,9 @@ export class MemStorage implements IStorage {
       this.categories.set(category.id, category);
     });
 
-    // Seed subcategories for Lighting Solutions
+    // Seed subcategories
     const subcategoriesData: InsertSubcategory[] = [
+      // Lighting Solutions subcategories
       {
         name: "Rechargeable LED Lanterns",
         description: "Portable LED lanterns with rechargeable batteries",
@@ -139,6 +140,19 @@ export class MemStorage implements IStorage {
         description: "Automatic LED lights with motion detection",
         categoryId: 1, // Lighting Solutions
         slug: "motion-sensor-lights"
+      },
+      // Power Solutions subcategories
+      {
+        name: "Power Banks",
+        description: "Portable battery packs for charging devices on-the-go",
+        categoryId: 2, // Power Solutions
+        slug: "power-banks"
+      },
+      {
+        name: "UPS Devices",
+        description: "Uninterruptible Power Supply systems for backup power protection",
+        categoryId: 2, // Power Solutions
+        slug: "ups-devices"
       }
     ];
 
