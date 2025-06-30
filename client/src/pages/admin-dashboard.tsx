@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Button } from '@/components/ui/button';
@@ -242,6 +242,34 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
   });
   
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('');
+
+  // Update form data when product changes (for editing)
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        categoryId: product.categoryId,
+        featured: product.featured,
+        rating: product.rating,
+        inStock: product.inStock,
+      });
+    } else {
+      // Reset form for new product
+      setFormData({
+        name: '',
+        description: '',
+        price: '0',
+        image: '',
+        categoryId: 1,
+        featured: false,
+        rating: '0',
+        inStock: true,
+      });
+    }
+  }, [product]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
