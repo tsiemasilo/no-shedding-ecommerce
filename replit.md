@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- June 30, 2025: Database migration and product catalog reset
+  - Removed all existing products from the system
+  - Migrated from in-memory storage to PostgreSQL database storage
+  - New products added through admin dashboard are now saved to database
+  - Maintained all categories and subcategories with proper structure
+  - Currency conversion completed to South African Rands (R) throughout the site
+
 - June 30, 2025: Enhanced subcategory functionality and Power Solutions expansion
   - Fixed subcategory product browsing with proper navigation and empty states
   - Added drag and drop image upload functionality for admin dashboard
