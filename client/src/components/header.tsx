@@ -70,7 +70,10 @@ export function Header() {
               variant="ghost"
               size="icon"
               className="relative text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                console.log('Cart button clicked, setting isOpen to true');
+                setIsOpen(true);
+              }}
             >
               <ShoppingCart className="w-8 h-8" />
               {cartCount > 0 && (

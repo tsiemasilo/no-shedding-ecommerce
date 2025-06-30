@@ -18,6 +18,8 @@ export function ShoppingCart() {
   
   const { toast } = useToast();
 
+  console.log('ShoppingCart component - isOpen:', isOpen, 'cartItems:', cartItems);
+
   const handleUpdateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeFromCart(id);
