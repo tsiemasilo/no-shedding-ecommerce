@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set website to 80% zoom level as standard */
+/* Set website to 80% zoom level as standard with increased font size */
 body {
   zoom: 0.8;
   transform-origin: 0 0;
+  font-size: 18px; /* Increased from default 16px */
+  line-height: 1.6;
 }
 
 :root {

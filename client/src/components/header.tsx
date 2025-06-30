@@ -19,12 +19,12 @@ export function Header() {
 
   return (
     <header className="bg-navy shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo - Far Left */}
+          <div className="flex items-center space-x-3 flex-shrink-0">
             <div 
-              className="h-12 w-12 bg-white rounded-lg flex items-center justify-center p-1"
+              className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"
             >
               <img 
                 src={logoImage} 
@@ -32,49 +32,49 @@ export function Header() {
                 className="h-full w-full object-contain"
               />
             </div>
-            <span className="text-white text-xl font-bold">No Shedding</span>
+            <span className="text-white text-2xl font-bold">No Shedding</span>
           </div>
           
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
+          <div className="flex-1 max-w-3xl mx-10">
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
                 placeholder="Search for electrical solutions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
+                className="w-full pl-12 pr-4 py-3 text-lg bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-electric w-4 h-4" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-electric w-5 h-5" />
             </form>
           </div>
           
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-white hover:text-electric transition-colors">Categories</a>
-            <a href="#" className="text-white hover:text-electric transition-colors">About</a>
-            <a href="#" className="text-white hover:text-electric transition-colors">Support</a>
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Categories</a>
+            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">About</a>
+            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</a>
           </nav>
           
           {/* User Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-5">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:text-electric"
+              className="text-white hover:text-electric p-3"
               onClick={() => setLocation('/admin/login')}
             >
-              <User className="w-5 h-5" />
+              <User className="w-6 h-6" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="relative text-white hover:text-electric"
+              className="relative text-white hover:text-electric p-3"
               onClick={() => setIsOpen(true)}
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="w-6 h-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-bright-orange text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-bright-orange text-white text-sm rounded-full w-6 h-6 flex items-center justify-center font-bold">
                   {cartCount}
                 </span>
               )}

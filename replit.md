@@ -99,8 +99,18 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- June 30, 2025: Set website to 80% zoom level as standard
+- June 30, 2025: Enhanced navbar and increased font sizes
+  - Increased navbar height from 16 to 20 (h-16 to h-20) for better prominence
+  - Enlarged logo from 12x12 to 16x16 and positioned on far left with flex-shrink-0
+  - Increased logo text from text-xl to text-2xl for better visibility
+  - Enhanced search bar with larger padding and text-lg font size
+  - Upgraded navigation links to text-lg with font-medium weight
+  - Enlarged user action icons from w-5 h-5 to w-6 h-6
+  - Increased cart count badge size and font weight for better visibility
+
+- June 30, 2025: Set website to 80% zoom level as standard with increased base font size
   - Added CSS zoom property to body element for consistent 80% scaling
+  - Increased base font size from 16px to 18px for better readability
   - Website now operates at 80% zoom level across all pages and components
   - Maintains proper proportions and functionality at reduced scale
 
