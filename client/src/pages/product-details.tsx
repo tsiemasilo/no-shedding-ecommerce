@@ -95,112 +95,214 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sand to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <Button
-          variant="ghost"
-          onClick={() => setLocation("/")}
-          className="mb-8 text-navy hover:text-electric hover:bg-navy/5"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Products
-        </Button>
+    <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand/50">
+      {/* Header Section */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation("/")}
+            className="text-navy hover:text-electric hover:bg-navy/5 font-medium"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Products
+          </Button>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Product Image */}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+          {/* Product Image Gallery */}
           <div className="relative lg:sticky lg:top-8">
-            <Card className="overflow-hidden shadow-xl">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-[500px] object-cover"
-              />
-              {product.featured && (
-                <div className="absolute top-6 left-6 bg-bright-orange text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  Featured
-                </div>
-              )}
-              {!product.inStock && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <span className="text-white font-bold text-2xl">Out of Stock</span>
-                </div>
-              )}
-            </Card>
-          </div>
-
-          {/* Product Info */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-5xl font-bold text-navy leading-tight">{product.name}</h1>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-2">
-                  {renderStars(product.rating)}
-                  <span className="text-lg font-medium text-charcoal">({product.rating})</span>
-                </div>
-                {product.inStock ? (
-                  <Badge className="bg-green-100 text-green-800 px-3 py-1">In Stock</Badge>
-                ) : (
-                  <Badge variant="destructive" className="px-3 py-1">Out of Stock</Badge>
+            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+              <div className="relative bg-gradient-to-br from-sand/30 to-white p-8">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-[550px] object-cover rounded-xl shadow-lg hover:scale-105 transition-transform duration-500"
+                />
+                {product.featured && (
+                  <div className="absolute top-12 left-12 bg-gradient-to-r from-bright-orange to-orange-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-xl backdrop-blur-sm">
+                    <Star className="w-4 h-4 inline mr-2" />
+                    Featured Product
+                  </div>
+                )}
+                {!product.inStock && (
+                  <div className="absolute inset-8 bg-black/70 backdrop-blur-sm flex items-center justify-center rounded-xl">
+                    <div className="text-center">
+                      <span className="text-white font-bold text-3xl block">Out of Stock</span>
+                      <span className="text-gray-300 text-sm mt-2">Currently unavailable</span>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
+            
+            {/* Trust Indicators */}
+            <div className="mt-6 bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="space-y-2">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <ShoppingCart className="w-6 h-6 text-green-600" />
+                  </div>
+                  <p className="text-sm font-medium text-navy">Secure Payment</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                    <Star className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <p className="text-sm font-medium text-navy">Quality Assured</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+                    <Heart className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <p className="text-sm font-medium text-navy">Customer Favorite</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <div className="py-4 border-y border-gray-200">
-              <div className="text-6xl font-bold text-navy">
-                R{product.price}
+          {/* Product Information */}
+          <div className="space-y-10">
+            {/* Product Header */}
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+              <div className="space-y-6">
+                <div>
+                  <h1 className="text-6xl font-bold text-navy leading-tight mb-4">{product.name}</h1>
+                  <div className="flex items-center space-x-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-1">
+                        {renderStars(product.rating)}
+                      </div>
+                      <span className="text-xl font-semibold text-charcoal">({product.rating})</span>
+                      <span className="text-gray-500">• Premium Quality</span>
+                    </div>
+                    {product.inStock ? (
+                      <Badge className="bg-green-50 border-green-200 text-green-800 px-4 py-2 text-sm font-semibold">
+                        ✓ In Stock - Ready to Ship
+                      </Badge>
+                    ) : (
+                      <Badge variant="destructive" className="px-4 py-2 text-sm font-semibold">
+                        Out of Stock
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-xl p-6 border border-gray-100">
+                  <div className="flex items-baseline space-x-3">
+                    <span className="text-7xl font-bold text-navy">R{product.price}</span>
+                    <span className="text-gray-500 text-lg">ZAR</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">Competitive pricing • Free delivery on orders over R500</p>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-xl font-semibold text-navy">Description</h3>
+            {/* Product Description */}
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+              <h3 className="text-2xl font-bold text-navy mb-6 flex items-center">
+                <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center mr-3">
+                  <Star className="w-4 h-4 text-electric" />
+                </div>
+                Product Overview
+              </h3>
               <p className="text-charcoal text-lg leading-relaxed">{product.description}</p>
             </div>
 
-            <div className="flex space-x-4 pt-4">
-              <Button
-                onClick={handleAddToCart}
-                disabled={!product.inStock || isAddingToCart}
-                className="flex-1 bg-electric hover:bg-electric/90 text-navy font-semibold py-4 text-lg shadow-lg"
-              >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
-              </Button>
+            {/* Action Buttons */}
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+              <div className="flex space-x-6">
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock || isAddingToCart}
+                  className="flex-1 bg-gradient-to-r from-electric to-electric/90 hover:from-electric/90 hover:to-electric/80 text-navy font-bold py-6 text-xl shadow-xl rounded-xl border-2 border-electric/20 transition-all duration-300 hover:scale-105"
+                >
+                  <ShoppingCart className="w-6 h-6 mr-3" />
+                  {!product.inStock ? 'Currently Unavailable' : 'Add to Cart'}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="px-8 py-6 border-2 border-navy/20 text-navy hover:bg-navy hover:text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                >
+                  <Heart className="w-6 h-6 mr-2" />
+                  Save
+                </Button>
+              </div>
               
-              <Button
-                variant="outline"
-                className="px-8 py-4 border-navy text-navy hover:bg-navy hover:text-white"
-              >
-                <Heart className="w-5 h-5" />
-              </Button>
+              {/* Additional Actions */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center text-gray-600">
+                    <ShoppingCart className="w-5 h-5 mr-2 text-green-600" />
+                    <span className="text-sm">Secure checkout</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <Star className="w-5 h-5 mr-2 text-blue-600" />
+                    <span className="text-sm">Quality guaranteed</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Additional Product Info */}
-            <Card className="shadow-lg">
-              <CardContent className="p-8">
-                <h3 className="text-xl font-semibold text-navy mb-6">Product Specifications</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                    <span className="text-charcoal font-medium">Quality Rating:</span>
+            {/* Product Specifications */}
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+              <h3 className="text-2xl font-bold text-navy mb-8 flex items-center">
+                <div className="w-8 h-8 bg-navy/20 rounded-lg flex items-center justify-center mr-3">
+                  <Star className="w-4 h-4 text-navy" />
+                </div>
+                Product Specifications
+              </h3>
+              
+              <div className="grid grid-cols-1 gap-6">
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-electric/20 rounded-full flex items-center justify-center">
+                        <Star className="w-5 h-5 text-electric" />
+                      </div>
+                      <span className="text-navy font-semibold text-lg">Quality Rating</span>
+                    </div>
                     <div className="flex items-center space-x-3">
                       {renderStars(product.rating)}
-                      <span className="text-navy font-semibold text-lg">{product.rating}/5</span>
+                      <span className="text-navy font-bold text-xl">{product.rating}/5</span>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                    <span className="text-charcoal font-medium">Availability:</span>
-                    <span className={`font-semibold text-lg ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                </div>
+                
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${product.inStock ? 'bg-green-100' : 'bg-red-100'}`}>
+                        <ShoppingCart className={`w-5 h-5 ${product.inStock ? 'text-green-600' : 'text-red-600'}`} />
+                      </div>
+                      <span className="text-navy font-semibold text-lg">Availability Status</span>
+                    </div>
+                    <span className={`font-bold text-xl ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
                       {product.inStock ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-3">
-                    <span className="text-charcoal font-medium">Featured Product:</span>
-                    <span className={`font-semibold text-lg ${product.featured ? 'text-electric' : 'text-charcoal'}`}>
+                </div>
+                
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${product.featured ? 'bg-bright-orange/20' : 'bg-gray-200'}`}>
+                        <Star className={`w-5 h-5 ${product.featured ? 'text-bright-orange' : 'text-gray-500'}`} />
+                      </div>
+                      <span className="text-navy font-semibold text-lg">Featured Product</span>
+                    </div>
+                    <span className={`font-bold text-xl ${product.featured ? 'text-bright-orange' : 'text-gray-500'}`}>
                       {product.featured ? 'Yes' : 'No'}
                     </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
