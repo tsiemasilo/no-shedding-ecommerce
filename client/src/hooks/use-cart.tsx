@@ -20,6 +20,13 @@ export function useCart() {
 
   const { data: cartItems = [], isLoading } = useQuery<CartItemWithProduct[]>({
     queryKey: ['/api/cart', sessionId],
+    queryFn: async () => {
+      const response = await fetch(`/api/cart/${sessionId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch cart items');
+      }
+      return response.json();
+    },
   });
 
   const addToCartMutation = useMutation({

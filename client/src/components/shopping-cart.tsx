@@ -141,7 +141,7 @@ export function ShoppingCart() {
           <div className="p-6 border-t border-gray-200">
             <div className="flex justify-between items-center mb-4">
               <span className="text-lg font-semibold text-navy">Total:</span>
-              <span className="text-xl font-bold text-navy">${cartTotal.toFixed(2)}</span>
+              <span className="text-xl font-bold text-navy">R{cartTotal.toFixed(2)}</span>
             </div>
             <Button
               onClick={handleCheckout}
