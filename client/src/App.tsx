@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
+import { ShoppingCart } from "@/components/shopping-cart";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin-login";
@@ -29,6 +30,7 @@ function App() {
         <AdminAuthProvider>
           <Toaster />
           <Router />
+          <ShoppingCart />
         </AdminAuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
