@@ -292,19 +292,22 @@ export default function ProductDetails() {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${product.featured ? 'bg-bright-orange/20' : 'bg-gray-200'}`}>
-                        <Star className={`w-5 h-5 ${product.featured ? 'text-bright-orange' : 'text-gray-500'}`} />
+{product.featured && (
+                  <div className="bg-gradient-to-r from-bright-orange/5 to-orange-50 rounded-xl p-6 border border-bright-orange/20">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-bright-orange/20 rounded-full flex items-center justify-center">
+                          <Star className="w-5 h-5 text-bright-orange" />
+                        </div>
+                        <span className="text-navy font-semibold text-lg">Featured Product</span>
                       </div>
-                      <span className="text-navy font-semibold text-lg">Featured Product</span>
+                      <div className="flex items-center space-x-2">
+                        <Star className="w-5 h-5 text-bright-orange fill-bright-orange" />
+                        <span className="font-bold text-xl text-bright-orange">Premium Selection</span>
+                      </div>
                     </div>
-                    <span className={`font-bold text-xl ${product.featured ? 'text-bright-orange' : 'text-gray-500'}`}>
-                      {product.featured ? 'Yes' : 'No'}
-                    </span>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
