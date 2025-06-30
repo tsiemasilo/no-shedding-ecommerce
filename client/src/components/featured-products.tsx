@@ -81,11 +81,11 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-navy">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-navy mb-4">Featured Products</h2>
-          <p className="text-charcoal text-lg">Discover our most popular electrical solutions</p>
+          <h2 className="text-3xl font-bold text-white mb-4">Featured Products</h2>
+          <p className="text-sand text-lg">Discover our most popular electrical solutions</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
