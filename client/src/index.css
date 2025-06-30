@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Increased font size for better readability */
+/* Set website to 90% zoom level with increased font size */
 body {
+  zoom: 0.9;
+  transform-origin: 0 0;
   font-size: 18px; /* Increased from default 16px */
   line-height: 1.6;
 }
