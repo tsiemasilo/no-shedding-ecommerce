@@ -561,8 +561,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteProduct(id: number): Promise<boolean> {
-    const result = await db.delete(products).where(eq(products.id, id));
-    return (result.rowCount ?? 0) > 0;
+    try {
+      console.log(`DatabaseStorage: Deleting product with ID ${id}`);
+      const result = await db.delete(products).where(eq(products.id, id));
+      console.log(`DatabaseStorage: Delete result:`, result);
+      const success = (result.rowCount ?? 0) > 0;
+      console.log(`DatabaseStorage: Delete success: ${success}`);
+      return success;
+    } catch (error) {
+      console.error(`DatabaseStorage: Delete error for product ${id}:`, error);
+      throw error;
+    }
   }
 }
 
