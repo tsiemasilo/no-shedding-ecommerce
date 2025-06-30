@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useLocation } from 'wouter';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const { cartCount, setIsOpen } = useCart();
+  const [, setLocation] = useLocation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +58,12 @@ export function Header() {
           
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-white hover:text-electric">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-white hover:text-electric"
+              onClick={() => setLocation('/admin/login')}
+            >
               <User className="w-5 h-5" />
             </Button>
             <Button
