@@ -19,10 +19,10 @@ export function Header() {
 
   return (
     <header className="bg-navy shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-6">
+      <div className="w-full px-2">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Far Left */}
-          <div className="flex items-center space-x-3 flex-shrink-0">
+          <div className="flex items-center space-x-3 flex-shrink-0 ml-2">
             <div 
               className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"
             >
