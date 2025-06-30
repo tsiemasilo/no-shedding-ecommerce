@@ -101,7 +101,7 @@ export function FeaturedProducts() {
                 <h3 className="font-semibold text-navy mb-2">{product.name}</h3>
                 <p className="text-charcoal text-sm mb-3 line-clamp-2">{product.description}</p>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xl font-bold text-navy">${product.price}</span>
+                  <span className="text-xl font-bold text-navy">R{product.price}</span>
                   {renderStars(product.rating)}
                 </div>
                 <Button

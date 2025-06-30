@@ -158,7 +158,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                     </p>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-2xl font-bold text-navy">
-                        ${product.price}
+                        R{product.price}
                       </span>
                       <div className="flex items-center space-x-1">
                         {renderStars(product.rating)}

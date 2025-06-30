@@ -188,7 +188,7 @@ export class MemStorage implements IStorage {
       {
         name: "Smart LED Ceiling Light",
         description: "Wireless controlled, energy-efficient LED ceiling light with dimming capabilities",
-        price: "89.99",
+        price: "1,599.99",
         image: "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 1,
         featured: true,
@@ -198,7 +198,7 @@ export class MemStorage implements IStorage {
       {
         name: "Portable Power Station",
         description: "1000W capacity portable power station with multiple outlets and USB ports",
-        price: "599.99",
+        price: "10,999.99",
         image: "https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 2,
         featured: true,
@@ -208,7 +208,7 @@ export class MemStorage implements IStorage {
       {
         name: "Professional Multimeter",
         description: "Digital display multimeter with auto-ranging and safety features",
-        price: "149.99",
+        price: "2,749.99",
         image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 4,
         featured: true,
@@ -218,7 +218,7 @@ export class MemStorage implements IStorage {
       {
         name: "Smart Home Hub",
         description: "Control all your smart devices from one central hub with voice control",
-        price: "299.99",
+        price: "5,499.99",
         image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 5,
         featured: true,
@@ -228,7 +228,7 @@ export class MemStorage implements IStorage {
       {
         name: "LED Strip Lights Kit",
         description: "16.4ft RGB LED strip lights with remote control and adhesive backing",
-        price: "39.99",
+        price: "729.99",
         image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 1,
         featured: false,
@@ -238,7 +238,7 @@ export class MemStorage implements IStorage {
       {
         name: "Solar Power Generator",
         description: "Eco-friendly solar generator with built-in battery storage",
-        price: "899.99",
+        price: "16,499.99",
         image: "https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 2,
         featured: false,
@@ -248,7 +248,7 @@ export class MemStorage implements IStorage {
       {
         name: "Smart Circuit Breaker Panel",
         description: "Advanced circuit breaker with remote monitoring and control",
-        price: "349.99",
+        price: "6,399.99",
         image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 6,
         featured: true,

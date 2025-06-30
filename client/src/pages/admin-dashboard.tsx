@@ -167,7 +167,7 @@ export default function AdminDashboard() {
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">{product.name}</TableCell>
                       <TableCell>{category?.name || 'Unknown'}</TableCell>
-                      <TableCell>${product.price}</TableCell>
+                      <TableCell>R{product.price}</TableCell>
                       <TableCell>{product.featured ? 'Yes' : 'No'}</TableCell>
                       <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
                       <TableCell>

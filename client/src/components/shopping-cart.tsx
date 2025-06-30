@@ -99,7 +99,7 @@ export function ShoppingCart() {
                   />
                   <div className="flex-1">
                     <h4 className="font-semibold text-navy">{item.product?.name}</h4>
-                    <p className="text-charcoal">${item.product?.price}</p>
+                    <p className="text-charcoal">R{item.product?.price}</p>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button
