@@ -121,29 +121,29 @@ export default function ProductDetails() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Product Image Gallery */}
           <div className="relative lg:sticky lg:top-8">
-            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-              <div className="relative bg-gradient-to-br from-sand/30 to-white p-8">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+              <div className="relative bg-gradient-to-br from-sand/30 to-white p-4">
                 {/* Main Image Display */}
                 <img
                   src={currentImageIndex === -1 || !product.images || product.images.length === 0 || !product.images[currentImageIndex]
                     ? product.image 
                     : product.images[currentImageIndex]}
                   alt={product.name}
-                  className="w-full h-[550px] object-cover rounded-xl shadow-lg hover:scale-105 transition-transform duration-500"
+                  className="w-full h-[400px] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-500"
                 />
                 {product.featured && (
-                  <div className="absolute top-12 left-12 bg-gradient-to-r from-bright-orange to-orange-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-xl backdrop-blur-sm">
-                    <Star className="w-4 h-4 inline mr-2" />
-                    Featured Product
+                  <div className="absolute top-4 left-4 bg-gradient-to-r from-bright-orange to-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
+                    <Star className="w-3 h-3 inline mr-1" />
+                    Featured
                   </div>
                 )}
                 {!product.inStock && (
-                  <div className="absolute top-12 right-12 bg-red-600 text-white px-4 py-2 rounded-tl-lg rounded-br-lg font-bold text-sm shadow-xl transform rotate-12 z-10">
+                  <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-tl-lg rounded-br-lg font-bold text-xs shadow-lg transform rotate-12 z-10">
                     OUT OF STOCK
                   </div>
                 )}
@@ -152,7 +152,7 @@ export default function ProductDetails() {
 
             {/* Image Thumbnails */}
             {product.images && product.images.length > 0 && (
-              <div className="mt-6 grid grid-cols-5 gap-3">
+              <div className="mt-4 grid grid-cols-4 gap-2">
                 {/* Main image thumbnail */}
                 <button
                   onClick={() => setCurrentImageIndex(-1)}
@@ -165,7 +165,7 @@ export default function ProductDetails() {
                   <img
                     src={product.image}
                     alt={`${product.name} - Main`}
-                    className="w-full h-16 object-cover"
+                    className="w-full h-14 object-cover"
                   />
                 </button>
                 
@@ -183,7 +183,7 @@ export default function ProductDetails() {
                     <img
                       src={image}
                       alt={`${product.name} - Image ${index + 2}`}
-                      className="w-full h-16 object-cover"
+                      className="w-full h-14 object-cover"
                     />
                   </button>
                 ))}
@@ -216,19 +216,19 @@ export default function ProductDetails() {
           </div>
 
           {/* Product Information */}
-          <div className="space-y-10">
+          <div className="space-y-6">
             {/* Product Header */}
-            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-              <div className="space-y-6">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="space-y-4">
                 <div>
-                  <h1 className="text-6xl font-bold text-navy leading-tight mb-4">{product.name}</h1>
-                  <div className="flex items-center space-x-8">
-                    <div className="flex items-center space-x-3">
+                  <h1 className="text-3xl font-bold text-navy leading-tight mb-3">{product.name}</h1>
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
                       <div className="flex items-center space-x-1">
                         {renderStars(product.rating)}
                       </div>
-                      <span className="text-xl font-semibold text-charcoal">({product.rating})</span>
-                      <span className="text-gray-500">• Premium Quality</span>
+                      <span className="text-lg font-semibold text-charcoal">({product.rating})</span>
+                      <span className="text-gray-500 text-sm">• Premium Quality</span>
                     </div>
                     {product.inStock ? (
                       <Badge className="bg-green-50 border-green-200 text-green-800 px-4 py-2 text-sm font-semibold">
@@ -242,12 +242,12 @@ export default function ProductDetails() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-xl p-6 border border-gray-100">
-                  <div className="flex items-baseline space-x-3">
-                    <span className="text-7xl font-bold text-navy">R{product.price}</span>
-                    <span className="text-gray-500 text-lg">ZAR</span>
+                <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-lg p-4 border border-gray-100">
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-4xl font-bold text-navy">R{product.price}</span>
+                    <span className="text-gray-500 text-base">ZAR</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">Competitive pricing • Free delivery on orders over R500</p>
+                  <p className="text-xs text-gray-600 mt-1">Competitive pricing • Free delivery on orders over R500</p>
                 </div>
               </div>
             </div>
