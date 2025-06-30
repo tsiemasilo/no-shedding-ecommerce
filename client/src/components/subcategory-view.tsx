@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Lightbulb, Sun, Battery, Activity } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Sun, Battery, Radar } from 'lucide-react';
 import type { Subcategory } from '@shared/schema';
 
 interface SubcategoryViewProps {
@@ -24,7 +24,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
       case 'Rechargeable Bulbs':
         return Battery;
       case 'Motion Sensor Lights':
-        return Activity;
+        return Radar;
       default:
         return Lightbulb;
     }
