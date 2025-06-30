@@ -240,6 +240,8 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
     rating: product?.rating || '0',
     inStock: product?.inStock || true,
   });
+  
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,7 +304,10 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
             <Label htmlFor="category">Category</Label>
             <Select 
               value={formData.categoryId.toString()} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, categoryId: parseInt(value) }))}
+              onValueChange={(value) => {
+                setFormData(prev => ({ ...prev, categoryId: parseInt(value) }));
+                setSelectedSubcategoryId(''); // Reset subcategory when category changes
+              }}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -319,11 +324,8 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
           <div className="space-y-2">
             <Label htmlFor="subcategory">Subcategory (Optional)</Label>
             <Select 
-              value={subcategories.find(s => s.categoryId === formData.categoryId)?.id?.toString() || ""} 
-              onValueChange={(value) => {
-                // Optional: Add subcategoryId to form data if needed
-                console.log('Selected subcategory:', value);
-              }}
+              value={selectedSubcategoryId} 
+              onValueChange={(value) => setSelectedSubcategoryId(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select subcategory..." />
