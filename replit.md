@@ -108,11 +108,10 @@ Preferred communication style: Simple, everyday language.
   - Enlarged user action icons from w-5 h-5 to w-6 h-6
   - Increased cart count badge size and font weight for better visibility
 
-- June 30, 2025: Set website to 80% zoom level as standard with increased base font size
-  - Added CSS zoom property to body element for consistent 80% scaling
-  - Increased base font size from 16px to 18px for better readability
-  - Website now operates at 80% zoom level across all pages and components
-  - Maintains proper proportions and functionality at reduced scale
+- June 30, 2025: Returned website to 100% scale with enhanced readability
+  - Removed 80% zoom level and returned to normal 100% scale
+  - Maintained increased base font size at 18px for better readability
+  - Website now operates at standard scale with enhanced typography
 
 - June 30, 2025: Updated out of stock displays with elegant ribbons
   - Replaced full image overlays with top-right corner ribbons
