@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, createContext, useContext, ReactNode } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import type { CartItemWithProduct } from '@/lib/types';
@@ -13,7 +13,23 @@ const getSessionId = () => {
   return sessionId;
 };
 
-export function useCart() {
+interface CartContextType {
+  cartItems: CartItemWithProduct[];
+  cartCount: number;
+  cartTotal: number;
+  isOpen: boolean;
+  isLoading: boolean;
+  setIsOpen: (open: boolean) => void;
+  addToCart: (data: { productId: number; quantity: number }) => void;
+  updateQuantity: (data: { id: number; quantity: number }) => void;
+  removeFromCart: (id: number) => void;
+  clearCart: () => void;
+  isAddingToCart: boolean;
+}
+
+const CartContext = createContext<CartContextType | null>(null);
+
+export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const sessionId = getSessionId();
@@ -81,7 +97,7 @@ export function useCart() {
     return sum;
   }, 0);
 
-  return {
+  const contextValue: CartContextType = {
     cartItems,
     cartCount,
     cartTotal,
@@ -94,4 +110,18 @@ export function useCart() {
     clearCart: clearCartMutation.mutate,
     isAddingToCart: addToCartMutation.isPending,
   };
+
+  return (
+    <CartContext.Provider value={contextValue}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
 }

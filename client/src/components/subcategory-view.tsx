@@ -56,20 +56,10 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
   };
 
   const handleAddToCart = (product: Product) => {
-    addToCart({ productId: product.id, quantity: 1 }, {
-      onSuccess: () => {
-        toast({
-          title: "Added to cart",
-          description: `${product.name} has been added to your cart.`,
-        });
-      },
-      onError: () => {
-        toast({
-          title: "Error",
-          description: "Failed to add item to cart. Please try again.",
-          variant: "destructive",
-        });
-      },
+    addToCart({ productId: product.id, quantity: 1 });
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
