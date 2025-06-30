@@ -191,25 +191,25 @@ export default function ProductDetails() {
             )}
             
             {/* Trust Indicators */}
-            <div className="mt-6 bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="space-y-2">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                    <ShoppingCart className="w-6 h-6 text-green-600" />
+            <div className="mt-4 bg-white rounded-lg p-4 shadow-md border border-gray-100">
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="space-y-1">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <ShoppingCart className="w-4 h-4 text-green-600" />
                   </div>
-                  <p className="text-sm font-medium text-navy">Secure Payment</p>
+                  <p className="text-xs font-medium text-navy">Secure Payment</p>
                 </div>
-                <div className="space-y-2">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                    <Star className="w-6 h-6 text-blue-600" />
+                <div className="space-y-1">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                    <Star className="w-4 h-4 text-blue-600" />
                   </div>
-                  <p className="text-sm font-medium text-navy">Quality Assured</p>
+                  <p className="text-xs font-medium text-navy">Quality Assured</p>
                 </div>
-                <div className="space-y-2">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                    <Heart className="w-6 h-6 text-purple-600" />
+                <div className="space-y-1">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+                    <Heart className="w-4 h-4 text-purple-600" />
                   </div>
-                  <p className="text-sm font-medium text-navy">Customer Favorite</p>
+                  <p className="text-xs font-medium text-navy">Customer Favorite</p>
                 </div>
               </div>
             </div>
@@ -253,31 +253,31 @@ export default function ProductDetails() {
             </div>
 
             {/* Product Description */}
-            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-              <h3 className="text-2xl font-bold text-navy mb-6 flex items-center">
-                <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center mr-3">
-                  <Star className="w-4 h-4 text-electric" />
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                <div className="w-6 h-6 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
+                  <Star className="w-3 h-3 text-electric" />
                 </div>
                 Product Overview
               </h3>
-              <p className="text-charcoal text-lg leading-relaxed">{product.description}</p>
+              <p className="text-charcoal text-base leading-relaxed">{product.description}</p>
             </div>
 
             {/* Action Buttons */}
-            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-              <div className="flex space-x-6">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="flex space-x-4">
                 <Button
                   onClick={handleAddToCart}
                   disabled={!product.inStock || isAddingToCart}
-                  className="flex-1 bg-gradient-to-r from-electric to-electric/90 hover:from-electric/90 hover:to-electric/80 text-navy font-bold py-6 text-xl shadow-xl rounded-xl border-2 border-electric/20 transition-all duration-300 hover:scale-105"
+                  className="flex-1 bg-gradient-to-r from-electric to-electric/90 hover:from-electric/90 hover:to-electric/80 text-navy font-bold py-4 text-lg shadow-lg rounded-lg border-2 border-electric/20 transition-all duration-300 hover:scale-105"
                 >
-                  <ShoppingCart className="w-6 h-6 mr-3" />
+                  <ShoppingCart className="w-5 h-5 mr-2" />
                   {!product.inStock ? 'Currently Unavailable' : 'Add to Cart'}
                 </Button>
                 
                 <Button
                   variant="outline"
-                  className="px-8 py-6 border-2 border-navy/20 text-navy hover:bg-navy hover:text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                  className="px-6 py-4 border-2 border-navy/20 text-navy hover:bg-navy hover:text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                 >
                   <Heart className="w-6 h-6 mr-2" />
                   Save
