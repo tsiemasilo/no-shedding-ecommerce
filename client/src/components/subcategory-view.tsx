@@ -243,39 +243,62 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
             {categoryName}
           </h2>
           <p className="text-xl text-charcoal max-w-3xl mx-auto">
-            Choose from our specialized lighting subcategories designed for every electrical need
+            {categoryName === 'Lighting Solutions' 
+              ? 'Choose from our specialized lighting subcategories designed for every electrical need'
+              : categoryName === 'Power Solutions'
+              ? 'Choose from our power solution subcategories for all your energy needs'
+              : `Explore our ${categoryName.toLowerCase()} designed for your electrical requirements`
+            }
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {subcategories.map((subcategory) => {
-            const IconComponent = getSubcategoryIcon(subcategory.name);
-            return (
-              <div
-                key={subcategory.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105"
-              >
-                <div className="w-full h-48 bg-gradient-to-br from-sand to-electric/10 flex items-center justify-center">
-                  <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <IconComponent className="w-16 h-16 text-navy" />
+        {subcategories.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {subcategories.map((subcategory) => {
+              const IconComponent = getSubcategoryIcon(subcategory.name);
+              return (
+                <div
+                  key={subcategory.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-full h-48 bg-gradient-to-br from-sand to-electric/10 flex items-center justify-center">
+                    <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <IconComponent className="w-16 h-16 text-navy" />
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-navy mb-3">{subcategory.name}</h3>
+                    <p className="text-charcoal text-sm mb-4 leading-relaxed">
+                      {subcategory.description}
+                    </p>
+                    <Button 
+                      onClick={() => setSelectedSubcategory(subcategory)}
+                      className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+                    >
+                      Browse Products
+                    </Button>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-navy mb-3">{subcategory.name}</h3>
-                  <p className="text-charcoal text-sm mb-4 leading-relaxed">
-                    {subcategory.description}
-                  </p>
-                  <Button 
-                    onClick={() => setSelectedSubcategory(subcategory)}
-                    className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
-                  >
-                    Browse Products
-                  </Button>
-                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <div className="w-24 h-24 bg-sand rounded-full flex items-center justify-center mx-auto mb-6">
+                <ShoppingCart className="w-12 h-12 text-charcoal" />
               </div>
-            );
-          })}
-        </div>
+              <h3 className="text-2xl font-bold text-navy mb-4">Products Coming Soon</h3>
+              <p className="text-charcoal mb-6">
+                We're working hard to bring you amazing {categoryName.toLowerCase()} products. 
+                Our team is carefully curating the best electrical solutions for this category.
+              </p>
+              <p className="text-sm text-charcoal/70">
+                Check back soon for exciting new products and subcategories!
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

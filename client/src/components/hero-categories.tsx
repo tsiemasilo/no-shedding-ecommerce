@@ -101,16 +101,11 @@ export function HeroCategories() {
                   <p className="text-charcoal mb-4">{category.description}</p>
                   <Button 
                     className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
-                    onClick={() => {
-                      if (category.name === 'Lighting Solutions') {
-                        setSelectedCategory(category);
-                      } else {
-                        // Handle other categories - could navigate to product pages
-                        console.log(`Browse ${category.name} products`);
-                      }
-                    }}
+                    onClick={() => setSelectedCategory(category)}
                   >
-                    {category.name === 'Lighting Solutions' ? 'View Subcategories' : `Explore ${category.name.split(' ')[0]}`}
+                    {(category.name === 'Lighting Solutions' || category.name === 'Power Solutions') 
+                      ? 'View Subcategories' 
+                      : `Explore ${category.name.split(' ')[0]}`}
                   </Button>
                 </div>
               </div>
