@@ -1,11 +1,30 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
+import { Lightbulb, Zap, Home, Wrench, Star } from 'lucide-react';
 import type { Category } from '@shared/schema';
 
 export function HeroCategories() {
   const { data: categories = [], isLoading } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
   });
+
+  // Icon mapping for each category
+  const getCategoryIcon = (categoryName: string) => {
+    switch (categoryName) {
+      case 'Lighting Solutions':
+        return Lightbulb;
+      case 'Power Solutions':
+        return Zap;
+      case 'Appliance Alternatives':
+        return Home;
+      case 'Comfort & Utility Kits':
+        return Wrench;
+      case 'Premium Items':
+        return Star;
+      default:
+        return Lightbulb;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -22,7 +41,9 @@ export function HeroCategories() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
-                <div className="w-full h-48 bg-gray-200"></div>
+                <div className="w-full h-48 bg-sand flex items-center justify-center">
+                  <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
+                </div>
                 <div className="p-6">
                   <div className="h-6 bg-gray-200 rounded mb-2"></div>
                   <div className="h-16 bg-gray-200 rounded mb-4"></div>
@@ -49,27 +70,28 @@ export function HeroCategories() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category, index) => (
-            <div
-              key={category.id}
-              className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105 ${
-                index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
-              }`}
-            >
-              <img
-                src={category.image}
-                alt={category.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-navy mb-2">{category.name}</h3>
-                <p className="text-charcoal mb-4">{category.description}</p>
-                <Button className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold">
-                  Explore {category.name.split(' ')[0]}
-                </Button>
+          {categories.map((category, index) => {
+            const IconComponent = getCategoryIcon(category.name);
+            return (
+              <div
+                key={category.id}
+                className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105 ${
+                  index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
+              >
+                <div className="w-full h-48 bg-sand flex items-center justify-center">
+                  <IconComponent className="w-24 h-24 text-navy" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-navy mb-2">{category.name}</h3>
+                  <p className="text-charcoal mb-4">{category.description}</p>
+                  <Button className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold">
+                    Explore {category.name.split(' ')[0]}
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
