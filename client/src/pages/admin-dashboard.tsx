@@ -277,7 +277,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
   };
 
   return (
-    <DialogContent className="max-w-2xl">
+    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
         <DialogDescription>
