@@ -101,12 +101,12 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Button
-              variant="ghost"
+              variant="outline"
               onClick={() => setSelectedSubcategory(null)}
-              className="mb-8 text-navy hover:text-electric hover:bg-navy/5"
+              className="group bg-white/90 backdrop-blur-sm border-2 border-navy/20 text-navy hover:bg-navy hover:text-white hover:border-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl mb-8"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to {categoryName}
+              <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+              <span className="text-lg">Back to {categoryName}</span>
             </Button>
             
             <h2 className="text-5xl font-bold text-navy mb-6">
@@ -244,12 +244,12 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={onBack}
-            className="mb-8 text-navy hover:text-electric hover:bg-navy/5"
+            className="group bg-white/90 backdrop-blur-sm border-2 border-navy/20 text-navy hover:bg-navy hover:text-white hover:border-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl mb-8"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Categories
+            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+            <span className="text-lg">Back to Categories</span>
           </Button>
           
           <h2 className="text-5xl font-bold text-navy mb-6">

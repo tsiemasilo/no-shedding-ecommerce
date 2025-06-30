@@ -109,12 +109,12 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
+              variant="outline"
               onClick={() => setLocation('/')}
-              className="text-white hover:bg-navy/70"
+              className="group bg-white/90 backdrop-blur-sm border-2 border-white/20 text-navy hover:bg-white hover:text-navy hover:border-white font-semibold px-4 py-2 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <Home className="w-4 h-4 mr-2" />
-              Home
+              <Home className="w-4 h-4 mr-2 group-hover:animate-pulse" />
+              <span>Home</span>
             </Button>
             <Button
               variant="ghost"
