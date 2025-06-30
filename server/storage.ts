@@ -516,16 +516,19 @@ export class DatabaseStorage implements IStorage {
 
   async removeFromCart(id: number): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   async clearCart(sessionId: string): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   async subscribeToNewsletter(newsletter: InsertNewsletter): Promise<Newsletter> {
-    const [newSubscription] = await db.insert(newsletters).values(newsletter).returning();
+    const [newSubscription] = await db.insert(newsletters).values({
+      email: newsletter.email,
+      subscribedAt: new Date().toISOString()
+    }).returning();
     return newSubscription;
   }
 
@@ -559,7 +562,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProduct(id: number): Promise<boolean> {
     const result = await db.delete(products).where(eq(products.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 }
 
