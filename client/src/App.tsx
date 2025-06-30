@@ -13,6 +13,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -22,8 +24,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <AdminAuthProvider>
+          <Toaster />
+          <Router />
+        </AdminAuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -94,7 +94,7 @@ export function Footer() {
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 No Shedding. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <p>&copy; 2024 No Shedding. All rights reserved. | Privacy Policy | Terms of Service | <a href="/admin/login" className="text-electric hover:text-white transition-colors">Admin</a></p>
         </div>
       </div>
     </footer>
