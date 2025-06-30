@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield, Flame, Coffee } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
 import type { Subcategory, Product } from '@shared/schema';
 
 interface SubcategoryViewProps {
