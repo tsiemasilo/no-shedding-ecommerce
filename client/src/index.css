@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Set website to 80% zoom level as standard */
+body {
+  zoom: 0.8;
+  transform-origin: 0 0;
+}
+
 :root {
   --background: hsl(46, 87%, 97%);
   --foreground: hsl(0, 0%, 20%);

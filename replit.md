@@ -99,6 +99,18 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- June 30, 2025: Set website to 80% zoom level as standard
+  - Added CSS zoom property to body element for consistent 80% scaling
+  - Website now operates at 80% zoom level across all pages and components
+  - Maintains proper proportions and functionality at reduced scale
+
+- June 30, 2025: Updated out of stock displays with elegant ribbons
+  - Replaced full image overlays with top-right corner ribbons
+  - Applied consistent red ribbon styling across all product displays
+  - Updated product details, subcategory views, and featured products
+  - Added professional rotation and shadow effects for visual appeal
+  - Product images now remain fully visible with clear status indication
+
 - June 30, 2025: Standardized back button styling across all pages
   - Applied consistent professional design with glassmorphism effects
   - Added hover animations and scale effects for better user interaction
