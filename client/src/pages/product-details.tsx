@@ -101,15 +101,15 @@ export default function ProductDetails() {
       <Header />
       
       {/* Breadcrumb Section */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="bg-gradient-to-r from-white via-sand/10 to-white border-b border-gray-200/30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => setLocation("/")}
-            className="text-navy hover:text-electric hover:bg-navy/5 font-medium"
+            className="group bg-white/90 backdrop-blur-sm border-2 border-navy/20 text-navy hover:bg-navy hover:text-white hover:border-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Products
+            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+            <span className="text-lg">Back to Products</span>
           </Button>
         </div>
       </div>
