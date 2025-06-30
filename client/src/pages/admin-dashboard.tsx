@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useLocation } from 'wouter';
-import { Loader2, Plus, Edit, Trash2, LogOut } from 'lucide-react';
+import { Loader2, Plus, Edit, Trash2, LogOut, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import type { Product, Category, InsertProduct } from '@shared/schema';
@@ -99,14 +99,24 @@ export default function AdminDashboard() {
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
             <p className="text-electric">Welcome, {user.username}</p>
           </div>
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className="text-white hover:bg-navy/70"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => setLocation('/')}
+              className="text-white hover:bg-navy/70"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="text-white hover:bg-navy/70"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
