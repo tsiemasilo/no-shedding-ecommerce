@@ -36,7 +36,7 @@ export function Header() {
           </div>
           
           {/* Search Bar */}
-          <div className="flex-1 max-w-3xl mx-10">
+          <div className="flex-1 max-w-2xl mx-8">
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
@@ -50,31 +50,31 @@ export function Header() {
           </div>
           
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6 mr-4">
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Categories</a>
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">About</a>
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</a>
           </nav>
           
           {/* User Actions */}
-          <div className="flex items-center space-x-5">
+          <div className="flex items-center space-x-3 mr-6">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:text-electric p-3"
+              className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
               onClick={() => setLocation('/admin/login')}
             >
-              <User className="w-6 h-6" />
+              <User className="w-8 h-8" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="relative text-white hover:text-electric p-3"
+              className="relative text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
               onClick={() => setIsOpen(true)}
             >
-              <ShoppingCart className="w-6 h-6" />
+              <ShoppingCart className="w-8 h-8" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-bright-orange text-white text-sm rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 bg-bright-orange text-white text-sm rounded-full w-7 h-7 flex items-center justify-center font-bold border-2 border-navy">
                   {cartCount}
                 </span>
               )}
