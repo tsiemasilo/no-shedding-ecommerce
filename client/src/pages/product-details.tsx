@@ -106,57 +106,61 @@ export default function ProductDetails() {
           Back to Products
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Product Image */}
-          <div className="relative">
-            <Card className="overflow-hidden">
+          <div className="relative lg:sticky lg:top-8">
+            <Card className="overflow-hidden shadow-xl">
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-96 object-cover"
+                className="w-full h-[500px] object-cover"
               />
               {product.featured && (
-                <div className="absolute top-4 left-4 bg-bright-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                <div className="absolute top-6 left-6 bg-bright-orange text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                   Featured
                 </div>
               )}
               {!product.inStock && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">Out of Stock</span>
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <span className="text-white font-bold text-2xl">Out of Stock</span>
                 </div>
               )}
             </Card>
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-4xl font-bold text-navy mb-4">{product.name}</h1>
-              <div className="flex items-center space-x-4 mb-4">
-                {renderStars(product.rating)}
-                <span className="text-lg text-charcoal">({product.rating})</span>
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-bold text-navy leading-tight">{product.name}</h1>
+              <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-2">
+                  {renderStars(product.rating)}
+                  <span className="text-lg font-medium text-charcoal">({product.rating})</span>
+                </div>
                 {product.inStock ? (
-                  <Badge className="bg-green-100 text-green-800">In Stock</Badge>
+                  <Badge className="bg-green-100 text-green-800 px-3 py-1">In Stock</Badge>
                 ) : (
-                  <Badge variant="destructive">Out of Stock</Badge>
+                  <Badge variant="destructive" className="px-3 py-1">Out of Stock</Badge>
                 )}
               </div>
             </div>
 
-            <div className="text-5xl font-bold text-navy mb-6">
-              R{product.price}
+            <div className="py-4 border-y border-gray-200">
+              <div className="text-6xl font-bold text-navy">
+                R{product.price}
+              </div>
             </div>
 
-            <div>
-              <h3 className="text-lg font-semibold text-navy mb-2">Description</h3>
+            <div className="space-y-3">
+              <h3 className="text-xl font-semibold text-navy">Description</h3>
               <p className="text-charcoal text-lg leading-relaxed">{product.description}</p>
             </div>
 
-            <div className="flex space-x-4 pt-6">
+            <div className="flex space-x-4 pt-4">
               <Button
                 onClick={handleAddToCart}
                 disabled={!product.inStock || isAddingToCart}
-                className="flex-1 bg-electric hover:bg-electric/90 text-navy font-semibold py-3 text-lg"
+                className="flex-1 bg-electric hover:bg-electric/90 text-navy font-semibold py-4 text-lg shadow-lg"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
@@ -164,33 +168,33 @@ export default function ProductDetails() {
               
               <Button
                 variant="outline"
-                className="px-6 border-navy text-navy hover:bg-navy hover:text-white"
+                className="px-8 py-4 border-navy text-navy hover:bg-navy hover:text-white"
               >
                 <Heart className="w-5 h-5" />
               </Button>
             </div>
 
             {/* Additional Product Info */}
-            <Card className="mt-8">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-navy mb-4">Product Features</h3>
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-charcoal">Quality Rating:</span>
-                    <div className="flex items-center space-x-2">
+            <Card className="shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-semibold text-navy mb-6">Product Specifications</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-charcoal font-medium">Quality Rating:</span>
+                    <div className="flex items-center space-x-3">
                       {renderStars(product.rating)}
-                      <span className="text-navy font-semibold">{product.rating}/5</span>
+                      <span className="text-navy font-semibold text-lg">{product.rating}/5</span>
                     </div>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-charcoal">Availability:</span>
-                    <span className={`font-semibold ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-charcoal font-medium">Availability:</span>
+                    <span className={`font-semibold text-lg ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
                       {product.inStock ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-charcoal">Featured Product:</span>
-                    <span className={`font-semibold ${product.featured ? 'text-electric' : 'text-charcoal'}`}>
+                  <div className="flex justify-between items-center py-3">
+                    <span className="text-charcoal font-medium">Featured Product:</span>
+                    <span className={`font-semibold text-lg ${product.featured ? 'text-electric' : 'text-charcoal'}`}>
                       {product.featured ? 'Yes' : 'No'}
                     </span>
                   </div>
