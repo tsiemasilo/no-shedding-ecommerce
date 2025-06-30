@@ -26,8 +26,7 @@ export default function ProductDetails() {
     try {
       await addToCart({
         productId: product.id,
-        quantity: 1,
-        sessionId: 'default-session'
+        quantity: 1
       });
       
       toast({
@@ -151,6 +150,12 @@ export default function ProductDetails() {
                 <p className="text-xs text-charcoal">30-Day Policy</p>
               </div>
             </div>
+
+            {/* Product Description */}
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
+              <h3 className="text-2xl font-bold text-navy mb-4">Product Description</h3>
+              <p className="text-charcoal leading-relaxed text-lg">{product.description}</p>
+            </div>
           </div>
 
           {/* Product Information */}
@@ -223,12 +228,6 @@ export default function ProductDetails() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Product Description */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
-              <h3 className="text-2xl font-bold text-navy mb-4">Product Description</h3>
-              <p className="text-charcoal leading-relaxed text-lg">{product.description}</p>
             </div>
 
             {/* Delivery Information */}
