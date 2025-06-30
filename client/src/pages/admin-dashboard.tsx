@@ -322,12 +322,57 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="image">Product Image</Label>
+          <Label htmlFor="image">Main Product Image</Label>
           <ImageUpload
             value={formData.image}
             onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
             disabled={isLoading}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="images">Additional Product Images</Label>
+          <div className="space-y-4">
+            {(formData.images || []).map((imageUrl, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <div className="flex-1">
+                  <ImageUpload
+                    value={imageUrl}
+                    onChange={(url) => {
+                      const newImages = [...(formData.images || [])];
+                      newImages[index] = url;
+                      setFormData(prev => ({ ...prev, images: newImages }));
+                    }}
+                    disabled={isLoading}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newImages = (formData.images || []).filter((_, i) => i !== index);
+                    setFormData(prev => ({ ...prev, images: newImages }));
+                  }}
+                  disabled={isLoading}
+                  className="mt-2"
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              + Add Another Image
+            </Button>
+          </div>
         </div>
         
         <div className="grid grid-cols-2 gap-4">

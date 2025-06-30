@@ -14,6 +14,7 @@ export default function ProductDetails() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { addToCart, isAddingToCart } = useCart();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: [`/api/products/${id}`],
