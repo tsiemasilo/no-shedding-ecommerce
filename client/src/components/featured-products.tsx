@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
 import type { Product } from '@shared/schema';
 
 export function FeaturedProducts() {
@@ -12,6 +13,7 @@ export function FeaturedProducts() {
 
   const { addToCart, isAddingToCart } = useCart();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const handleAddToCart = (product: Product) => {
     addToCart({ productId: product.id, quantity: 1 }, {
