@@ -110,233 +110,256 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      {/* Enhanced Navigation Header - Full Width */}
-      <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="px-8 py-4">
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-black">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,theme(colors.electric/20),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,theme(colors.orange/15),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,theme(colors.electric/10),transparent_50%)]"></div>
+      </div>
+
+      {/* Floating Navigation */}
+      <div className="fixed top-6 left-6 right-6 z-50">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 text-sm">
-              <button 
-                onClick={() => setLocation('/')}
-                className="flex items-center gap-2 text-gray-600 hover:text-navy transition-all duration-200 hover:bg-gray-100 px-3 py-2 rounded-lg"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Store
-              </button>
-              <span className="text-gray-300">/</span>
-              <span className="text-navy font-semibold">{product.name}</span>
-            </div>
+            <button 
+              onClick={() => setLocation('/')}
+              className="flex items-center gap-3 text-white hover:text-electric transition-all duration-300 group"
+            >
+              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-electric/20 transition-all duration-300">
+                <ArrowLeft className="w-5 h-5" />
+              </div>
+              <span className="font-medium">Back to Store</span>
+            </button>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm">
-                <Heart className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Share2 className="w-4 h-4" />
-              </Button>
+              <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all duration-300">
+                <Heart className="w-5 h-5 text-white" />
+              </button>
+              <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all duration-300">
+                <Share2 className="w-5 h-5 text-white" />
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Full Width Split Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        {/* Left Side - Product Image Section */}
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col justify-center items-center p-8 lg:p-16">
-          <div className="w-full max-w-2xl">
-            <div className="relative mb-8">
-              <div className="aspect-square bg-white rounded-3xl shadow-2xl overflow-hidden p-8">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover rounded-2xl"
-                />
-                {product.featured && (
-                  <div className="absolute top-6 right-6 bg-gradient-to-r from-orange to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                    ⭐ Featured Product
+      {/* Main Content Grid */}
+      <div className="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-5">
+        {/* Left Section - Product Showcase */}
+        <div className="lg:col-span-3 flex flex-col justify-center items-center p-8 lg:p-16">
+          <div className="w-full max-w-4xl">
+            {/* Product Image with Floating Elements */}
+            <div className="relative mb-12">
+              <div className="relative group">
+                {/* Main Product Card */}
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-12 shadow-2xl">
+                  <div className="aspect-square relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-100">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* Floating Badge */}
+                    {product.featured && (
+                      <div className="absolute -top-4 -right-4 bg-gradient-to-r from-orange to-red-500 text-white px-6 py-3 rounded-2xl font-bold shadow-2xl animate-pulse">
+                        ⭐ Featured
+                      </div>
+                    )}
+                    {/* Interactive Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                      <span className="font-bold text-gray-900">360° Interactive View</span>
+                    </div>
                   </div>
-                )}
-                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                  <span className="text-sm font-medium text-gray-700">360° View Available</span>
+                </div>
+
+                {/* Floating Rating Card */}
+                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-8 py-4 shadow-2xl">
+                  <div className="flex items-center gap-3">
+                    {renderStars(product.rating)}
+                    <span className="text-white font-bold text-lg">({product.rating}) Excellent</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Trust Badges - Full Width */}
+            {/* Floating Feature Cards */}
             <div className="grid grid-cols-3 gap-6">
-              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <Shield className="w-10 h-10 text-green-500 mx-auto mb-3" />
-                <p className="text-base font-bold text-gray-900">Secure Payment</p>
-                <p className="text-sm text-gray-600">SSL Protected</p>
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <p className="text-white font-bold">Secure Payment</p>
+                <p className="text-gray-300 text-sm">SSL Protected</p>
               </div>
-              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <Truck className="w-10 h-10 text-blue-500 mx-auto mb-3" />
-                <p className="text-base font-bold text-gray-900">Free Shipping</p>
-                <p className="text-sm text-gray-600">Orders over R500</p>
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Truck className="w-6 h-6 text-white" />
+                </div>
+                <p className="text-white font-bold">Free Shipping</p>
+                <p className="text-gray-300 text-sm">Orders over R500</p>
               </div>
-              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <RotateCcw className="w-10 h-10 text-purple-500 mx-auto mb-3" />
-                <p className="text-base font-bold text-gray-900">Easy Returns</p>
-                <p className="text-sm text-gray-600">30-Day Policy</p>
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <RotateCcw className="w-6 h-6 text-white" />
+                </div>
+                <p className="text-white font-bold">Easy Returns</p>
+                <p className="text-gray-300 text-sm">30-Day Policy</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side - Product Information Section */}
-        <div className="bg-white flex flex-col justify-center p-8 lg:p-16 overflow-y-auto">
-          <div className="w-full max-w-2xl mx-auto space-y-8">
+        {/* Right Section - Product Details */}
+        <div className="lg:col-span-2 bg-white/5 backdrop-blur-xl border-l border-white/10 p-8 lg:p-12 overflow-y-auto">
+          <div className="space-y-8 max-w-2xl">
             {/* Product Header */}
             <div className="space-y-6">
-              <div>
-                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">{product.name}</h1>
-                
-                {/* Enhanced Rating */}
-                <div className="flex items-center gap-6 mb-8">
-                  <div className="flex items-center gap-2">
-                    {renderStars(product.rating)}
-                    <span className="text-xl font-semibold text-gray-700 ml-2">({product.rating})</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-base text-blue-600 hover:text-blue-700 cursor-pointer">
-                    <span>See all reviews</span>
-                    <ArrowLeft className="w-4 h-4 rotate-180" />
-                  </div>
-                </div>
+              <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                {product.name}
+              </h1>
 
-                {/* Enhanced Price */}
-                <div className="bg-gradient-to-r from-electric/10 to-orange/10 rounded-3xl p-8 mb-8">
-                  <div className="flex items-baseline gap-4 mb-3">
-                    <span className="text-6xl lg:text-7xl font-bold text-gray-900">R{product.price}</span>
-                    <span className="text-2xl text-gray-600 bg-white px-4 py-2 rounded-full">incl. VAT</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-lg text-gray-700">
-                    <span className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-bold">
-                      💳 R{Math.round(parseFloat(product.price) / 6)}/month
-                    </span>
-                    <span>with 0% interest financing</span>
-                  </div>
-                </div>
-
-                {/* Enhanced Stock Status */}
-                <div className="mb-8">
-                  {product.inStock ? (
-                    <div className="flex items-center gap-4 bg-green-50 border border-green-200 rounded-2xl p-6">
-                      <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-xl font-bold text-green-800">✅ In Stock - Ships Today</span>
+              {/* Mega Price Display */}
+              <div className="relative">
+                <div className="bg-gradient-to-r from-electric/20 to-orange/20 rounded-3xl p-8 border border-electric/30">
+                  <div className="text-center space-y-4">
+                    <div className="text-7xl lg:text-8xl font-black text-transparent bg-gradient-to-r from-electric via-white to-orange bg-clip-text">
+                      R{product.price}
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-4 bg-red-50 border border-red-200 rounded-2xl p-6">
-                      <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                      <span className="text-xl font-bold text-red-800">❌ Currently Out of Stock</span>
+                    <div className="flex items-center justify-center gap-4">
+                      <span className="bg-white/20 text-white px-4 py-2 rounded-full font-bold">incl. VAT</span>
+                      <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-full font-bold">
+                        R{Math.round(parseFloat(product.price) / 6)}/month
+                      </span>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
 
-              {/* Enhanced Action Buttons */}
-              <div className="space-y-6">
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock || isAddingToCart}
-                  className="w-full bg-gradient-to-r from-electric via-electric to-orange hover:from-electric/90 hover:to-orange/90 text-navy font-bold py-8 text-2xl rounded-3xl shadow-2xl shadow-electric/25 hover:shadow-electric/40 transition-all duration-300 transform hover:scale-105"
-                  size="lg"
-                >
-                  <ShoppingCart className="w-8 h-8 mr-4" />
-                  {isAddingToCart ? "Adding to Cart..." : product.inStock ? "Add to Cart - Free Shipping" : "Notify When Available"}
+              {/* Stock Status */}
+              <div className="flex justify-center">
+                {product.inStock ? (
+                  <div className="bg-green-500/20 border border-green-400/30 rounded-2xl px-6 py-4 flex items-center gap-3">
+                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-300 font-bold text-lg">In Stock - Ships Today</span>
+                  </div>
+                ) : (
+                  <div className="bg-red-500/20 border border-red-400/30 rounded-2xl px-6 py-4 flex items-center gap-3">
+                    <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                    <span className="text-red-300 font-bold text-lg">Out of Stock</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-4">
+              <Button
+                onClick={handleAddToCart}
+                disabled={!product.inStock || isAddingToCart}
+                className="w-full bg-gradient-to-r from-electric via-electric to-orange hover:from-electric/80 hover:to-orange/80 text-navy font-black py-8 text-xl rounded-2xl shadow-2xl hover:shadow-electric/50 transition-all duration-500 transform hover:scale-105 border-2 border-white/20"
+                size="lg"
+              >
+                <ShoppingCart className="w-8 h-8 mr-4" />
+                {isAddingToCart ? "Adding to Cart..." : product.inStock ? "Add to Cart" : "Notify When Available"}
+              </Button>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <Button variant="outline" className="py-6 text-white border-white/30 hover:bg-white/10 rounded-2xl transition-all duration-300">
+                  <Heart className="w-5 h-5 mr-2 text-red-400" />
+                  Wishlist
                 </Button>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <Button variant="outline" className="py-6 text-lg rounded-2xl border-2 hover:bg-gray-50 transition-all duration-200">
-                    <Heart className="w-6 h-6 mr-3 text-red-500" />
-                    Save for Later
-                  </Button>
-                  <Button variant="outline" className="py-6 text-lg rounded-2xl border-2 hover:bg-gray-50 transition-all duration-200">
-                    <Package className="w-6 h-6 mr-3 text-blue-500" />
-                    Compare
-                  </Button>
-                </div>
+                <Button variant="outline" className="py-6 text-white border-white/30 hover:bg-white/10 rounded-2xl transition-all duration-300">
+                  <Package className="w-5 h-5 mr-2 text-blue-400" />
+                  Compare
+                </Button>
               </div>
             </div>
 
             {/* Key Features */}
             <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-gray-900 flex items-center">
-                <Zap className="w-8 h-8 mr-4 text-electric" />
+              <h3 className="text-2xl font-bold text-white flex items-center">
+                <Zap className="w-6 h-6 mr-3 text-electric" />
                 Key Features
               </h3>
               <div className="space-y-4">
-                <div className="flex items-center gap-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
-                  <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-xl font-bold text-gray-900">High-Capacity Battery</p>
-                    <p className="text-lg text-gray-600">Long-lasting power for your devices</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-100">
-                  <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center">
-                    <Package className="w-8 h-8 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-xl font-bold text-gray-900">Ultra-Portable Design</p>
-                    <p className="text-lg text-gray-600">Compact and lightweight for travel</p>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-lg">High-Capacity Battery</p>
+                      <p className="text-gray-300">Long-lasting power for your devices</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-6 p-6 bg-gradient-to-r from-purple-50 to-violet-50 rounded-2xl border border-purple-100">
-                  <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center">
-                    <Shield className="w-8 h-8 text-white" />
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center">
+                      <Package className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-lg">Ultra-Portable Design</p>
+                      <p className="text-gray-300">Compact and lightweight for travel</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xl font-bold text-gray-900">Safety Certified</p>
-                    <p className="text-lg text-gray-600">Multiple protection systems built-in</p>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-lg">Safety Certified</p>
+                      <p className="text-gray-300">Multiple protection systems built-in</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Delivery Information */}
-            <div className="bg-gradient-to-br from-navy to-navy/90 rounded-3xl p-8 shadow-2xl text-white">
-              <h3 className="text-3xl font-bold mb-8 flex items-center">
-                <Truck className="w-8 h-8 mr-4 text-electric" />
+            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8">
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <Truck className="w-6 h-6 mr-3 text-electric" />
                 Delivery & Returns
               </h3>
-              <div className="space-y-6">
-                <div className="flex items-start gap-6 p-6 bg-white/10 rounded-2xl backdrop-blur-sm">
-                  <div className="w-12 h-12 bg-electric/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Truck className="w-6 h-6 text-electric" />
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-electric/20 rounded-xl flex items-center justify-center">
+                    <Truck className="w-5 h-5 text-electric" />
                   </div>
                   <div>
-                    <p className="text-xl font-bold text-white">Free Standard Delivery</p>
-                    <p className="text-lg text-gray-300">On orders over R500 • 2-3 business days nationwide</p>
+                    <p className="text-white font-bold">Free Standard Delivery</p>
+                    <p className="text-gray-300 text-sm">On orders over R500 • 2-3 business days</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-6 p-6 bg-white/10 rounded-2xl backdrop-blur-sm">
-                  <div className="w-12 h-12 bg-electric/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-electric" />
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-electric/20 rounded-xl flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-electric" />
                   </div>
                   <div>
-                    <p className="text-xl font-bold text-white">Express Delivery Available</p>
-                    <p className="text-lg text-gray-300">Next business day delivery • Only R99</p>
+                    <p className="text-white font-bold">Express Delivery</p>
+                    <p className="text-gray-300 text-sm">Next business day • Only R99</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-6 p-6 bg-white/10 rounded-2xl backdrop-blur-sm">
-                  <div className="w-12 h-12 bg-electric/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <RotateCcw className="w-6 h-6 text-electric" />
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-electric/20 rounded-xl flex items-center justify-center">
+                    <RotateCcw className="w-5 h-5 text-electric" />
                   </div>
                   <div>
-                    <p className="text-xl font-bold text-white">30-Day Returns</p>
-                    <p className="text-lg text-gray-300">Free returns on all items • No questions asked</p>
+                    <p className="text-white font-bold">30-Day Returns</p>
+                    <p className="text-gray-300 text-sm">Free returns on all items</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Product Description */}
-            <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-gray-900">Product Description</h3>
-              <div className="prose prose-gray max-w-none">
-                <p className="text-xl text-gray-700 leading-relaxed">{product.description}</p>
-              </div>
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-white">Product Description</h3>
+              <p className="text-gray-300 text-lg leading-relaxed">{product.description}</p>
             </div>
           </div>
         </div>
