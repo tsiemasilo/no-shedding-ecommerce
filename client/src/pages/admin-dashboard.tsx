@@ -317,18 +317,42 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="rating">Rating</Label>
-            <Input
-              id="rating"
-              type="number"
-              step="0.1"
-              min="0"
-              max="5"
-              value={formData.rating}
-              onChange={(e) => setFormData(prev => ({ ...prev, rating: e.target.value }))}
-              required
-            />
+            <Label htmlFor="subcategory">Subcategory (Optional)</Label>
+            <Select 
+              value={subcategories.find(s => s.categoryId === formData.categoryId)?.id?.toString() || ""} 
+              onValueChange={(value) => {
+                // Optional: Add subcategoryId to form data if needed
+                console.log('Selected subcategory:', value);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select subcategory..." />
+              </SelectTrigger>
+              <SelectContent>
+                {subcategories
+                  .filter(sub => sub.categoryId === formData.categoryId)
+                  .map((subcategory) => (
+                    <SelectItem key={subcategory.id} value={subcategory.id.toString()}>
+                      {subcategory.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="rating">Rating</Label>
+          <Input
+            id="rating"
+            type="number"
+            step="0.1"
+            min="0"
+            max="5"
+            value={formData.rating}
+            onChange={(e) => setFormData(prev => ({ ...prev, rating: e.target.value }))}
+            required
+          />
         </div>
         
         <div className="flex gap-4">
