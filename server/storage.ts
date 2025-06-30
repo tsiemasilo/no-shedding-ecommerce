@@ -258,7 +258,7 @@ export class MemStorage implements IStorage {
       {
         name: "Whole House Surge Protector",
         description: "Professional-grade surge protection for entire home",
-        price: "279.99",
+        price: "5,129.99",
         image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 6,
         featured: false,
@@ -268,7 +268,7 @@ export class MemStorage implements IStorage {
       {
         name: "Ground Fault Circuit Interrupter",
         description: "GFCI outlet with built-in safety protection",
-        price: "45.99",
+        price: "839.99",
         image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
         categoryId: 6,
         featured: false,
