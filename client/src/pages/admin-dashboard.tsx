@@ -14,7 +14,7 @@ import { useLocation } from 'wouter';
 import { Loader2, Plus, Edit, Trash2, LogOut, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
-import type { Product, Category, InsertProduct } from '@shared/schema';
+import type { Product, Category, Subcategory, InsertProduct } from '@shared/schema';
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -35,6 +35,10 @@ export default function AdminDashboard() {
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
+  });
+
+  const { data: subcategories = [] } = useQuery<Subcategory[]>({
+    queryKey: ['/api/subcategories'],
   });
 
   const createProductMutation = useMutation({
@@ -142,6 +146,7 @@ export default function AdminDashboard() {
                 </DialogTrigger>
                 <ProductDialog
                   categories={categories}
+                  subcategories={subcategories}
                   onSubmit={(data) => createProductMutation.mutate(data)}
                   isLoading={createProductMutation.isPending}
                 />
@@ -184,6 +189,7 @@ export default function AdminDashboard() {
                             </DialogTrigger>
                             <ProductDialog
                               categories={categories}
+                              subcategories={subcategories}
                               product={editingProduct}
                               onSubmit={(data) => updateProductMutation.mutate({ id: product.id, data })}
                               isLoading={updateProductMutation.isPending}
@@ -217,12 +223,13 @@ export default function AdminDashboard() {
 
 interface ProductDialogProps {
   categories: Category[];
+  subcategories: Subcategory[];
   product?: Product | null;
   onSubmit: (data: InsertProduct) => void;
   isLoading: boolean;
 }
 
-function ProductDialog({ categories, product, onSubmit, isLoading }: ProductDialogProps) {
+function ProductDialog({ categories, subcategories, product, onSubmit, isLoading }: ProductDialogProps) {
   const [formData, setFormData] = useState<InsertProduct>({
     name: product?.name || '',
     description: product?.description || '',
