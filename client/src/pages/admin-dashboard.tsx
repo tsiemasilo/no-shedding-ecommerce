@@ -76,9 +76,8 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
-      queryClient.invalidateQueries({ predicate: (query) => 
-        Boolean(query.queryKey[0]?.toString().startsWith('/api/products'))
-      });
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products?featured=true'] });
       toast({ title: "Product deleted successfully" });
     },
     onError: () => {
