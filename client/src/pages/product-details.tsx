@@ -108,75 +108,141 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-sand">
+    <div className="min-h-screen bg-gradient-to-br from-sand to-white">
+      {/* Header with Navigation */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-4">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation('/')}
+            className="text-navy hover:text-electric hover:bg-electric/10 transition-all duration-200"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
-        <Button
-          variant="ghost"
-          onClick={() => setLocation('/')}
-          className="mb-6 text-navy hover:text-electric"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Button>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Product Image */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-96 object-cover"
-            />
-          </div>
-
-          {/* Product Information */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold text-navy mb-2">{product.name}</h1>
-              <div className="flex items-center gap-4 mb-4">
-                {renderStars(product.rating)}
-                <Badge variant={product.inStock ? "default" : "destructive"}>
-                  {product.inStock ? "In Stock" : "Out of Stock"}
-                </Badge>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Product Image Section */}
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 group">
+              <div className="relative overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-96 lg:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 {product.featured && (
-                  <Badge variant="secondary" className="bg-electric text-navy">
-                    Featured
-                  </Badge>
+                  <div className="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    ⭐ Featured
+                  </div>
                 )}
               </div>
-              <p className="text-4xl font-bold text-navy mb-6">R{product.price}</p>
             </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-navy mb-3">Description</h3>
-              <p className="text-charcoal leading-relaxed">{product.description}</p>
+            
+            {/* Trust Indicators - Moved here for better visual balance */}
+            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+              <h3 className="text-lg font-semibold text-navy mb-4 flex items-center">
+                <Shield className="w-5 h-5 mr-2 text-electric" />
+                Why Choose No Shedding?
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-charcoal">
+                  <div className="w-2 h-2 bg-electric rounded-full"></div>
+                  <span>Secure Payment & Privacy Protection</span>
+                </div>
+                <div className="flex items-center gap-3 text-charcoal">
+                  <div className="w-2 h-2 bg-electric rounded-full"></div>
+                  <span>Free Shipping on Orders Over R500</span>
+                </div>
+                <div className="flex items-center gap-3 text-charcoal">
+                  <div className="w-2 h-2 bg-electric rounded-full"></div>
+                  <span>30-Day Money-Back Guarantee</span>
+                </div>
+                <div className="flex items-center gap-3 text-charcoal">
+                  <div className="w-2 h-2 bg-electric rounded-full"></div>
+                  <span>Expert Customer Support</span>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div className="space-y-4">
+          {/* Product Information Section */}
+          <div className="space-y-8">
+            {/* Product Header */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <div className="flex items-center gap-3 mb-4">
+                {renderStars(product.rating)}
+                <span className="text-sm text-charcoal font-medium">({product.rating} stars)</span>
+                <Badge variant={product.inStock ? "default" : "destructive"} className="ml-auto">
+                  {product.inStock ? "✓ In Stock" : "Out of Stock"}
+                </Badge>
+              </div>
+              
+              <h1 className="text-3xl lg:text-4xl font-bold text-navy mb-4 leading-tight">
+                {product.name}
+              </h1>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-4xl lg:text-5xl font-bold text-navy">R{product.price}</span>
+                <span className="text-lg text-charcoal/70">excl. VAT</span>
+              </div>
+
+              {/* Action Button */}
               <Button
                 onClick={handleAddToCart}
                 disabled={!product.inStock || isAddingToCart}
-                className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-3"
+                className="w-full bg-gradient-to-r from-electric to-orange hover:from-electric/90 hover:to-orange/90 text-navy font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 size="lg"
               >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {isAddingToCart ? "Adding to Cart..." : "Add to Cart"}
+                <ShoppingCart className="w-6 h-6 mr-3" />
+                {isAddingToCart ? "Adding to Cart..." : product.inStock ? "Add to Cart" : "Currently Unavailable"}
               </Button>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="border-t pt-6 space-y-4">
-              <div className="flex items-center gap-3 text-sm text-charcoal">
-                <Shield className="w-5 h-5 text-electric" />
-                <span>Secure Payment & Privacy Protection</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-charcoal">
-                <Truck className="w-5 h-5 text-electric" />
-                <span>Free Shipping on Orders Over R500</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-charcoal">
-                <RotateCcw className="w-5 h-5 text-electric" />
-                <span>30-Day Return Policy</span>
+            {/* Product Description */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                <div className="w-1 h-6 bg-electric rounded-full mr-3"></div>
+                Product Details
+              </h3>
+              <p className="text-charcoal leading-relaxed text-lg">{product.description}</p>
+            </div>
+
+            {/* Additional Features */}
+            <div className="bg-gradient-to-r from-navy to-navy/90 rounded-2xl p-8 shadow-lg text-white">
+              <h3 className="text-xl font-bold mb-6 flex items-center">
+                <div className="w-2 h-2 bg-electric rounded-full mr-3"></div>
+                Key Features
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-electric" />
+                  </div>
+                  <span>Quality Guaranteed</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
+                    <Truck className="w-4 h-4 text-electric" />
+                  </div>
+                  <span>Fast Delivery</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
+                    <RotateCcw className="w-4 h-4 text-electric" />
+                  </div>
+                  <span>Easy Returns</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
+                    <Star className="w-4 h-4 text-electric" />
+                  </div>
+                  <span>Top Rated</span>
+                </div>
               </div>
             </div>
           </div>
