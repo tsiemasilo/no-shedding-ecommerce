@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useLocation } from 'wouter';
-import { ArrowLeft, Star, ShoppingCart, Shield, Truck, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Star, ShoppingCart, Shield, Truck, RotateCcw, Heart, Share2, Package, Zap, Award, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@shared/schema';
@@ -108,142 +110,171 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sand to-white">
-      {/* Header with Navigation */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Button
-            variant="ghost"
-            onClick={() => setLocation('/')}
-            className="text-navy hover:text-electric hover:bg-electric/10 transition-all duration-200"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <button 
+              onClick={() => setLocation('/')}
+              className="hover:text-navy transition-colors"
+            >
+              Home
+            </button>
+            <span>/</span>
+            <span className="text-navy font-medium">{product.name}</span>
+          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
           {/* Product Image Section */}
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 group">
-              <div className="relative overflow-hidden">
+            <div className="bg-white rounded-lg border overflow-hidden">
+              <div className="aspect-square relative">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-96 lg:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 {product.featured && (
-                  <div className="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                    ⭐ Featured
+                  <div className="absolute top-4 left-4 bg-orange text-white px-3 py-1 rounded text-sm font-medium">
+                    Featured
                   </div>
                 )}
-              </div>
-            </div>
-            
-            {/* Trust Indicators - Moved here for better visual balance */}
-            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-              <h3 className="text-lg font-semibold text-navy mb-4 flex items-center">
-                <Shield className="w-5 h-5 mr-2 text-electric" />
-                Why Choose No Shedding?
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-charcoal">
-                  <div className="w-2 h-2 bg-electric rounded-full"></div>
-                  <span>Secure Payment & Privacy Protection</span>
-                </div>
-                <div className="flex items-center gap-3 text-charcoal">
-                  <div className="w-2 h-2 bg-electric rounded-full"></div>
-                  <span>Free Shipping on Orders Over R500</span>
-                </div>
-                <div className="flex items-center gap-3 text-charcoal">
-                  <div className="w-2 h-2 bg-electric rounded-full"></div>
-                  <span>30-Day Money-Back Guarantee</span>
-                </div>
-                <div className="flex items-center gap-3 text-charcoal">
-                  <div className="w-2 h-2 bg-electric rounded-full"></div>
-                  <span>Expert Customer Support</span>
-                </div>
               </div>
             </div>
           </div>
 
           {/* Product Information Section */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Product Header */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
+              
+              {/* Rating */}
               <div className="flex items-center gap-3 mb-4">
-                {renderStars(product.rating)}
-                <span className="text-sm text-charcoal font-medium">({product.rating} stars)</span>
-                <Badge variant={product.inStock ? "default" : "destructive"} className="ml-auto">
-                  {product.inStock ? "✓ In Stock" : "Out of Stock"}
-                </Badge>
-              </div>
-              
-              <h1 className="text-3xl lg:text-4xl font-bold text-navy mb-4 leading-tight">
-                {product.name}
-              </h1>
-              
-              <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-4xl lg:text-5xl font-bold text-navy">R{product.price}</span>
-                <span className="text-lg text-charcoal/70">excl. VAT</span>
+                <div className="flex items-center gap-1">
+                  {renderStars(product.rating)}
+                  <span className="text-sm text-gray-600 ml-1">({product.rating})</span>
+                </div>
+                <span className="text-sm text-gray-400">|</span>
+                <span className="text-sm text-gray-600">Write a review</span>
               </div>
 
-              {/* Action Button */}
+              {/* Price */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-gray-900">R{product.price}</span>
+                  <span className="text-sm text-gray-500">incl. VAT</span>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">
+                  Or as low as R{Math.round(parseFloat(product.price) / 6).toFixed(0)}/month with financing
+                </p>
+              </div>
+
+              {/* Stock Status */}
+              <div className="mb-6">
+                {product.inStock ? (
+                  <div className="flex items-center gap-2 text-green-600">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                    <span className="font-medium">In Stock</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-red-600">
+                    <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+                    <span className="font-medium">Out of Stock</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
               <Button
                 onClick={handleAddToCart}
                 disabled={!product.inStock || isAddingToCart}
-                className="w-full bg-gradient-to-r from-electric to-orange hover:from-electric/90 hover:to-orange/90 text-navy font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="w-full bg-electric hover:bg-electric/90 text-navy font-bold py-4 text-lg"
                 size="lg"
               >
-                <ShoppingCart className="w-6 h-6 mr-3" />
-                {isAddingToCart ? "Adding to Cart..." : product.inStock ? "Add to Cart" : "Currently Unavailable"}
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                {isAddingToCart ? "Adding to Cart..." : product.inStock ? "Add to Cart" : "Notify When Available"}
               </Button>
+              
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1">
+                  <Heart className="w-4 h-4 mr-2" />
+                  Add to Wishlist
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+              </div>
             </div>
 
-            {/* Product Description */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                <div className="w-1 h-6 bg-electric rounded-full mr-3"></div>
-                Product Details
-              </h3>
-              <p className="text-charcoal leading-relaxed text-lg">{product.description}</p>
-            </div>
+            <Separator className="my-6" />
 
-            {/* Additional Features */}
-            <div className="bg-gradient-to-r from-navy to-navy/90 rounded-2xl p-8 shadow-lg text-white">
-              <h3 className="text-xl font-bold mb-6 flex items-center">
-                <div className="w-2 h-2 bg-electric rounded-full mr-3"></div>
-                Key Features
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-electric" />
-                  </div>
-                  <span>Quality Guaranteed</span>
+            {/* Product Features */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Key Features</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Zap className="w-5 h-5 text-electric" />
+                  <span className="text-sm font-medium">High Capacity</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
-                    <Truck className="w-4 h-4 text-electric" />
-                  </div>
-                  <span>Fast Delivery</span>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Package className="w-5 h-5 text-electric" />
+                  <span className="text-sm font-medium">Portable Design</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
-                    <RotateCcw className="w-4 h-4 text-electric" />
-                  </div>
-                  <span>Easy Returns</span>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Shield className="w-5 h-5 text-electric" />
+                  <span className="text-sm font-medium">Safety Certified</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-electric/20 rounded-lg flex items-center justify-center">
-                    <Star className="w-4 h-4 text-electric" />
-                  </div>
-                  <span>Top Rated</span>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Award className="w-5 h-5 text-electric" />
+                  <span className="text-sm font-medium">Premium Quality</span>
                 </div>
               </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Delivery & Returns */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Delivery & Returns</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Truck className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm font-medium">Free Standard Delivery</p>
+                    <p className="text-xs text-gray-600">On orders over R500 • 3-5 business days</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm font-medium">Express Delivery Available</p>
+                    <p className="text-xs text-gray-600">Next business day • R99</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <RotateCcw className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm font-medium">30-Day Returns</p>
+                    <p className="text-xs text-gray-600">Free returns on all items</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Product Description */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Product Description</h3>
+              <p className="text-gray-700 leading-relaxed">{product.description}</p>
             </div>
           </div>
         </div>
