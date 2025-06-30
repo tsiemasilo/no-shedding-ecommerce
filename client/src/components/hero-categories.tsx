@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, Zap, Home, Wrench, Star } from 'lucide-react';
+import { Lightbulb, Zap, Home, Wrench, Star, Shield } from 'lucide-react';
 import type { Category } from '@shared/schema';
 
 export function HeroCategories() {
@@ -21,6 +21,8 @@ export function HeroCategories() {
         return Wrench;
       case 'Premium Items':
         return Star;
+      case 'Safety & Security':
+        return Shield;
       default:
         return Lightbulb;
     }
@@ -39,7 +41,7 @@ export function HeroCategories() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
                 <div className="w-full h-48 bg-sand flex items-center justify-center">
                   <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
@@ -75,9 +77,7 @@ export function HeroCategories() {
             return (
               <div
                 key={category.id}
-                className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105 ${
-                  index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
+                className="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105"
               >
                 <div className="w-full h-48 bg-sand flex items-center justify-center">
                   <IconComponent className="w-24 h-24 text-navy" />

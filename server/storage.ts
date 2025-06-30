@@ -77,6 +77,12 @@ export class MemStorage implements IStorage {
         description: "Luxury electrical fixtures and high-end smart solutions",
         image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
         slug: "premium-items"
+      },
+      {
+        name: "Safety & Security",
+        description: "Circuit breakers, surge protectors, electrical safety equipment",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "safety-security"
       }
     ];
 
@@ -145,6 +151,36 @@ export class MemStorage implements IStorage {
         categoryId: 2,
         featured: false,
         rating: "4.4",
+        inStock: true
+      },
+      {
+        name: "Smart Circuit Breaker Panel",
+        description: "Advanced circuit breaker with remote monitoring and control",
+        price: "349.99",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
+        categoryId: 6,
+        featured: true,
+        rating: "4.8",
+        inStock: true
+      },
+      {
+        name: "Whole House Surge Protector",
+        description: "Professional-grade surge protection for entire home",
+        price: "279.99",
+        image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
+        categoryId: 6,
+        featured: false,
+        rating: "4.6",
+        inStock: true
+      },
+      {
+        name: "Ground Fault Circuit Interrupter",
+        description: "GFCI outlet with built-in safety protection",
+        price: "45.99",
+        image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
+        categoryId: 6,
+        featured: false,
+        rating: "4.5",
         inStock: true
       }
     ];
