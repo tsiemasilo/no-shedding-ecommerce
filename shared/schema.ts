@@ -23,7 +23,8 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  image: text("image").notNull(),
+  image: text("image").notNull(), // Primary image for backward compatibility
+  images: text("images").array().notNull().default([]), // Array of additional images
   categoryId: integer("category_id").references(() => categories.id).notNull(),
   featured: boolean("featured").default(false).notNull(),
   rating: decimal("rating", { precision: 2, scale: 1 }).default("0").notNull(),
