@@ -92,7 +92,8 @@ export function FeaturedProducts() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300"
+              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer"
+              onClick={() => setLocation(`/product/${product.id}`)}
             >
               <img
                 src={product.image}
@@ -107,7 +108,10 @@ export function FeaturedProducts() {
                   {renderStars(product.rating)}
                 </div>
                 <Button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
                   disabled={isAddingToCart || !product.inStock}
                   className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
                 >
