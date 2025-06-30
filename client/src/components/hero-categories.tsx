@@ -103,7 +103,7 @@ export function HeroCategories() {
                     className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
                     onClick={() => setSelectedCategory(category)}
                   >
-                    {(category.name === 'Lighting Solutions' || category.name === 'Power Solutions') 
+                    {(category.name === 'Lighting Solutions' || category.name === 'Power Solutions' || category.name === 'Appliance Alternatives') 
                       ? 'View Subcategories' 
                       : `Explore ${category.name.split(' ')[0]}`}
                   </Button>

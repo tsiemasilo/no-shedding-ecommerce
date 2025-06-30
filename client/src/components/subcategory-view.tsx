@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield, Flame, Coffee } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import type { Subcategory, Product } from '@shared/schema';
@@ -44,6 +44,10 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
         return Smartphone;
       case 'UPS Devices':
         return Shield;
+      case 'Gas Stoves':
+        return Flame;
+      case 'Kettles':
+        return Coffee;
       default:
         return Lightbulb;
     }

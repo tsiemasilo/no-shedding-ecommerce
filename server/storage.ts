@@ -153,6 +153,19 @@ export class MemStorage implements IStorage {
         description: "Uninterruptible Power Supply systems for backup power protection",
         categoryId: 2, // Power Solutions
         slug: "ups-devices"
+      },
+      // Appliance Alternatives subcategories
+      {
+        name: "Gas Stoves",
+        description: "Efficient gas-powered cooking stoves and portable burners",
+        categoryId: 3, // Appliance Alternatives
+        slug: "gas-stoves"
+      },
+      {
+        name: "Kettles",
+        description: "Electric and stovetop kettles for quick water heating",
+        categoryId: 3, // Appliance Alternatives
+        slug: "kettles"
       }
     ];
 
