@@ -44,6 +44,7 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products?featured=true'] });
       setIsCreateOpen(false);
       toast({ title: "Product created successfully" });
     },
@@ -60,6 +61,7 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products?featured=true'] });
       setEditingProduct(null);
       toast({ title: "Product updated successfully" });
     },
@@ -74,7 +76,9 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ predicate: (query) => 
+        Boolean(query.queryKey[0]?.toString().startsWith('/api/products'))
+      });
       toast({ title: "Product deleted successfully" });
     },
     onError: () => {
