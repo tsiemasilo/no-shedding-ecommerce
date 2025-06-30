@@ -1,4 +1,4 @@
-import { categories, products, cartItems, newsletters, subcategories, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory } from "@shared/schema";
+import { categories, products, cartItems, newsletters, subcategories, users, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser } from "@shared/schema";
 
 export interface IStorage {
   // Categories
@@ -25,6 +25,16 @@ export interface IStorage {
   
   // Newsletter
   subscribeToNewsletter(newsletter: InsertNewsletter): Promise<Newsletter>;
+  
+  // Users/Auth
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  
+  // Product management
+  createProduct(product: InsertProduct): Promise<Product>;
+  updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
+  deleteProduct(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -33,11 +43,13 @@ export class MemStorage implements IStorage {
   private products: Map<number, Product>;
   private cartItems: Map<number, CartItem>;
   private newsletters: Map<number, Newsletter>;
+  private users: Map<number, User>;
   private currentCategoryId: number;
   private currentSubcategoryId: number;
   private currentProductId: number;
   private currentCartItemId: number;
   private currentNewsletterId: number;
+  private currentUserId: number;
 
   constructor() {
     this.categories = new Map();
@@ -45,11 +57,13 @@ export class MemStorage implements IStorage {
     this.products = new Map();
     this.cartItems = new Map();
     this.newsletters = new Map();
+    this.users = new Map();
     this.currentCategoryId = 1;
     this.currentSubcategoryId = 1;
     this.currentProductId = 1;
     this.currentCartItemId = 1;
     this.currentNewsletterId = 1;
+    this.currentUserId = 1;
     
     this.seedData();
   }
@@ -132,6 +146,15 @@ export class MemStorage implements IStorage {
       const subcategory: Subcategory = { ...subcat, id: this.currentSubcategoryId++ };
       this.subcategories.set(subcategory.id, subcategory);
     });
+
+    // Seed admin user
+    const adminUser: User = {
+      id: this.currentUserId++,
+      username: "admin",
+      password: "admin1", // In production, this should be hashed
+      role: "admin"
+    };
+    this.users.set(adminUser.id, adminUser);
 
     // Seed products
     const productsData: InsertProduct[] = [
@@ -320,6 +343,42 @@ export class MemStorage implements IStorage {
     };
     this.newsletters.set(newSubscription.id, newSubscription);
     return newSubscription;
+  }
+
+  // User/Auth methods
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.username === username);
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const newUser: User = { ...user, id: this.currentUserId++ };
+    this.users.set(newUser.id, newUser);
+    return newUser;
+  }
+
+  // Product management methods
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const newProduct: Product = { ...product, id: this.currentProductId++ };
+    this.products.set(newProduct.id, newProduct);
+    return newProduct;
+  }
+
+  async updateProduct(id: number, productUpdate: Partial<InsertProduct>): Promise<Product | undefined> {
+    const product = this.products.get(id);
+    if (product) {
+      const updatedProduct: Product = { ...product, ...productUpdate };
+      this.products.set(id, updatedProduct);
+      return updatedProduct;
+    }
+    return undefined;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    return this.products.delete(id);
   }
 }
 

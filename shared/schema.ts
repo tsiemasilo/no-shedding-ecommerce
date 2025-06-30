@@ -43,6 +43,13 @@ export const newsletters = pgTable("newsletters", {
   subscribedAt: text("subscribed_at").notNull(),
 });
 
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  role: text("role").notNull().default("admin"),
+});
+
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
 });
@@ -64,14 +71,20 @@ export const insertNewsletterSchema = createInsertSchema(newsletters).omit({
   subscribedAt: true,
 });
 
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+});
+
 export type Category = typeof categories.$inferSelect;
 export type Subcategory = typeof subcategories.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type CartItem = typeof cartItems.$inferSelect;
 export type Newsletter = typeof newsletters.$inferSelect;
+export type User = typeof users.$inferSelect;
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertSubcategory = z.infer<typeof insertSubcategorySchema>;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertCartItem = z.infer<typeof insertCartItemSchema>;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
+export type InsertUser = z.infer<typeof insertUserSchema>;
