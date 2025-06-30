@@ -563,6 +563,12 @@ export class DatabaseStorage implements IStorage {
   async deleteProduct(id: number): Promise<boolean> {
     try {
       console.log(`DatabaseStorage: Deleting product with ID ${id}`);
+      
+      // First delete any cart items that reference this product
+      console.log(`DatabaseStorage: Removing cart items for product ${id}`);
+      await db.delete(cartItems).where(eq(cartItems.productId, id));
+      
+      // Then delete the product
       const result = await db.delete(products).where(eq(products.id, id));
       console.log(`DatabaseStorage: Delete result:`, result);
       const success = (result.rowCount ?? 0) > 0;
