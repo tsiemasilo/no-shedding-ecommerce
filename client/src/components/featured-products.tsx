@@ -88,23 +88,23 @@ export function FeaturedProducts() {
           <p className="text-charcoal text-lg">Discover our most popular electrical solutions</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer"
+              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer transform hover:scale-105"
               onClick={() => setLocation(`/product/${product.id}`)}
             >
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-64 object-cover"
               />
-              <div className="p-4">
-                <h3 className="font-semibold text-navy mb-2">{product.name}</h3>
-                <p className="text-charcoal text-sm mb-3 line-clamp-2">{product.description}</p>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xl font-bold text-navy">R{product.price}</span>
+              <div className="p-6">
+                <h3 className="font-semibold text-navy mb-3 text-lg">{product.name}</h3>
+                <p className="text-charcoal text-base mb-4 line-clamp-2">{product.description}</p>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-bold text-navy">R{product.price}</span>
                   {renderStars(product.rating)}
                 </div>
                 <Button
@@ -113,7 +113,7 @@ export function FeaturedProducts() {
                     handleAddToCart(product);
                   }}
                   disabled={isAddingToCart || !product.inStock}
-                  className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
+                  className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold py-3 text-base"
                 >
                   {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
                 </Button>
