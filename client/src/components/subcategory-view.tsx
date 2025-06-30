@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield, Flame, Coffee } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
-import { useLocation } from 'wouter';
 import type { Subcategory, Product } from '@shared/schema';
 
 interface SubcategoryViewProps {
@@ -18,7 +17,6 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
   const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
   const { addToCart, isAddingToCart } = useCart();
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
 
   const { data: subcategories = [], isLoading } = useQuery<Subcategory[]>({
     queryKey: ['/api/subcategories', categoryId],
@@ -133,7 +131,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
           ) : products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product) => (
-                <Card key={product.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => setLocation(`/product/${product.id}`)}>
+                <Card key={product.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300">
                   <div className="relative overflow-hidden">
                     <img
                       src={product.image}
