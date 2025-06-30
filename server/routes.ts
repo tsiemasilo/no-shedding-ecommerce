@@ -27,6 +27,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Subcategories
+  app.get("/api/subcategories", async (req, res) => {
+    try {
+      const { categoryId } = req.query;
+      
+      let subcategories;
+      if (categoryId) {
+        subcategories = await storage.getSubcategoriesByCategory(parseInt(categoryId as string));
+      } else {
+        subcategories = await storage.getSubcategories();
+      }
+      
+      res.json(subcategories);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch subcategories" });
+    }
+  });
+
+  app.get("/api/subcategories/:slug", async (req, res) => {
+    try {
+      const subcategory = await storage.getSubcategoryBySlug(req.params.slug);
+      if (!subcategory) {
+        return res.status(404).json({ message: "Subcategory not found" });
+      }
+      res.json(subcategory);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch subcategory" });
+    }
+  });
+
   // Products
   app.get("/api/products", async (req, res) => {
     try {

@@ -1,12 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Lightbulb, Zap, Home, Wrench, Star, Shield } from 'lucide-react';
+import { useState } from 'react';
+import { SubcategoryView } from '@/components/subcategory-view';
 import type { Category } from '@shared/schema';
 
 export function HeroCategories() {
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const { data: categories = [], isLoading } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
   });
+
+  // Show subcategory view if a category is selected
+  if (selectedCategory) {
+    return (
+      <SubcategoryView
+        categoryId={selectedCategory.id}
+        categoryName={selectedCategory.name}
+        onBack={() => setSelectedCategory(null)}
+      />
+    );
+  }
 
   // Icon mapping for each category
   const getCategoryIcon = (categoryName: string) => {
@@ -85,8 +99,18 @@ export function HeroCategories() {
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-navy mb-2">{category.name}</h3>
                   <p className="text-charcoal mb-4">{category.description}</p>
-                  <Button className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold">
-                    Explore {category.name.split(' ')[0]}
+                  <Button 
+                    className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
+                    onClick={() => {
+                      if (category.name === 'Lighting Solutions') {
+                        setSelectedCategory(category);
+                      } else {
+                        // Handle other categories - could navigate to product pages
+                        console.log(`Browse ${category.name} products`);
+                      }
+                    }}
+                  >
+                    {category.name === 'Lighting Solutions' ? 'View Subcategories' : `Explore ${category.name.split(' ')[0]}`}
                   </Button>
                 </div>
               </div>
