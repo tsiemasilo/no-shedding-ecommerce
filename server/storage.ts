@@ -1,9 +1,14 @@
-import { categories, products, cartItems, newsletters, type Category, type Product, type CartItem, type Newsletter, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter } from "@shared/schema";
+import { categories, products, cartItems, newsletters, subcategories, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory } from "@shared/schema";
 
 export interface IStorage {
   // Categories
   getCategories(): Promise<Category[]>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
+  
+  // Subcategories
+  getSubcategories(): Promise<Subcategory[]>;
+  getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]>;
+  getSubcategoryBySlug(slug: string): Promise<Subcategory | undefined>;
   
   // Products
   getProducts(): Promise<Product[]>;
@@ -24,20 +29,24 @@ export interface IStorage {
 
 export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
+  private subcategories: Map<number, Subcategory>;
   private products: Map<number, Product>;
   private cartItems: Map<number, CartItem>;
   private newsletters: Map<number, Newsletter>;
   private currentCategoryId: number;
+  private currentSubcategoryId: number;
   private currentProductId: number;
   private currentCartItemId: number;
   private currentNewsletterId: number;
 
   constructor() {
     this.categories = new Map();
+    this.subcategories = new Map();
     this.products = new Map();
     this.cartItems = new Map();
     this.newsletters = new Map();
     this.currentCategoryId = 1;
+    this.currentSubcategoryId = 1;
     this.currentProductId = 1;
     this.currentCartItemId = 1;
     this.currentNewsletterId = 1;
@@ -89,6 +98,39 @@ export class MemStorage implements IStorage {
     categoriesData.forEach(cat => {
       const category: Category = { ...cat, id: this.currentCategoryId++ };
       this.categories.set(category.id, category);
+    });
+
+    // Seed subcategories for Lighting Solutions
+    const subcategoriesData: InsertSubcategory[] = [
+      {
+        name: "Rechargeable LED Lanterns",
+        description: "Portable LED lanterns with rechargeable batteries",
+        categoryId: 1, // Lighting Solutions
+        slug: "rechargeable-led-lanterns"
+      },
+      {
+        name: "Solar Powered Lamp",
+        description: "Eco-friendly solar powered outdoor and indoor lamps",
+        categoryId: 1, // Lighting Solutions
+        slug: "solar-powered-lamp"
+      },
+      {
+        name: "Rechargeable Bulbs",
+        description: "Emergency LED bulbs with built-in battery backup",
+        categoryId: 1, // Lighting Solutions
+        slug: "rechargeable-bulbs"
+      },
+      {
+        name: "Motion Sensor Lights",
+        description: "Automatic LED lights with motion detection",
+        categoryId: 1, // Lighting Solutions
+        slug: "motion-sensor-lights"
+      }
+    ];
+
+    subcategoriesData.forEach(subcat => {
+      const subcategory: Subcategory = { ...subcat, id: this.currentSubcategoryId++ };
+      this.subcategories.set(subcategory.id, subcategory);
     });
 
     // Seed products
@@ -197,6 +239,18 @@ export class MemStorage implements IStorage {
 
   async getCategoryBySlug(slug: string): Promise<Category | undefined> {
     return Array.from(this.categories.values()).find(cat => cat.slug === slug);
+  }
+
+  async getSubcategories(): Promise<Subcategory[]> {
+    return Array.from(this.subcategories.values());
+  }
+
+  async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
+    return Array.from(this.subcategories.values()).filter(subcat => subcat.categoryId === categoryId);
+  }
+
+  async getSubcategoryBySlug(slug: string): Promise<Subcategory | undefined> {
+    return Array.from(this.subcategories.values()).find(subcat => subcat.slug === slug);
   }
 
   async getProducts(): Promise<Product[]> {
