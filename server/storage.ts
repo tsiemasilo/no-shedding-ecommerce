@@ -1,4 +1,9 @@
 import { categories, products, cartItems, newsletters, subcategories, users, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
 
 export interface IStorage {
   // Categories
@@ -35,6 +40,9 @@ export interface IStorage {
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: number): Promise<boolean>;
+  
+  // Session store
+  sessionStore: session.SessionStore;
 }
 
 export class MemStorage implements IStorage {
@@ -183,104 +191,8 @@ export class MemStorage implements IStorage {
     };
     this.users.set(adminUser.id, adminUser);
 
-    // Seed products
-    const productsData: InsertProduct[] = [
-      {
-        name: "Smart LED Ceiling Light",
-        description: "Wireless controlled, energy-efficient LED ceiling light with dimming capabilities",
-        price: "1,599.99",
-        image: "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 1,
-        featured: true,
-        rating: "4.8",
-        inStock: true
-      },
-      {
-        name: "Portable Power Station",
-        description: "1000W capacity portable power station with multiple outlets and USB ports",
-        price: "10,999.99",
-        image: "https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 2,
-        featured: true,
-        rating: "4.6",
-        inStock: true
-      },
-      {
-        name: "Professional Multimeter",
-        description: "Digital display multimeter with auto-ranging and safety features",
-        price: "2,749.99",
-        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 4,
-        featured: true,
-        rating: "4.9",
-        inStock: true
-      },
-      {
-        name: "Smart Home Hub",
-        description: "Control all your smart devices from one central hub with voice control",
-        price: "5,499.99",
-        image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 5,
-        featured: true,
-        rating: "4.7",
-        inStock: true
-      },
-      {
-        name: "LED Strip Lights Kit",
-        description: "16.4ft RGB LED strip lights with remote control and adhesive backing",
-        price: "729.99",
-        image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 1,
-        featured: false,
-        rating: "4.5",
-        inStock: true
-      },
-      {
-        name: "Solar Power Generator",
-        description: "Eco-friendly solar generator with built-in battery storage",
-        price: "16,499.99",
-        image: "https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 2,
-        featured: false,
-        rating: "4.4",
-        inStock: true
-      },
-      {
-        name: "Smart Circuit Breaker Panel",
-        description: "Advanced circuit breaker with remote monitoring and control",
-        price: "6,399.99",
-        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 6,
-        featured: true,
-        rating: "4.8",
-        inStock: true
-      },
-      {
-        name: "Whole House Surge Protector",
-        description: "Professional-grade surge protection for entire home",
-        price: "5,129.99",
-        image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 6,
-        featured: false,
-        rating: "4.6",
-        inStock: true
-      },
-      {
-        name: "Ground Fault Circuit Interrupter",
-        description: "GFCI outlet with built-in safety protection",
-        price: "839.99",
-        image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
-        categoryId: 6,
-        featured: false,
-        rating: "4.5",
-        inStock: true
-      }
-    ];
-
-    productsData.forEach(prod => {
-      const product: Product = { ...prod, id: this.currentProductId++ };
-      this.products.set(product.id, product);
-    });
+    // Products will be added through admin dashboard and saved to database
+    // No seed products - starting with empty product catalog
   }
 
   async getCategories(): Promise<Category[]> {
@@ -409,4 +321,246 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+const PostgresSessionStore = connectPg(session);
+
+export class DatabaseStorage implements IStorage {
+  sessionStore: session.SessionStore;
+
+  constructor() {
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true 
+    });
+    this.seedData();
+  }
+
+  private async seedData() {
+    // Check if categories already exist to avoid duplicate seeding
+    const existingCategories = await db.select().from(categories).limit(1);
+    if (existingCategories.length > 0) {
+      return; // Data already seeded
+    }
+
+    // Seed categories
+    const categoriesData: InsertCategory[] = [
+      {
+        name: "Lighting Solutions",
+        description: "Premium LED fixtures, smart lighting systems, and energy-efficient solutions",
+        image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "lighting-solutions"
+      },
+      {
+        name: "Power Solutions", 
+        description: "UPS systems, generators, power distribution, and backup solutions",
+        image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "power-solutions"
+      },
+      {
+        name: "Appliance Alternatives",
+        description: "Energy-efficient alternatives to traditional appliances",
+        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "appliance-alternatives"
+      },
+      {
+        name: "Comfort & Utility Kits",
+        description: "Complete electrical tool kits and comfort solutions",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "comfort-utility-kits"
+      },
+      {
+        name: "Premium Items",
+        description: "Luxury electrical fixtures and high-end smart solutions",
+        image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "premium-items"
+      },
+      {
+        name: "Safety & Security",
+        description: "Advanced security systems and safety equipment for electrical installations",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+        slug: "safety-security"
+      }
+    ];
+
+    await db.insert(categories).values(categoriesData);
+
+    // Seed subcategories
+    const subcategoriesData: InsertSubcategory[] = [
+      // Lighting Solutions subcategories
+      {
+        name: "Rechargeable LED Lanterns",
+        description: "Portable LED lanterns with rechargeable batteries",
+        categoryId: 1,
+        icon: "Zap",
+        slug: "rechargeable-led-lanterns"
+      },
+      {
+        name: "Solar Powered Lamps",
+        description: "Eco-friendly solar-powered outdoor and indoor lamps",
+        categoryId: 1,
+        icon: "Sun",
+        slug: "solar-powered-lamps"
+      },
+      {
+        name: "Rechargeable Bulbs",
+        description: "Smart LED bulbs with built-in backup power",
+        categoryId: 1,
+        icon: "Lightbulb",
+        slug: "rechargeable-bulbs"
+      },
+      {
+        name: "Motion Sensor Lights",
+        description: "Automatic lighting solutions with motion detection",
+        categoryId: 1,
+        icon: "Eye",
+        slug: "motion-sensor-lights"
+      },
+      // Power Solutions subcategories
+      {
+        name: "Power Banks",
+        description: "Portable charging solutions for all your devices",
+        categoryId: 2,
+        icon: "Smartphone",
+        slug: "power-banks"
+      },
+      {
+        name: "UPS Devices",
+        description: "Uninterruptible power supply systems for home and office",
+        categoryId: 2,
+        icon: "Shield",
+        slug: "ups-devices"
+      },
+      // Appliance Alternatives subcategories
+      {
+        name: "Gas Stoves",
+        description: "Efficient gas cooking solutions and portable stoves",
+        categoryId: 3,
+        icon: "Flame",
+        slug: "gas-stoves"
+      },
+      {
+        name: "Kettles",
+        description: "Electric and gas kettles for all your hot water needs",
+        categoryId: 3,
+        icon: "Coffee",
+        slug: "kettles"
+      }
+    ];
+
+    await db.insert(subcategories).values(subcategoriesData);
+
+    // Seed admin user
+    await db.insert(users).values({
+      username: "admin",
+      password: "admin1", // In production, this should be hashed
+      role: "admin"
+    });
+
+    // No products seeded - they will be added through admin dashboard
+  }
+
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategoryBySlug(slug: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
+    return category;
+  }
+
+  async getSubcategories(): Promise<Subcategory[]> {
+    return await db.select().from(subcategories);
+  }
+
+  async getSubcategoriesByCategory(categoryId: number): Promise<Subcategory[]> {
+    return await db.select().from(subcategories).where(eq(subcategories.categoryId, categoryId));
+  }
+
+  async getSubcategoryBySlug(slug: string): Promise<Subcategory | undefined> {
+    const [subcategory] = await db.select().from(subcategories).where(eq(subcategories.slug, slug));
+    return subcategory;
+  }
+
+  async getProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getFeaturedProducts(): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.featured, true));
+  }
+
+  async getProductsByCategory(categoryId: number): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.categoryId, categoryId));
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product;
+  }
+
+  async getCartItems(sessionId: string): Promise<CartItem[]> {
+    return await db.select().from(cartItems).where(eq(cartItems.sessionId, sessionId));
+  }
+
+  async addToCart(cartItem: InsertCartItem): Promise<CartItem> {
+    const [newItem] = await db.insert(cartItems).values(cartItem).returning();
+    return newItem;
+  }
+
+  async updateCartItemQuantity(id: number, quantity: number): Promise<CartItem | undefined> {
+    const [updatedItem] = await db.update(cartItems)
+      .set({ quantity })
+      .where(eq(cartItems.id, id))
+      .returning();
+    return updatedItem;
+  }
+
+  async removeFromCart(id: number): Promise<boolean> {
+    const result = await db.delete(cartItems).where(eq(cartItems.id, id));
+    return result.rowCount > 0;
+  }
+
+  async clearCart(sessionId: string): Promise<boolean> {
+    const result = await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
+    return result.rowCount > 0;
+  }
+
+  async subscribeToNewsletter(newsletter: InsertNewsletter): Promise<Newsletter> {
+    const [newSubscription] = await db.insert(newsletters).values(newsletter).returning();
+    return newSubscription;
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values(user).returning();
+    return newUser;
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [newProduct] = await db.insert(products).values(product).returning();
+    return newProduct;
+  }
+
+  async updateProduct(id: number, productUpdate: Partial<InsertProduct>): Promise<Product | undefined> {
+    const [updatedProduct] = await db.update(products)
+      .set(productUpdate)
+      .where(eq(products.id, id))
+      .returning();
+    return updatedProduct;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id));
+    return result.rowCount > 0;
+  }
+}
+
+export const storage = new DatabaseStorage();
