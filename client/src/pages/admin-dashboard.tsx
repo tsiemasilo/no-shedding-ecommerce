@@ -385,24 +385,31 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
           />
         </div>
         
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               id="featured"
               checked={formData.featured}
               onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+              className="w-4 h-4 text-navy border-gray-300 rounded focus:ring-navy"
             />
-            <Label htmlFor="featured">Featured Product</Label>
+            <Label htmlFor="featured" className="text-sm font-medium">Featured Product</Label>
           </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="inStock"
-              checked={formData.inStock}
-              onChange={(e) => setFormData(prev => ({ ...prev, inStock: e.target.checked }))}
-            />
-            <Label htmlFor="inStock">In Stock</Label>
+          <div className="space-y-2">
+            <Label htmlFor="stockStatus" className="text-sm font-medium">Stock Status</Label>
+            <Select 
+              value={formData.inStock ? "in-stock" : "out-of-stock"} 
+              onValueChange={(value) => setFormData(prev => ({ ...prev, inStock: value === "in-stock" }))}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="in-stock">✅ In Stock</SelectItem>
+                <SelectItem value="out-of-stock">❌ Out of Stock</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         
