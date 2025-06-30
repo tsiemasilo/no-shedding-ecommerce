@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Star, ShoppingCart, Heart } from "lucide-react";
+import { Header } from "@/components/header";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Product } from "@shared/schema";
@@ -96,7 +97,10 @@ export default function ProductDetails() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand/50">
-      {/* Header Section */}
+      {/* Navigation Header */}
+      <Header />
+      
+      {/* Breadcrumb Section */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Button
