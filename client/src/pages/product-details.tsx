@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Star, ShoppingCart, Heart } from "lucide-react";
+import { useState } from "react";
 import { Header } from "@/components/header";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
@@ -127,8 +128,11 @@ export default function ProductDetails() {
           <div className="relative lg:sticky lg:top-8">
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
               <div className="relative bg-gradient-to-br from-sand/30 to-white p-8">
+                {/* Main Image Display */}
                 <img
-                  src={product.image}
+                  src={currentImageIndex === -1 || !product.images || product.images.length === 0 || !product.images[currentImageIndex]
+                    ? product.image 
+                    : product.images[currentImageIndex]}
                   alt={product.name}
                   className="w-full h-[550px] object-cover rounded-xl shadow-lg hover:scale-105 transition-transform duration-500"
                 />
@@ -145,6 +149,46 @@ export default function ProductDetails() {
                 )}
               </div>
             </div>
+
+            {/* Image Thumbnails */}
+            {product.images && product.images.length > 0 && (
+              <div className="mt-6 grid grid-cols-5 gap-3">
+                {/* Main image thumbnail */}
+                <button
+                  onClick={() => setCurrentImageIndex(-1)}
+                  className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                    currentImageIndex === -1 || (currentImageIndex === 0 && !product.images[0])
+                      ? 'border-navy shadow-lg scale-105' 
+                      : 'border-gray-200 hover:border-navy/50'
+                  }`}
+                >
+                  <img
+                    src={product.image}
+                    alt={`${product.name} - Main`}
+                    className="w-full h-16 object-cover"
+                  />
+                </button>
+                
+                {/* Additional image thumbnails */}
+                {product.images.filter(img => img && img.trim() !== '').map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                      currentImageIndex === index 
+                        ? 'border-navy shadow-lg scale-105' 
+                        : 'border-gray-200 hover:border-navy/50'
+                    }`}
+                  >
+                    <img
+                      src={image}
+                      alt={`${product.name} - Image ${index + 2}`}
+                      className="w-full h-16 object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
             
             {/* Trust Indicators */}
             <div className="mt-6 bg-white rounded-xl p-6 shadow-lg border border-gray-100">

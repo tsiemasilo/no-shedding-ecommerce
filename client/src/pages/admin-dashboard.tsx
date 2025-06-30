@@ -365,7 +365,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
               type="button"
               variant="outline"
               onClick={() => {
-                setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
+                setFormData(prev => ({ ...prev, images: [...(prev.images || []), ''] }));
               }}
               disabled={isLoading}
               className="w-full"
