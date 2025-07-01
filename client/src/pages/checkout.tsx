@@ -164,7 +164,7 @@ export default function Checkout() {
                       <Input
                         id="firstName"
                         {...form.register('firstName')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                         placeholder="Enter first name"
                       />
                       {form.formState.errors.firstName && (
@@ -179,7 +179,7 @@ export default function Checkout() {
                       <Input
                         id="lastName"
                         {...form.register('lastName')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                         placeholder="Enter last name"
                       />
                       {form.formState.errors.lastName && (
@@ -197,7 +197,7 @@ export default function Checkout() {
                       id="email"
                       type="email"
                       {...form.register('email')}
-                      className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                       placeholder="Enter email address"
                     />
                     {form.formState.errors.email && (
@@ -213,7 +213,7 @@ export default function Checkout() {
                     <Input
                       id="phone"
                       {...form.register('phone')}
-                      className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                       placeholder="Enter phone number"
                     />
                     {form.formState.errors.phone && (
@@ -229,7 +229,7 @@ export default function Checkout() {
                     <Input
                       id="address"
                       {...form.register('address')}
-                      className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                       placeholder="Enter street address"
                     />
                     {form.formState.errors.address && (
@@ -246,7 +246,7 @@ export default function Checkout() {
                       <Input
                         id="city"
                         {...form.register('city')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                         placeholder="Enter city"
                       />
                       {form.formState.errors.city && (
@@ -261,7 +261,7 @@ export default function Checkout() {
                       <Input
                         id="postalCode"
                         {...form.register('postalCode')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
                         placeholder="Enter postal code"
                       />
                       {form.formState.errors.postalCode && (
