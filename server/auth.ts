@@ -67,39 +67,43 @@ export function setupAuth(app: Express) {
 
   // Google OAuth Strategy
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    passport.use(
-      new GoogleStrategy(
-        {
-          clientID: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
-        },
-        async (accessToken, refreshToken, profile, done) => {
-          try {
-            // Check if customer already exists
-            let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
-            
-            if (!customer) {
-              // Create new customer from Google profile
-              customer = await storage.createCustomer({
-                firstName: profile.name?.givenName || profile.displayName || "",
-                lastName: profile.name?.familyName || "",
-                email: profile.emails?.[0]?.value || "",
-                password: "", // No password needed for Google auth
-                phone: "",
-                address: "",
-                city: "",
-                postalCode: "",
-              });
+    try {
+      passport.use(
+        new GoogleStrategy(
+          {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
+          },
+          async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+            try {
+              // Check if customer already exists
+              let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
+              
+              if (!customer) {
+                // Create new customer from Google profile
+                customer = await storage.createCustomer({
+                  firstName: profile.name?.givenName || profile.displayName || "",
+                  lastName: profile.name?.familyName || "",
+                  email: profile.emails?.[0]?.value || "",
+                  password: "", // No password needed for Google auth
+                  phone: "",
+                  address: "",
+                  city: "",
+                  postalCode: "",
+                });
+              }
+              
+              return done(null, customer as any);
+            } catch (error) {
+              return done(error, undefined);
             }
-            
-            return done(null, customer as any);
-          } catch (error) {
-            return done(error, undefined);
           }
-        }
-      )
-    );
+        )
+      );
+    } catch (error) {
+      console.error("Failed to initialize Google OAuth strategy:", error);
+    }
   }
 
   passport.serializeUser((user: any, done) => {
