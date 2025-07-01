@@ -99,14 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 1, 2025: Enhanced authentication security and admin access control
-  - Created dedicated admin authentication page at /admin/auth with proper login form
+- July 1, 2025: Implemented unified authentication system with role-based access control
+  - Created single authentication page at /auth that handles both customer and admin login
   - Added missing admin authentication API endpoints (/api/admin/user, /api/admin/login, /api/admin/logout)
-  - Fixed admin dashboard security to properly redirect unauthorized users to admin auth page
-  - Updated header with dropdown menu providing separate "Customer Login" and "Admin Dashboard" options
-  - Prevented customer accounts from accessing admin dashboard through proper session validation
+  - Authentication automatically detects user type: email addresses route to customer login, usernames route to admin login
+  - Admin users (username: "admin", password: "admin1") are redirected to /admin dashboard after login
+  - Customer users are redirected to home page after login or registration
+  - Customers are completely blocked from accessing admin dashboard with proper session validation
   - Fixed customer authentication hook to use server-side session management instead of localStorage
-  - Removed ability for customers to accidentally access admin features after logout
+  - Single "Sign In" button in header routes to unified authentication page
 
 - July 1, 2025: Completed Google OAuth integration for customer authentication
   - Installed and configured dotenv for environment variable management
