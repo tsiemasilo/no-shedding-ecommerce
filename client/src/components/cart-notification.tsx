@@ -32,15 +32,15 @@ export function CartNotification({ isVisible, onClose, productName, productPrice
   return (
     <div className="fixed bottom-4 right-4 z-50 transition-all duration-300 ease-out transform animate-in slide-in-from-right-4 slide-in-from-bottom-4">
       <div className="relative w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-        {/* Green accent bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-green-500"></div>
+        {/* Orange accent bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-orange-500"></div>
         
         <div className="p-4">
           <div className="flex items-start space-x-3">
             {/* Success Icon */}
             <div className="flex-shrink-0 mt-0.5">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -69,7 +69,7 @@ export function CartNotification({ isVisible, onClose, productName, productPrice
               {/* View Cart Button */}
               <button
                 onClick={handleViewCart}
-                className="mt-3 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors duration-200"
+                className="mt-3 w-full bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors duration-200"
                 type="button"
               >
                 View Cart
