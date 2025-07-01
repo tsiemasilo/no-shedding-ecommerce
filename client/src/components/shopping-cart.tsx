@@ -149,15 +149,16 @@ export function ShoppingCart() {
                 <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
                   <div className="flex items-center space-x-4">
                     {/* Product Image */}
-                    <div className="w-16 h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-100 shadow-sm">
                       {item.product?.image ? (
                         <img
                           src={item.product.image}
                           alt={item.product.name || ''}
-                          className="w-14 h-14 object-cover rounded-lg"
+                          className="w-18 h-18 object-contain p-1"
+                          style={{ backgroundColor: 'transparent' }}
                         />
                       ) : (
-                        <div className="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                        <div className="w-18 h-18 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
                           <span className="text-orange-600 text-xs font-semibold">IMG</span>
                         </div>
                       )}

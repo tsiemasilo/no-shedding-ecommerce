@@ -20,7 +20,8 @@ export function FeaturedProducts() {
       productId: product.id, 
       quantity: 1,
       productName: product.name,
-      productPrice: product.price
+      productPrice: product.price,
+      productImage: product.image
     });
   };
 
