@@ -270,6 +270,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get current customer from session
+  app.get("/api/customer/user", (req, res) => {
+    if (!req.isAuthenticated() || !req.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    // Check if this is a customer (has email but no username/role)
+    if (!req.user.email || req.user.username || req.user.role) {
+      return res.status(401).json({ message: "Not a customer account" });
+    }
+
+    // Remove password from response
+    const { password, ...customerResponse } = req.user;
+    res.json(customerResponse);
+  });
+
   app.post("/api/customer/login", async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -284,9 +300,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      // Remove password from response
-      const { password: _, ...customerResponse } = customer;
-      res.status(200).json(customerResponse);
+      // Log in the customer using passport
+      req.login(customer, (err) => {
+        if (err) {
+          return res.status(500).json({ message: "Login failed" });
+        }
+        
+        // Remove password from response
+        const { password: _, ...customerResponse } = customer;
+        res.status(200).json(customerResponse);
+      });
     } catch (error) {
       res.status(500).json({ message: "Login failed" });
     }

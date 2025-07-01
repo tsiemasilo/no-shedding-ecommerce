@@ -23,10 +23,30 @@ export default function AdminDashboard() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated as admin
   if (!user) {
-    setLocation('/customer/auth');
-    return null;
+    setLocation('/');
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-navy">Access Denied</CardTitle>
+            <CardDescription>
+              This area is restricted to administrators only.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <Button 
+              onClick={() => setLocation('/')}
+              className="bg-navy hover:bg-navy/90 text-white"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Return Home
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const { data: products = [], refetch: refetchProducts } = useQuery<Product[]>({
