@@ -38,11 +38,11 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-12 bg-sand">
+    <section className="py-12" style={{ backgroundColor: '#0A2342' }}>
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-navy mb-4">Stay Powered Up</h2>
-          <p className="text-charcoal mb-6">Get electrical safety tips, product updates, and exclusive offers</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Stay Powered Up</h2>
+          <p className="text-gray-200 mb-6">Get electrical safety tips, product updates, and exclusive offers</p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
             <Input
               type="email"
