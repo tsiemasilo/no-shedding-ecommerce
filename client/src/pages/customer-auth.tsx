@@ -93,7 +93,18 @@ export default function CustomerAuth() {
   };
 
   const handleRegister = (data: RegisterFormData) => {
-    const { confirmPassword, ...customerData } = data;
+    const { confirmPassword, ...registerData } = data;
+    
+    // Ensure all required fields have default values
+    const customerData = {
+      ...registerData,
+      lastName: registerData.lastName || '',
+      phone: registerData.phone || '',
+      address: registerData.address || '',
+      city: registerData.city || '',
+      postalCode: registerData.postalCode || '',
+    };
+    
     registerMutation.mutate(customerData, {
       onSuccess: () => {
         setLocation('/');
@@ -193,13 +204,29 @@ export default function CustomerAuth() {
                 )}
               </div>
 
-              {/* Hidden fields for complete registration */}
-              <input type="hidden" {...registerForm.register('lastName')} value="" />
-              <input type="hidden" {...registerForm.register('phone')} value="" />
-              <input type="hidden" {...registerForm.register('address')} value="" />
-              <input type="hidden" {...registerForm.register('city')} value="" />
-              <input type="hidden" {...registerForm.register('postalCode')} value="" />
-              <input type="hidden" {...registerForm.register('confirmPassword')} value={registerForm.watch('password')} />
+              {/* Confirm Password Field */}
+              <div className="space-y-3">
+                <Label htmlFor="confirmPassword" className="text-black text-lg font-medium">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18,8h-1V6c0-2.76-2.24-5-5-5S7,3.24,7,6v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V10 C20,8.9,19.1,8,18,8z M12,17c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,17,12,17z M15.1,8H8.9V6c0-1.71,1.39-3.1,3.1-3.1 s3.1,1.39,3.1,3.1V8z"/>
+                    </svg>
+                  </div>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your Password"
+                    {...registerForm.register('confirmPassword')}
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
+                  />
+                </div>
+                {registerForm.formState.errors.confirmPassword && (
+                  <p className="text-red-500 text-sm">{registerForm.formState.errors.confirmPassword.message}</p>
+                )}
+              </div>
 
               {/* Sign Up Button */}
               <Button
