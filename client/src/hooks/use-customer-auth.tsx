@@ -64,10 +64,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (customer: Customer) => {
-      queryClient.setQueryData(["/api/customer/user"], customer);
+      // Don't automatically log in the user
       toast({
-        title: "Account created!",
-        description: `Welcome to No Shedding, ${customer.firstName || customer.email}!`,
+        title: "Account created successfully!",
+        description: `Account created for ${customer.firstName || customer.email}. Please sign in with your credentials.`,
       });
     },
     onError: (error: Error) => {

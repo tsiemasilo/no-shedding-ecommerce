@@ -107,7 +107,10 @@ export default function CustomerAuth() {
     
     registerMutation.mutate(customerData, {
       onSuccess: () => {
-        setLocation('/');
+        // Switch to login form instead of redirecting to home
+        setIsLogin(true);
+        // Clear the registration form
+        registerForm.reset();
       },
     });
   };
