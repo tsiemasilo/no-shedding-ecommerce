@@ -65,8 +65,51 @@ export async function setupAuth(app: Express) {
     }),
   );
 
-  // Google OAuth Strategy - temporarily disabled for debugging
-  console.log("Google OAuth temporarily disabled - working on authentication compatibility");
+  // Google OAuth Strategy
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    try {
+      // Import using dynamic import for ES modules
+      const { Strategy: GoogleStrategy } = await import("passport-google-oauth20");
+      
+      passport.use("google", new GoogleStrategy(
+        {
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
+        },
+        async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+          try {
+            // Check if customer already exists
+            let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
+            
+            if (!customer) {
+              // Create new customer from Google profile
+              customer = await storage.createCustomer({
+                firstName: profile.name?.givenName || profile.displayName || "",
+                lastName: profile.name?.familyName || "",
+                email: profile.emails?.[0]?.value || "",
+                password: "", // No password needed for Google auth
+                phone: "",
+                address: "",
+                city: "",
+                postalCode: "",
+              });
+            }
+            
+            return done(null, customer as any);
+          } catch (error) {
+            console.error("Google OAuth callback error:", error);
+            return done(error, undefined);
+          }
+        }
+      ));
+      console.log("Google OAuth strategy initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize Google OAuth strategy:", error);
+    }
+  } else {
+    console.log("Google OAuth credentials not found - skipping Google strategy");
+  }
 
   passport.serializeUser((user: any, done) => {
     if (user.username) {
