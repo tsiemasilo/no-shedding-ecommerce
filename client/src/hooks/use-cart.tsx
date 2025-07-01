@@ -20,17 +20,22 @@ interface CartContextType {
   isOpen: boolean;
   isLoading: boolean;
   setIsOpen: (open: boolean) => void;
-  addToCart: (data: { productId: number; quantity: number }) => void;
+  addToCart: (data: { productId: number; quantity: number; productName?: string; productPrice?: string }) => void;
   updateQuantity: (data: { id: number; quantity: number }) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
   isAddingToCart: boolean;
+  showNotification: boolean;
+  setShowNotification: (show: boolean) => void;
+  lastAddedProduct: { name: string; price: string } | null;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [lastAddedProduct, setLastAddedProduct] = useState<{ name: string; price: string } | null>(null);
   const queryClient = useQueryClient();
   const sessionId = getSessionId();
 
@@ -46,16 +51,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
   });
 
   const addToCartMutation = useMutation({
-    mutationFn: async ({ productId, quantity }: { productId: number; quantity: number }) => {
+    mutationFn: async ({ productId, quantity, productName, productPrice }: { 
+      productId: number; 
+      quantity: number; 
+      productName?: string; 
+      productPrice?: string; 
+    }) => {
       const response = await apiRequest('POST', '/api/cart', {
         productId,
         quantity,
         sessionId,
       });
-      return response.json();
+      return { data: await response.json(), productName, productPrice };
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['/api/cart', sessionId] });
+      
+      // Show notification if product info is provided
+      if (result.productName && result.productPrice) {
+        setLastAddedProduct({
+          name: result.productName,
+          price: result.productPrice
+        });
+        setShowNotification(true);
+      }
     },
   });
 
@@ -109,6 +128,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     removeFromCart: removeFromCartMutation.mutate,
     clearCart: clearCartMutation.mutate,
     isAddingToCart: addToCartMutation.isPending,
+    showNotification,
+    setShowNotification,
+    lastAddedProduct,
   };
 
   return (
