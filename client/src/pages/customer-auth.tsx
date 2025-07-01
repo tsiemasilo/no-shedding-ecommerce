@@ -268,6 +268,19 @@ export default function CustomerAuth() {
                   </div>
                 </Button>
               </div>
+
+              {/* Back to Store Button for Register */}
+              <div className="pt-6 border-t border-gray-200 mt-6">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setLocation('/')}
+                  className="w-full py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Store
+                </Button>
+              </div>
             </form>
           ) : (
             // Login Form
