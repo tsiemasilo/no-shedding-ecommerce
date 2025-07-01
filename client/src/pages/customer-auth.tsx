@@ -65,7 +65,18 @@ export default function CustomerAuth() {
 
   // Redirect if already authenticated
   if (customerAuthenticated || adminUser) {
-    setLocation(adminUser ? '/admin/dashboard' : '/');
+    if (adminUser) {
+      setLocation('/admin/dashboard');
+    } else {
+      // Check if there's a redirect destination stored for customers
+      const redirectTo = localStorage.getItem('redirectAfterLogin');
+      if (redirectTo) {
+        localStorage.removeItem('redirectAfterLogin');
+        setLocation(redirectTo);
+      } else {
+        setLocation('/');
+      }
+    }
     return null;
   }
 
