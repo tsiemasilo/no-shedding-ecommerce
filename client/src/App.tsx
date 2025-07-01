@@ -7,6 +7,7 @@ import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { CustomerAuthProvider } from "@/hooks/use-customer-auth";
 import { CartProvider } from "@/hooks/use-cart";
 import { ShoppingCart } from "@/components/shopping-cart";
+import { CartNotificationWrapper } from "@/components/cart-notification-wrapper";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 
@@ -36,6 +37,7 @@ function App() {
               <Toaster />
               <Router />
               <ShoppingCart />
+              <CartNotificationWrapper />
             </CartProvider>
           </CustomerAuthProvider>
         </AdminAuthProvider>

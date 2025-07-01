@@ -24,10 +24,11 @@ export default function ProductDetails() {
   const handleAddToCart = () => {
     if (!product) return;
     
-    addToCart({ productId: product.id, quantity: 1 });
-    toast({
-      title: "Added to cart",
-      description: `${product.name} has been added to your cart.`,
+    addToCart({ 
+      productId: product.id, 
+      quantity: 1,
+      productName: product.name,
+      productPrice: product.price
     });
   };
 
