@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
-import backgroundPattern from '@assets/image_1751366173508.png';
+
 
 const loginSchema = z.object({
   identifier: z.string().min(1, 'Email or username is required'),
@@ -33,7 +33,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
   const [isLogin, setIsLogin] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const { toast } = useToast();
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
@@ -61,19 +61,7 @@ export default function CustomerAuth() {
     },
   });
 
-  // Mouse tracking effect for torch lighting
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      // Get position relative to the viewport
-      setMousePosition({ 
-        x: e.clientX, 
-        y: e.clientY 
-      });
-    };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Redirect if already authenticated
   if (customerAuthenticated || adminUser) {
@@ -120,29 +108,14 @@ export default function CustomerAuth() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" 
+      className="min-h-screen flex items-center justify-center p-4" 
       style={{ 
         zoom: '0.9',
-        backgroundColor: '#000000',
-        cursor: `url("data:image/svg+xml,%3csvg width='48' height='48' xmlns='http://www.w3.org/2000/svg'%3e%3cg%3e%3cpath d='M24 4L20 16L24 28L28 16L24 4Z' fill='%23FFC300'/%3e%3cpath d='M24 28L14 36L24 44L34 36L24 28Z' fill='%23FF6F00'/%3e%3ccircle cx='24' cy='38' r='3' fill='%23654321'/%3e%3cpath d='M24 16L22 20L24 24L26 20L24 16Z' fill='%23FFE135'/%3e%3c/g%3e%3c/svg%3e") 24 24, auto`
+        backgroundColor: '#FDF6EC' // Light Sand background from website color theme
       }}
     >
-      {/* Dynamic lighting effect that follows mouse */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle 200px at ${mousePosition.x}px ${mousePosition.y}px, 
-            rgba(255, 195, 0, 0.4) 0%, 
-            rgba(255, 195, 0, 0.2) 30%, 
-            rgba(255, 111, 0, 0.1) 60%, 
-            transparent 100%)`,
-          transition: 'background 0.05s ease-out'
-        }}
-      />
-
-
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-white backdrop-blur-md rounded-lg overflow-hidden relative z-10" style={{ boxShadow: '0 0 50px rgba(255, 195, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8)' }}>
+      <Card className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200">
         <CardHeader className="text-center pb-4 pt-8">
           {/* Removed logo to match the design */}
         </CardHeader>
