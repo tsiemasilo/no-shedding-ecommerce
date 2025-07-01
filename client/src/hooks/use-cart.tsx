@@ -118,7 +118,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const response = await apiRequest('DELETE', `/api/cart/${id}`);
       return response.json();
     },
-    onSuccess: () => {
+    onMutate: async (id: number) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['/api/cart', sessionId] });
+      
+      // Snapshot the previous value
+      const previousCartItems = queryClient.getQueryData(['/api/cart', sessionId]);
+      
+      // Optimistically remove the item from the cache
+      queryClient.setQueryData(['/api/cart', sessionId], (old: CartItemWithProduct[] | undefined) => {
+        if (!old) return old;
+        return old.filter(item => item.id !== id);
+      });
+      
+      return { previousCartItems };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousCartItems) {
+        queryClient.setQueryData(['/api/cart', sessionId], context.previousCartItems);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/cart', sessionId] });
     },
   });

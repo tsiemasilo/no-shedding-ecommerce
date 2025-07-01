@@ -215,7 +215,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!success) {
         return res.status(404).json({ message: "Cart item not found" });
       }
-      res.json({ message: "Item removed from cart" });
+      res.json({ success: true });
     } catch (error) {
       res.status(500).json({ message: "Failed to remove item from cart" });
     }
