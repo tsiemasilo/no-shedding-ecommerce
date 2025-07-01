@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { useLocation } from 'wouter';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
+import { useToast } from '@/hooks/use-toast';
 import { insertCustomerSchema } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +32,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
   const [isLogin, setIsLogin] = useState(false);
+  const { toast } = useToast();
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
 
