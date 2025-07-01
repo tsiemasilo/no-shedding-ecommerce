@@ -14,13 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
-const customerLoginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-const adminLoginSchema = z.object({
-  username: z.string().min(3, 'Username must be at least 3 characters'),
+const loginSchema = z.object({
+  identifier: z.string().min(1, 'Email or username is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -31,13 +26,12 @@ const registerSchema = insertCustomerSchema.extend({
   path: ["confirmPassword"],
 });
 
-type CustomerLoginFormData = z.infer<typeof customerLoginSchema>;
-type AdminLoginFormData = z.infer<typeof adminLoginSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState('customer-login');
+  const [activeTab, setActiveTab] = useState('login');
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
 
@@ -47,18 +41,10 @@ export default function CustomerAuth() {
     return null;
   }
 
-  const customerLoginForm = useForm<CustomerLoginFormData>({
-    resolver: zodResolver(customerLoginSchema),
+  const loginForm = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  const adminLoginForm = useForm<AdminLoginFormData>({
-    resolver: zodResolver(adminLoginSchema),
-    defaultValues: {
-      username: '',
+      identifier: '',
       password: '',
     },
   });
@@ -78,20 +64,27 @@ export default function CustomerAuth() {
     },
   });
 
-  const handleCustomerLogin = (data: CustomerLoginFormData) => {
-    customerLoginMutation.mutate(data, {
-      onSuccess: () => {
-        setLocation('/');
-      },
-    });
-  };
-
-  const handleAdminLogin = (data: AdminLoginFormData) => {
-    adminLoginMutation.mutate(data, {
-      onSuccess: () => {
-        setLocation('/admin/dashboard');
-      },
-    });
+  const handleLogin = (data: LoginFormData) => {
+    const { identifier, password } = data;
+    
+    // Check if identifier looks like an email (for customer) or username (for admin)
+    const isEmail = identifier.includes('@');
+    
+    if (isEmail) {
+      // Try customer login
+      customerLoginMutation.mutate({ email: identifier, password }, {
+        onSuccess: () => {
+          setLocation('/');
+        },
+      });
+    } else {
+      // Try admin login
+      adminLoginMutation.mutate({ username: identifier, password }, {
+        onSuccess: () => {
+          setLocation('/admin/dashboard');
+        },
+      });
+    }
   };
 
   const handleRegister = (data: RegisterFormData) => {
@@ -105,134 +98,84 @@ export default function CustomerAuth() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand flex items-center justify-center p-4" style={{ zoom: '0.9' }}>
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-        {/* Left side - Forms */}
-        <div className="w-full max-w-md mx-auto lg:mx-0">
-          {/* Back button */}
-          <Button
-            variant="ghost"
-            onClick={() => setLocation('/')}
-            className="mb-6 text-navy hover:text-electric hover:bg-white/80 backdrop-blur-sm border border-navy/20 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg animate-pulse"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Store
-          </Button>
+      {/* Back button */}
+      <Button
+        variant="ghost"
+        onClick={() => setLocation('/')}
+        className="absolute top-6 left-6 text-white bg-navy/90 hover:bg-navy hover:scale-105 transition-all duration-300 px-4 py-2 rounded-lg shadow-md"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Back to Store
+      </Button>
 
-          <Card className="border-2 border-navy/10 shadow-2xl bg-white/95 backdrop-blur-sm">
-            <CardHeader className="text-center">
-              <div className="flex items-center justify-center mb-4">
-                <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center p-2 shadow-lg">
-                  <img 
-                    src={logoImage} 
-                    alt="No Shedding Logo" 
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              </div>
-              <CardTitle className="text-2xl font-bold text-navy">Customer Account</CardTitle>
-              <CardDescription className="text-charcoal">
-                Sign in to your account or create a new one to start shopping
-              </CardDescription>
-            </CardHeader>
+      {/* Centered Auth Form */}
+      <Card className="w-full max-w-md border-2 border-navy/10 shadow-2xl bg-white/95 backdrop-blur-sm">
+        <CardHeader className="text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center p-2 shadow-lg">
+              <img 
+                src={logoImage} 
+                alt="No Shedding Logo" 
+                className="h-full w-full object-contain"
+              />
+            </div>
+          </div>
+          <CardTitle className="text-2xl font-bold text-navy">Welcome</CardTitle>
+          <CardDescription className="text-charcoal">
+            Sign in or create an account
+          </CardDescription>
+        </CardHeader>
 
-            <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-3 mb-6">
-                  <TabsTrigger value="customer-login" className="text-sm">Customer</TabsTrigger>
-                  <TabsTrigger value="admin-login" className="text-sm">Admin</TabsTrigger>
-                  <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
-                </TabsList>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="login" className="text-sm">Sign In</TabsTrigger>
+              <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
+            </TabsList>
 
-                {/* Customer Login Tab */}
-                <TabsContent value="customer-login">
-                  <form onSubmit={customerLoginForm.handleSubmit(handleCustomerLogin)} className="space-y-4">
+                {/* Login Tab */}
+                <TabsContent value="login">
+                  <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="customer-email" className="text-navy font-medium">
-                        <Mail className="w-4 h-4 inline mr-2" />
-                        Email
+                      <Label htmlFor="identifier" className="text-navy font-medium">
+                        <User className="w-4 h-4 inline mr-2" />
+                        Email or Username
                       </Label>
                       <Input
-                        id="customer-email"
-                        type="email"
-                        placeholder="Enter your email"
-                        {...customerLoginForm.register('email')}
+                        id="identifier"
+                        type="text"
+                        placeholder="Enter your email or username"
+                        {...loginForm.register('identifier')}
                         className="border-navy/20 focus:ring-electric focus:border-electric"
                       />
-                      {customerLoginForm.formState.errors.email && (
-                        <p className="text-red-500 text-sm">{customerLoginForm.formState.errors.email.message}</p>
+                      {loginForm.formState.errors.identifier && (
+                        <p className="text-red-500 text-sm">{loginForm.formState.errors.identifier.message}</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="customer-password" className="text-navy font-medium">
+                      <Label htmlFor="password" className="text-navy font-medium">
                         <Lock className="w-4 h-4 inline mr-2" />
                         Password
                       </Label>
                       <Input
-                        id="customer-password"
+                        id="password"
                         type="password"
                         placeholder="Enter your password"
-                        {...customerLoginForm.register('password')}
+                        {...loginForm.register('password')}
                         className="border-navy/20 focus:ring-electric focus:border-electric"
                       />
-                      {customerLoginForm.formState.errors.password && (
-                        <p className="text-red-500 text-sm">{customerLoginForm.formState.errors.password.message}</p>
+                      {loginForm.formState.errors.password && (
+                        <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
                       )}
                     </div>
 
                     <Button
                       type="submit"
-                      disabled={customerLoginMutation.isPending}
+                      disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
                       className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
                     >
-                      {customerLoginMutation.isPending ? 'Signing In...' : 'Customer Sign In'}
-                    </Button>
-                  </form>
-                </TabsContent>
-
-                {/* Admin Login Tab */}
-                <TabsContent value="admin-login">
-                  <form onSubmit={adminLoginForm.handleSubmit(handleAdminLogin)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-username" className="text-navy font-medium">
-                        <User className="w-4 h-4 inline mr-2" />
-                        Username
-                      </Label>
-                      <Input
-                        id="admin-username"
-                        type="text"
-                        placeholder="Enter admin username"
-                        {...adminLoginForm.register('username')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {adminLoginForm.formState.errors.username && (
-                        <p className="text-red-500 text-sm">{adminLoginForm.formState.errors.username.message}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="admin-password" className="text-navy font-medium">
-                        <Lock className="w-4 h-4 inline mr-2" />
-                        Password
-                      </Label>
-                      <Input
-                        id="admin-password"
-                        type="password"
-                        placeholder="Enter admin password"
-                        {...adminLoginForm.register('password')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {adminLoginForm.formState.errors.password && (
-                        <p className="text-red-500 text-sm">{adminLoginForm.formState.errors.password.message}</p>
-                      )}
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={adminLoginMutation.isPending}
-                      className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                    >
-                      {adminLoginMutation.isPending ? 'Signing In...' : 'Admin Sign In'}
+                      {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Sign In'}
                     </Button>
                   </form>
                 </TabsContent>
@@ -380,48 +323,9 @@ export default function CustomerAuth() {
                     </Button>
                   </form>
                 </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right side - Hero section */}
-        <div className="hidden lg:block">
-          <div className="text-center space-y-6 p-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-navy leading-tight">
-                Welcome to No Shedding
-              </h1>
-              <p className="text-xl text-charcoal leading-relaxed">
-                Your trusted partner for premium electrical solutions and power management systems.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 mt-8">
-              <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-navy/10 shadow-lg">
-                <h3 className="text-lg font-semibold text-navy mb-2">Premium Quality Products</h3>
-                <p className="text-charcoal">Carefully selected electrical solutions from trusted manufacturers</p>
-              </div>
-
-              <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-navy/10 shadow-lg">
-                <h3 className="text-lg font-semibold text-navy mb-2">Expert Support</h3>
-                <p className="text-charcoal">Professional guidance to help you choose the right electrical solutions</p>
-              </div>
-
-              <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-navy/10 shadow-lg">
-                <h3 className="text-lg font-semibold text-navy mb-2">Fast Delivery</h3>
-                <p className="text-charcoal">Quick and reliable delivery across South Africa</p>
-              </div>
-            </div>
-
-            <div className="mt-8 p-6 bg-electric/10 rounded-lg border border-electric/20">
-              <p className="text-navy font-medium">
-                Create your account today and enjoy exclusive member benefits, order tracking, and personalized recommendations!
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
