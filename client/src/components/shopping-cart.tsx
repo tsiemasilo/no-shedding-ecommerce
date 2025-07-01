@@ -59,10 +59,9 @@ export function ShoppingCart() {
       return;
     }
     
-    toast({
-      title: "Checkout",
-      description: "Checkout functionality would be implemented here.",
-    });
+    // Close cart and navigate to checkout page
+    setIsOpen(false);
+    window.location.href = '/checkout';
   };
 
   const handleApplyCoupon = (e: React.FormEvent) => {
