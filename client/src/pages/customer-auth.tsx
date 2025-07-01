@@ -64,11 +64,15 @@ export default function CustomerAuth() {
   // Mouse tracking effect for torch lighting
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      // Get position relative to the viewport
+      setMousePosition({ 
+        x: e.clientX, 
+        y: e.clientY 
+      });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // Redirect if already authenticated
@@ -120,34 +124,25 @@ export default function CustomerAuth() {
       style={{ 
         zoom: '0.9',
         backgroundColor: '#000000',
-        cursor: `url("data:image/svg+xml,%3csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3e%3cg%3e%3cpath d='M16 2L14 8L16 14L18 8L16 2Z' fill='%23FFC300'/%3e%3cpath d='M16 14L10 18L16 22L22 18L16 14Z' fill='%23FF6F00'/%3e%3ccircle cx='16' cy='24' r='4' fill='%23333'/%3e%3c/g%3e%3c/svg%3e") 16 16, auto`
+        cursor: `url("data:image/svg+xml,%3csvg width='48' height='48' xmlns='http://www.w3.org/2000/svg'%3e%3cg%3e%3cpath d='M24 4L20 16L24 28L28 16L24 4Z' fill='%23FFC300'/%3e%3cpath d='M24 28L14 36L24 44L34 36L24 28Z' fill='%23FF6F00'/%3e%3ccircle cx='24' cy='38' r='3' fill='%23654321'/%3e%3cpath d='M24 16L22 20L24 24L26 20L24 16Z' fill='%23FFE135'/%3e%3c/g%3e%3c/svg%3e") 24 24, auto`
       }}
     >
       {/* Dynamic lighting effect that follows mouse */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(circle 300px at ${mousePosition.x}px ${mousePosition.y}px, 
-            rgba(255, 195, 0, 0.3) 0%, 
-            rgba(255, 195, 0, 0.15) 20%, 
-            rgba(255, 111, 0, 0.1) 40%, 
-            transparent 70%)`,
-          transition: 'background 0.1s ease-out'
+          background: `radial-gradient(circle 200px at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(255, 195, 0, 0.4) 0%, 
+            rgba(255, 195, 0, 0.2) 30%, 
+            rgba(255, 111, 0, 0.1) 60%, 
+            transparent 100%)`,
+          transition: 'background 0.05s ease-out'
         }}
       />
-      {/* Back button */}
-      <Button
-        variant="ghost"
-        onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 text-white bg-navy/90 hover:bg-navy hover:scale-105 transition-all duration-300 px-4 py-2 rounded-lg relative z-10"
-        style={{ boxShadow: '0 0 20px rgba(255, 195, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.6)' }}
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Store
-      </Button>
+
 
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden ring-1 ring-electric/20 relative z-10" style={{ boxShadow: '0 0 50px rgba(255, 195, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8)' }}>
+      <Card className="w-full max-w-md border-0 shadow-2xl bg-white backdrop-blur-md rounded-lg overflow-hidden relative z-10" style={{ boxShadow: '0 0 50px rgba(255, 195, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8)' }}>
         <CardHeader className="text-center pb-4 pt-8">
           {/* Removed logo to match the design */}
         </CardHeader>
@@ -360,6 +355,19 @@ export default function CustomerAuth() {
                     </svg>
                     <span className="text-gray-700 font-medium">Google</span>
                   </div>
+                </Button>
+              </div>
+
+              {/* Back to Store Button */}
+              <div className="pt-6 border-t border-gray-200 mt-6">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setLocation('/')}
+                  className="w-full py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Store
                 </Button>
               </div>
             </form>
