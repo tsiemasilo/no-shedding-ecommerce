@@ -34,10 +34,6 @@ export function ShoppingCart() {
 
   const handleRemoveItem = (id: number) => {
     removeFromCart(id);
-    toast({
-      title: "Item removed",
-      description: "Item has been removed from your cart.",
-    });
   };
 
   const handleClearAll = () => {
