@@ -52,11 +52,11 @@ export default function CustomerAuth() {
   const registerForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
-      firstName: '',
-      lastName: '',
       phone: '',
       address: '',
       city: '',
@@ -133,196 +133,213 @@ export default function CustomerAuth() {
               <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
             </TabsList>
 
-                {/* Login Tab */}
-                <TabsContent value="login">
-                  <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="identifier" className="text-navy font-medium">
-                        <User className="w-4 h-4 inline mr-2" />
-                        Email or Username
-                      </Label>
-                      <Input
-                        id="identifier"
-                        type="text"
-                        placeholder="Enter your email or username"
-                        {...loginForm.register('identifier')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {loginForm.formState.errors.identifier && (
-                        <p className="text-red-500 text-sm">{loginForm.formState.errors.identifier.message}</p>
-                      )}
-                    </div>
+            {/* Login Tab */}
+            <TabsContent value="login">
+              <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="identifier" className="text-navy font-medium">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Email or Username
+                  </Label>
+                  <Input
+                    id="identifier"
+                    type="text"
+                    placeholder="Enter your email or username"
+                    {...loginForm.register('identifier')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {loginForm.formState.errors.identifier && (
+                    <p className="text-red-500 text-sm">{loginForm.formState.errors.identifier.message}</p>
+                  )}
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="password" className="text-navy font-medium">
-                        <Lock className="w-4 h-4 inline mr-2" />
-                        Password
-                      </Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        {...loginForm.register('password')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {loginForm.formState.errors.password && (
-                        <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
-                      )}
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-navy font-medium">
+                    <Lock className="w-4 h-4 inline mr-2" />
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    {...loginForm.register('password')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {loginForm.formState.errors.password && (
+                    <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
+                  )}
+                </div>
 
-                    <Button
-                      type="submit"
-                      disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
-                      className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                    >
-                      {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Sign In'}
-                    </Button>
-                  </form>
-                </TabsContent>
+                <Button
+                  type="submit"
+                  disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
+                  className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
+                >
+                  {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Sign In'}
+                </Button>
+              </form>
+            </TabsContent>
 
-                {/* Register Tab */}
-                <TabsContent value="register">
-                  <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName" className="text-navy font-medium">First Name</Label>
-                        <Input
-                          id="firstName"
-                          placeholder="First name"
-                          {...registerForm.register('firstName')}
-                          className="border-navy/20 focus:ring-electric focus:border-electric"
-                        />
-                        {registerForm.formState.errors.firstName && (
-                          <p className="text-red-500 text-sm">{registerForm.formState.errors.firstName.message}</p>
-                        )}
-                      </div>
+            {/* Register Tab */}
+            <TabsContent value="register">
+              <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-navy font-medium">
+                      <User className="w-4 h-4 inline mr-2" />
+                      First Name
+                    </Label>
+                    <Input
+                      id="firstName"
+                      placeholder="First name"
+                      {...registerForm.register('firstName')}
+                      className="border-navy/20 focus:ring-electric focus:border-electric"
+                    />
+                    {registerForm.formState.errors.firstName && (
+                      <p className="text-red-500 text-sm">{registerForm.formState.errors.firstName.message}</p>
+                    )}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName" className="text-navy font-medium">Last Name</Label>
-                        <Input
-                          id="lastName"
-                          placeholder="Last name"
-                          {...registerForm.register('lastName')}
-                          className="border-navy/20 focus:ring-electric focus:border-electric"
-                        />
-                        {registerForm.formState.errors.lastName && (
-                          <p className="text-red-500 text-sm">{registerForm.formState.errors.lastName.message}</p>
-                        )}
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-navy font-medium">
+                      Last Name
+                    </Label>
+                    <Input
+                      id="lastName"
+                      placeholder="Last name"
+                      {...registerForm.register('lastName')}
+                      className="border-navy/20 focus:ring-electric focus:border-electric"
+                    />
+                    {registerForm.formState.errors.lastName && (
+                      <p className="text-red-500 text-sm">{registerForm.formState.errors.lastName.message}</p>
+                    )}
+                  </div>
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="register-email" className="text-navy font-medium">
-                        <Mail className="w-4 h-4 inline mr-2" />
-                        Email
-                      </Label>
-                      <Input
-                        id="register-email"
-                        type="email"
-                        placeholder="Enter your email"
-                        {...registerForm.register('email')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {registerForm.formState.errors.email && (
-                        <p className="text-red-500 text-sm">{registerForm.formState.errors.email.message}</p>
-                      )}
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-navy font-medium">
+                    <Mail className="w-4 h-4 inline mr-2" />
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    {...registerForm.register('email')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {registerForm.formState.errors.email && (
+                    <p className="text-red-500 text-sm">{registerForm.formState.errors.email.message}</p>
+                  )}
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-navy font-medium">
-                        <Phone className="w-4 h-4 inline mr-2" />
-                        Phone (Optional)
-                      </Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="Phone number"
-                        {...registerForm.register('phone')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {registerForm.formState.errors.phone && (
-                        <p className="text-red-500 text-sm">{registerForm.formState.errors.phone.message}</p>
-                      )}
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-navy font-medium">
+                    <Phone className="w-4 h-4 inline mr-2" />
+                    Phone
+                  </Label>
+                  <Input
+                    id="phone"
+                    placeholder="Phone number"
+                    {...registerForm.register('phone')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {registerForm.formState.errors.phone && (
+                    <p className="text-red-500 text-sm">{registerForm.formState.errors.phone.message}</p>
+                  )}
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="address" className="text-navy font-medium">
-                        <MapPin className="w-4 h-4 inline mr-2" />
-                        Address (Optional)
-                      </Label>
-                      <Input
-                        id="address"
-                        placeholder="Street address"
-                        {...registerForm.register('address')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="address" className="text-navy font-medium">
+                    <MapPin className="w-4 h-4 inline mr-2" />
+                    Address
+                  </Label>
+                  <Input
+                    id="address"
+                    placeholder="Street address"
+                    {...registerForm.register('address')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {registerForm.formState.errors.address && (
+                    <p className="text-red-500 text-sm">{registerForm.formState.errors.address.message}</p>
+                  )}
+                </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="city" className="text-navy font-medium">City (Optional)</Label>
-                        <Input
-                          id="city"
-                          placeholder="City"
-                          {...registerForm.register('city')}
-                          className="border-navy/20 focus:ring-electric focus:border-electric"
-                        />
-                      </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-navy font-medium">
+                      City
+                    </Label>
+                    <Input
+                      id="city"
+                      placeholder="City"
+                      {...registerForm.register('city')}
+                      className="border-navy/20 focus:ring-electric focus:border-electric"
+                    />
+                    {registerForm.formState.errors.city && (
+                      <p className="text-red-500 text-sm">{registerForm.formState.errors.city.message}</p>
+                    )}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="postalCode" className="text-navy font-medium">Postal Code (Optional)</Label>
-                        <Input
-                          id="postalCode"
-                          placeholder="Postal code"
-                          {...registerForm.register('postalCode')}
-                          className="border-navy/20 focus:ring-electric focus:border-electric"
-                        />
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode" className="text-navy font-medium">
+                      Postal Code
+                    </Label>
+                    <Input
+                      id="postalCode"
+                      placeholder="Postal code"
+                      {...registerForm.register('postalCode')}
+                      className="border-navy/20 focus:ring-electric focus:border-electric"
+                    />
+                    {registerForm.formState.errors.postalCode && (
+                      <p className="text-red-500 text-sm">{registerForm.formState.errors.postalCode.message}</p>
+                    )}
+                  </div>
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password" className="text-navy font-medium">
-                        <Lock className="w-4 h-4 inline mr-2" />
-                        Password
-                      </Label>
-                      <Input
-                        id="register-password"
-                        type="password"
-                        placeholder="Create a password"
-                        {...registerForm.register('password')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {registerForm.formState.errors.password && (
-                        <p className="text-red-500 text-sm">{registerForm.formState.errors.password.message}</p>
-                      )}
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="registerPassword" className="text-navy font-medium">
+                    <Lock className="w-4 h-4 inline mr-2" />
+                    Password
+                  </Label>
+                  <Input
+                    id="registerPassword"
+                    type="password"
+                    placeholder="Create a password"
+                    {...registerForm.register('password')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {registerForm.formState.errors.password && (
+                    <p className="text-red-500 text-sm">{registerForm.formState.errors.password.message}</p>
+                  )}
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="confirmPassword" className="text-navy font-medium">
-                        <Lock className="w-4 h-4 inline mr-2" />
-                        Confirm Password
-                      </Label>
-                      <Input
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Confirm your password"
-                        {...registerForm.register('confirmPassword')}
-                        className="border-navy/20 focus:ring-electric focus:border-electric"
-                      />
-                      {registerForm.formState.errors.confirmPassword && (
-                        <p className="text-red-500 text-sm">{registerForm.formState.errors.confirmPassword.message}</p>
-                      )}
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="text-navy font-medium">
+                    <Lock className="w-4 h-4 inline mr-2" />
+                    Confirm Password
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    {...registerForm.register('confirmPassword')}
+                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                  />
+                  {registerForm.formState.errors.confirmPassword && (
+                    <p className="text-red-500 text-sm">{registerForm.formState.errors.confirmPassword.message}</p>
+                  )}
+                </div>
 
-                    <Button
-                      type="submit"
-                      disabled={registerMutation.isPending}
-                      className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                    >
-                      {registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
-                    </Button>
-                  </form>
-                </TabsContent>
+                <Button
+                  type="submit"
+                  disabled={registerMutation.isPending}
+                  className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
+                >
+                  {registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
+                </Button>
+              </form>
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
