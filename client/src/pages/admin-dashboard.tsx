@@ -295,6 +295,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
               id="name"
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              className="bg-white shadow-sm"
               required
             />
           </div>
@@ -306,6 +307,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
               step="0.01"
               value={formData.price}
               onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+              className="bg-white shadow-sm"
               required
             />
           </div>
@@ -317,6 +319,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
             id="description"
             value={formData.description}
             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            className="bg-white shadow-sm"
             required
           />
         </div>

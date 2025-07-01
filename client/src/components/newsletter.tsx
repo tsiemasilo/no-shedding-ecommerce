@@ -49,7 +49,7 @@ export function Newsletter() {
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 focus:ring-2 focus:ring-electric"
+              className="flex-1 bg-white focus:ring-2 focus:ring-electric shadow-sm"
               required
             />
             <Button
