@@ -13,15 +13,13 @@ import NotFound from "@/pages/not-found";
 import AdminDashboard from "@/pages/admin-dashboard";
 import ProductDetails from "@/pages/product-details";
 import CustomerAuth from "@/pages/customer-auth";
-import AdminAuth from "@/pages/admin-auth";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/product/:id" component={ProductDetails} />
-      <Route path="/customer/auth" component={CustomerAuth} />
-      <Route path="/admin/auth" component={AdminAuth} />
+      <Route path="/auth" component={CustomerAuth} />
       <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>

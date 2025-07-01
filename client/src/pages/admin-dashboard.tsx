@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
   // Redirect if not authenticated as admin
   if (!user) {
-    setLocation('/admin/auth');
+    setLocation('/auth');
     return null;
   }
 

@@ -83,34 +83,15 @@ export function Header() {
                 </Button>
               </div>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
-                    title="Login"
-                  >
-                    <User className="w-8 h-8" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem 
-                    onClick={() => setLocation('/customer/auth')}
-                    className="cursor-pointer"
-                  >
-                    <User className="w-4 h-4 mr-2" />
-                    Customer Login
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => setLocation('/admin/auth')}
-                    className="cursor-pointer"
-                  >
-                    <Shield className="w-4 h-4 mr-2" />
-                    Admin Dashboard
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
+                onClick={() => setLocation('/auth')}
+                title="Sign In"
+              >
+                <User className="w-8 h-8" />
+              </Button>
             )}
 
             {/* Shopping Cart */}
