@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
@@ -51,10 +52,65 @@ export function setupAuth(app: Express) {
     }),
   );
 
-  passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser(async (id: number, done) => {
-    const user = await storage.getUser(id);
-    done(null, user);
+  // Google OAuth Strategy
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    passport.use(
+      new GoogleStrategy(
+        {
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: "/api/auth/google/callback",
+        },
+        async (accessToken, refreshToken, profile, done) => {
+          try {
+            // Check if customer already exists
+            let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
+            
+            if (!customer) {
+              // Create new customer from Google profile
+              customer = await storage.createCustomer({
+                firstName: profile.name?.givenName || profile.displayName || "",
+                lastName: profile.name?.familyName || "",
+                email: profile.emails?.[0]?.value || "",
+                password: "", // No password needed for Google auth
+                phone: "",
+                address: "",
+                city: "",
+                postalCode: "",
+              });
+            }
+            
+            return done(null, customer);
+          } catch (error) {
+            return done(error, undefined);
+          }
+        }
+      )
+    );
+  }
+
+  passport.serializeUser((user: any, done) => {
+    if (user.username) {
+      // This is an admin user
+      done(null, { id: user.id, type: 'user' });
+    } else {
+      // This is a customer
+      done(null, { id: user.id, type: 'customer' });
+    }
+  });
+  
+  passport.deserializeUser(async (obj: any, done) => {
+    try {
+      if (obj.type === 'user') {
+        const user = await storage.getUser(obj.id);
+        done(null, user);
+      } else {
+        const customer = await storage.getCustomer(obj.id);
+        done(null, customer);
+      }
+    } catch (error) {
+      done(error, null);
+    }
   });
 
   // Admin login endpoint
@@ -86,4 +142,16 @@ export function setupAuth(app: Express) {
     }
     next();
   });
+
+  // Google OAuth routes
+  app.get("/api/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+  app.get(
+    "/api/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/customer/auth" }),
+    (req, res) => {
+      // Successful authentication, redirect to home
+      res.redirect("/");
+    }
+  );
 }
