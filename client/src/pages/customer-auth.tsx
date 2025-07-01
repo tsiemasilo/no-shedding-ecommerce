@@ -79,7 +79,14 @@ export default function CustomerAuth() {
       // Try customer login
       customerLoginMutation.mutate({ email: identifier, password }, {
         onSuccess: () => {
-          setLocation('/');
+          // Check if there's a redirect destination stored
+          const redirectTo = localStorage.getItem('redirectAfterLogin');
+          if (redirectTo) {
+            localStorage.removeItem('redirectAfterLogin');
+            setLocation(redirectTo);
+          } else {
+            setLocation('/');
+          }
         },
       });
     } else {

@@ -56,7 +56,8 @@ export function ShoppingCart() {
         variant: "destructive",
       });
       setIsOpen(false);
-      // Redirect to auth page
+      // Store the intended destination before redirecting to auth
+      localStorage.setItem('redirectAfterLogin', '/checkout');
       setLocation('/auth');
       return;
     }

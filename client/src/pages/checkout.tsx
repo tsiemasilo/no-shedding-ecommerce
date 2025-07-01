@@ -57,6 +57,8 @@ export default function Checkout() {
 
   // Redirect if not authenticated
   if (!isAuthenticated) {
+    // Store the intended destination before redirecting to auth
+    localStorage.setItem('redirectAfterLogin', '/checkout');
     setLocation('/auth');
     return null;
   }
