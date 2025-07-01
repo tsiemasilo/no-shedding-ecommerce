@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
+import backgroundPattern from '@assets/image_1751366173508.png';
 
 const loginSchema = z.object({
   identifier: z.string().min(1, 'Email or username is required'),
@@ -103,7 +104,16 @@ export default function CustomerAuth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand flex items-center justify-center p-4" style={{ zoom: '0.9' }}>
+    <div 
+      className="min-h-screen flex items-center justify-center p-4" 
+      style={{ 
+        zoom: '0.9',
+        backgroundImage: `url(${backgroundPattern})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '200px 200px',
+        backgroundColor: '#FFC300'
+      }}
+    >
       {/* Back button */}
       <Button
         variant="ghost"
@@ -115,7 +125,7 @@ export default function CustomerAuth() {
       </Button>
 
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-0 shadow-xl bg-gray-100 rounded-3xl overflow-hidden">
+      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/98 backdrop-blur-md rounded-3xl overflow-hidden ring-1 ring-black/10">
         <CardHeader className="text-center pb-4 pt-8">
           {/* Removed logo to match the design */}
         </CardHeader>
