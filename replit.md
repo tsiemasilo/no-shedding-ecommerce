@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 1, 2025: Implemented complete customer authentication system
+  - Added customers table to database schema with personal details
+  - Created customer authentication API routes with secure bcrypt password hashing
+  - Built customer authentication React hook with context state management
+  - Developed comprehensive customer login/signup page with form validation
+  - Integrated customer authentication into header with consolidated login dropdown
+  - Single "Sign In" button now provides access to both customer and admin login options
+  - Persistent login state using localStorage with welcome messages and logout functionality
+
 - June 30, 2025: Enhanced navbar and increased font sizes
   - Increased navbar height from 16 to 20 (h-16 to h-20) for better prominence
   - Enlarged logo from 12x12 to 16x16 and positioned on far left with flex-shrink-0

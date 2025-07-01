@@ -1,9 +1,10 @@
-import { Search, User, ShoppingCart, LogOut, UserPlus } from 'lucide-react';
+import { Search, User, ShoppingCart, LogOut, UserPlus, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useLocation } from 'wouter';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
@@ -60,7 +61,7 @@ export function Header() {
           
           {/* User Actions */}
           <div className="flex items-center space-x-3 mr-6">
-            {/* Customer Authentication */}
+            {/* Authentication */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-2">
                 <span className="text-white text-sm font-medium hidden md:block">
@@ -77,27 +78,37 @@ export function Header() {
                 </Button>
               </div>
             ) : (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-white hover:text-electric hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
-                onClick={() => setLocation('/customer/auth')}
-              >
-                <UserPlus className="w-5 h-5" />
-                <span className="hidden md:inline">Sign In</span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:text-electric hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                  >
+                    <User className="w-5 h-5" />
+                    <span className="hidden md:inline">Sign In</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-white border border-navy/20 shadow-lg">
+                  <DropdownMenuItem 
+                    onClick={() => setLocation('/customer/auth')}
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-sand"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>Customer Login</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={() => setLocation('/admin/login')}
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-sand"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Admin Login</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
-
-            {/* Admin Login - Keep separate */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-white hover:text-electric hover:bg-white/10 p-3 rounded-lg transition-all duration-200"
-              onClick={() => setLocation('/admin/login')}
-              title="Admin Login"
-            >
-              <User className="w-6 h-6" />
-            </Button>
 
             {/* Shopping Cart */}
             <Button
