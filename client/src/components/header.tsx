@@ -1,9 +1,15 @@
-import { Search, User, ShoppingCart, LogOut } from 'lucide-react';
+import { Search, User, ShoppingCart, LogOut, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 import { useLocation } from 'wouter';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
@@ -77,15 +83,34 @@ export function Header() {
                 </Button>
               </div>
             ) : (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
-                onClick={() => setLocation('/customer/auth')}
-                title="Login"
-              >
-                <User className="w-8 h-8" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
+                    title="Login"
+                  >
+                    <User className="w-8 h-8" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem 
+                    onClick={() => setLocation('/customer/auth')}
+                    className="cursor-pointer"
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Customer Login
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => setLocation('/admin/auth')}
+                    className="cursor-pointer"
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
+                    Admin Dashboard
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
 
             {/* Shopping Cart */}

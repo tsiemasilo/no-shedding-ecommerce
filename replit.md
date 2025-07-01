@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 1, 2025: Enhanced authentication security and admin access control
+  - Created dedicated admin authentication page at /admin/auth with proper login form
+  - Added missing admin authentication API endpoints (/api/admin/user, /api/admin/login, /api/admin/logout)
+  - Fixed admin dashboard security to properly redirect unauthorized users to admin auth page
+  - Updated header with dropdown menu providing separate "Customer Login" and "Admin Dashboard" options
+  - Prevented customer accounts from accessing admin dashboard through proper session validation
+  - Fixed customer authentication hook to use server-side session management instead of localStorage
+  - Removed ability for customers to accidentally access admin features after logout
+
 - July 1, 2025: Completed Google OAuth integration for customer authentication
   - Installed and configured dotenv for environment variable management
   - Successfully implemented Google OAuth strategy with passport-google-oauth20
