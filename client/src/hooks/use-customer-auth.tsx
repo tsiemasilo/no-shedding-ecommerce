@@ -1,10 +1,11 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import {
+  useQuery,
   useMutation,
   UseMutationResult,
 } from "@tanstack/react-query";
-import { insertCustomerSchema, Customer, InsertCustomer } from "@shared/schema";
-import { apiRequest } from "../lib/queryClient";
+import { Customer, InsertCustomer } from "@shared/schema";
+import { apiRequest, getQueryFn, queryClient } from "../lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
 type CustomerAuthContextType = {
@@ -24,8 +25,17 @@ type LoginData = {
 export const CustomerAuthContext = createContext<CustomerAuthContextType | null>(null);
 
 export function CustomerAuthProvider({ children }: { children: ReactNode }) {
-  const [customer, setCustomer] = useState<Customer | null>(null);
   const { toast } = useToast();
+
+  // Query current customer session
+  const {
+    data: customer,
+    error,
+    isLoading,
+  } = useQuery<Customer | undefined, Error>({
+    queryKey: ["/api/customer/user"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
@@ -33,11 +43,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (customer: Customer) => {
-      setCustomer(customer);
-      localStorage.setItem('customer', JSON.stringify(customer));
+      queryClient.setQueryData(["/api/customer/user"], customer);
       toast({
         title: "Welcome back!",
-        description: `Welcome back, ${customer.firstName}!`,
+        description: `Good to see you again, ${customer.firstName || customer.email}!`,
       });
     },
     onError: (error: Error) => {
@@ -55,11 +64,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (customer: Customer) => {
-      setCustomer(customer);
-      localStorage.setItem('customer', JSON.stringify(customer));
+      queryClient.setQueryData(["/api/customer/user"], customer);
       toast({
-        title: "Account created successfully!",
-        description: `Welcome to No Shedding, ${customer.firstName}!`,
+        title: "Account created!",
+        description: `Welcome to No Shedding, ${customer.firstName || customer.email}!`,
       });
     },
     onError: (error: Error) => {
@@ -72,37 +80,24 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   });
 
   const logout = () => {
-    setCustomer(null);
-    localStorage.removeItem('customer');
+    queryClient.setQueryData(["/api/customer/user"], null);
     toast({
-      title: "Logged out",
-      description: "You have been logged out successfully.",
+      title: "Goodbye!",
+      description: "You've been logged out successfully.",
     });
   };
 
-  // Check if customer is stored in localStorage on mount
-  useEffect(() => {
-    const storedCustomer = localStorage.getItem('customer');
-    if (storedCustomer) {
-      try {
-        setCustomer(JSON.parse(storedCustomer));
-      } catch (error) {
-        localStorage.removeItem('customer');
-      }
-    }
-  }, []);
+  const contextValue: CustomerAuthContextType = {
+    customer: customer ?? null,
+    isLoading,
+    loginMutation,
+    registerMutation,
+    logout,
+    isAuthenticated: !!customer,
+  };
 
   return (
-    <CustomerAuthContext.Provider
-      value={{
-        customer,
-        isLoading: loginMutation.isPending || registerMutation.isPending,
-        loginMutation,
-        registerMutation,
-        logout,
-        isAuthenticated: !!customer,
-      }}
-    >
+    <CustomerAuthContext.Provider value={contextValue}>
       {children}
     </CustomerAuthContext.Provider>
   );
