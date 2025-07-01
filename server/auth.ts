@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+// Google OAuth strategy will be imported dynamically when needed
 import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
@@ -41,7 +41,7 @@ async function comparePasswords(supplied: string, stored: string) {
   return supplied === stored;
 }
 
-export function setupAuth(app: Express) {
+export async function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "dev-secret-key",
     resave: false,
@@ -68,6 +68,9 @@ export function setupAuth(app: Express) {
   // Google OAuth Strategy
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     try {
+      // Dynamic import to avoid ES module issues
+      const { Strategy: GoogleStrategy } = await import("passport-google-oauth20");
+      
       passport.use(
         new GoogleStrategy(
           {
@@ -101,6 +104,7 @@ export function setupAuth(app: Express) {
           }
         )
       );
+      console.log("Google OAuth strategy initialized successfully");
     } catch (error) {
       console.error("Failed to initialize Google OAuth strategy:", error);
     }
