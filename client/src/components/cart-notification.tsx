@@ -30,7 +30,7 @@ export function CartNotification({ isVisible, onClose, productName, productPrice
   if (!isVisible) return null;
 
   return (
-    <div className="fixed top-6 right-6 z-50 transition-all duration-300 ease-in-out transform">
+    <div className="fixed bottom-6 right-6 z-50 transition-all duration-300 ease-in-out transform">
       <div className="w-[360px] h-[150px] bg-white/10 backdrop-blur-[10px] rounded-2xl shadow-lg border border-white/20 p-2.5">
         <div className="flex items-center h-full">
           {/* Cart Icon */}
