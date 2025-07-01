@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { useState } from 'react';
 
 export function ShoppingCart() {
@@ -18,15 +19,15 @@ export function ShoppingCart() {
     isLoading 
   } = useCart();
   
+  const { customer, isAuthenticated } = useCustomerAuth();
   const { toast } = useToast();
   const [couponCode, setCouponCode] = useState('');
 
   const handleUpdateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeFromCart(id);
-    } else {
-      updateQuantity({ id, quantity: newQuantity });
+    if (newQuantity < 0) {
+      return; // Don't allow negative quantities
     }
+    updateQuantity({ id, quantity: newQuantity });
   };
 
   const handleRemoveItem = (id: number) => {
@@ -46,6 +47,18 @@ export function ShoppingCart() {
   };
 
   const handleCheckout = () => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to proceed with checkout.",
+        variant: "destructive",
+      });
+      setIsOpen(false);
+      // Redirect to auth page
+      window.location.href = '/auth';
+      return;
+    }
+    
     toast({
       title: "Checkout",
       description: "Checkout functionality would be implemented here.",

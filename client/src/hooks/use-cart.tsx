@@ -85,7 +85,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const response = await apiRequest('PUT', `/api/cart/${id}`, { quantity });
       return response.json();
     },
-    onSuccess: () => {
+    onMutate: async ({ id, quantity }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['/api/cart', sessionId] });
+      
+      // Snapshot the previous value
+      const previousCartItems = queryClient.getQueryData(['/api/cart', sessionId]);
+      
+      // Optimistically update the cache
+      queryClient.setQueryData(['/api/cart', sessionId], (old: CartItemWithProduct[] | undefined) => {
+        if (!old) return old;
+        return old.map(item => 
+          item.id === id ? { ...item, quantity } : item
+        );
+      });
+      
+      return { previousCartItems };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousCartItems) {
+        queryClient.setQueryData(['/api/cart', sessionId], context.previousCartItems);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/cart', sessionId] });
     },
   });

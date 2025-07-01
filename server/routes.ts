@@ -194,7 +194,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/cart/:id", async (req, res) => {
     try {
       const { quantity } = req.body;
-      if (!quantity || quantity < 0) {
+      if (quantity === undefined || quantity === null || quantity < 0) {
         return res.status(400).json({ message: "Invalid quantity" });
       }
       
