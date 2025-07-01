@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
   // Redirect if not authenticated
   if (!user) {
-    setLocation('/admin/login');
+    setLocation('/customer/auth');
     return null;
   }
 
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        setLocation('/admin/login');
+        setLocation('/');
       }
     });
   };

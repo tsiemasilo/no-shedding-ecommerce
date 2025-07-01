@@ -9,7 +9,7 @@ import { CartProvider } from "@/hooks/use-cart";
 import { ShoppingCart } from "@/components/shopping-cart";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
-import AdminLogin from "@/pages/admin-login";
+
 import AdminDashboard from "@/pages/admin-dashboard";
 import ProductDetails from "@/pages/product-details";
 import CustomerAuth from "@/pages/customer-auth";
@@ -20,7 +20,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/product/:id" component={ProductDetails} />
       <Route path="/customer/auth" component={CustomerAuth} />
-      <Route path="/admin/login" component={AdminLogin} />
+
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
