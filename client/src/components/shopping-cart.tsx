@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
+import { useLocation } from 'wouter';
 import { useState } from 'react';
 
 export function ShoppingCart() {
@@ -21,6 +22,7 @@ export function ShoppingCart() {
   
   const { customer, isAuthenticated } = useCustomerAuth();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [couponCode, setCouponCode] = useState('');
 
   const handleUpdateQuantity = (id: number, newQuantity: number) => {
@@ -55,13 +57,13 @@ export function ShoppingCart() {
       });
       setIsOpen(false);
       // Redirect to auth page
-      window.location.href = '/auth';
+      setLocation('/auth');
       return;
     }
     
     // Close cart and navigate to checkout page
     setIsOpen(false);
-    window.location.href = '/checkout';
+    setLocation('/checkout');
   };
 
   const handleApplyCoupon = (e: React.FormEvent) => {

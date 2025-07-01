@@ -33,7 +33,7 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, cartTotal, clearCart, isLoading } = useCart();
   const { customer, isAuthenticated } = useCustomerAuth();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -61,7 +61,22 @@ export default function Checkout() {
     return null;
   }
 
-  // Redirect if cart is empty
+  // Show loading while cart is loading
+  if (isLoading) {
+    return (
+      <div 
+        className="min-h-screen bg-[#FDF6EC] flex items-center justify-center"
+        style={{ zoom: '0.9' }}
+      >
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#0A2342] mx-auto mb-4"></div>
+          <p className="text-[#0A2342] text-lg">Loading your cart...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if cart is empty after loading
   if (cartItems.length === 0) {
     setLocation('/');
     return null;
