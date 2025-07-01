@@ -1,13 +1,30 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCartItemSchema, insertNewsletterSchema, insertProductSchema } from "@shared/schema";
+import { insertCartItemSchema, insertNewsletterSchema, insertProductSchema, insertCustomerSchema } from "@shared/schema";
 import { z } from "zod";
 import { setupAuth } from "./auth";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import express from "express";
+import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
+
+async function comparePasswords(supplied: string, stored: string) {
+  const [hashed, salt] = stored.split(".");
+  const hashedBuf = Buffer.from(hashed, "hex");
+  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
+  return timingSafeEqual(hashedBuf, suppliedBuf);
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
@@ -224,6 +241,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid email address", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  // Customer Authentication Routes
+  app.post("/api/customer/register", async (req, res) => {
+    try {
+      const customerData = insertCustomerSchema.parse(req.body);
+      const existingCustomer = await storage.getCustomerByEmail(customerData.email);
+      
+      if (existingCustomer) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+
+      const customer = await storage.createCustomer({
+        ...customerData,
+        password: await hashPassword(customerData.password),
+      });
+
+      // Remove password from response
+      const { password, ...customerResponse } = customer;
+      res.status(201).json(customerResponse);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid customer data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+
+  app.post("/api/customer/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+
+      const customer = await storage.getCustomerByEmail(email);
+      
+      if (!customer || !(await comparePasswords(password, customer.password))) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      // Remove password from response
+      const { password: _, ...customerResponse } = customer;
+      res.status(200).json(customerResponse);
+    } catch (error) {
+      res.status(500).json({ message: "Login failed" });
     }
   });
 
