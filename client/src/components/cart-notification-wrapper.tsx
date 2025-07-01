@@ -10,6 +10,7 @@ export function CartNotificationWrapper() {
       onClose={() => setShowNotification(false)}
       productName={lastAddedProduct?.name || ''}
       productPrice={lastAddedProduct?.price || ''}
+      productImage={lastAddedProduct?.image || ''}
     />
   );
 }
