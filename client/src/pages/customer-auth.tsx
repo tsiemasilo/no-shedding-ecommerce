@@ -96,8 +96,8 @@ export default function CustomerAuth() {
   };
 
   const handleGoogleAuth = () => {
-    // This will be implemented when Google OAuth is set up
-    console.log('Google authentication to be implemented');
+    // Redirect to Google OAuth endpoint
+    window.location.href = '/api/auth/google';
   };
 
   return (

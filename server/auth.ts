@@ -6,11 +6,24 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User as SelectUser } from "@shared/schema";
+import { User as SelectUser, Customer } from "@shared/schema";
 
 declare global {
   namespace Express {
-    interface User extends SelectUser {}
+    interface User {
+      id: number;
+      username?: string;
+      password?: string;
+      role?: string;
+      email?: string;
+      firstName?: string;
+      lastName?: string;
+      phone?: string | null;
+      address?: string | null;
+      city?: string | null;
+      postalCode?: string | null;
+      createdAt?: Date | null;
+    }
   }
 }
 
@@ -59,7 +72,7 @@ export function setupAuth(app: Express) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "/api/auth/google/callback",
+          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
         },
         async (accessToken, refreshToken, profile, done) => {
           try {
@@ -80,7 +93,7 @@ export function setupAuth(app: Express) {
               });
             }
             
-            return done(null, customer);
+            return done(null, customer as any);
           } catch (error) {
             return done(error, undefined);
           }
@@ -106,7 +119,7 @@ export function setupAuth(app: Express) {
         done(null, user);
       } else {
         const customer = await storage.getCustomer(obj.id);
-        done(null, customer);
+        done(null, customer as any);
       }
     } catch (error) {
       done(error, null);
