@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import {
   useMutation,
   UseMutationResult,
@@ -81,7 +81,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Check if customer is stored in localStorage on mount
-  useState(() => {
+  useEffect(() => {
     const storedCustomer = localStorage.getItem('customer');
     if (storedCustomer) {
       try {
@@ -90,7 +90,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('customer');
       }
     }
-  });
+  }, []);
 
   return (
     <CustomerAuthContext.Provider

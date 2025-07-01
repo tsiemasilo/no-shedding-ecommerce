@@ -1,6 +1,7 @@
-import { Search, User, ShoppingCart } from 'lucide-react';
+import { Search, User, ShoppingCart, LogOut, UserPlus } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
+import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
@@ -9,6 +10,7 @@ import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_17511365199
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const { cartCount, setIsOpen } = useCart();
+  const { customer, isAuthenticated, logout } = useCustomerAuth();
   const [, setLocation] = useLocation();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -58,14 +60,46 @@ export function Header() {
           
           {/* User Actions */}
           <div className="flex items-center space-x-3 mr-6">
+            {/* Customer Authentication */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <span className="text-white text-sm font-medium hidden md:block">
+                  Welcome, {customer?.firstName}!
+                </span>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="text-white hover:text-electric hover:bg-white/10 p-3 rounded-lg transition-all duration-200"
+                  onClick={logout}
+                  title="Logout"
+                >
+                  <LogOut className="w-6 h-6" />
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:text-electric hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                onClick={() => setLocation('/customer/auth')}
+              >
+                <UserPlus className="w-5 h-5" />
+                <span className="hidden md:inline">Sign In</span>
+              </Button>
+            )}
+
+            {/* Admin Login - Keep separate */}
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
+              className="text-white hover:text-electric hover:bg-white/10 p-3 rounded-lg transition-all duration-200"
               onClick={() => setLocation('/admin/login')}
+              title="Admin Login"
             >
-              <User className="w-8 h-8" />
+              <User className="w-6 h-6" />
             </Button>
+
+            {/* Shopping Cart */}
             <Button
               variant="ghost"
               size="icon"
