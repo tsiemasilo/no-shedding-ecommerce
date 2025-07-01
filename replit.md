@@ -99,6 +99,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 1, 2025: Completed Google OAuth integration for customer authentication
+  - Installed and configured dotenv for environment variable management
+  - Successfully implemented Google OAuth strategy with passport-google-oauth20
+  - Added dynamic ES module import compatibility for Google OAuth
+  - Google "Sign in with Google" button now fully functional
+  - Automatic customer account creation from Google profiles
+  - Proper redirect URI configuration: https://no-shedding.replit.app/api/auth/google/callback
+  - Google OAuth credentials configured and working (GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
+  - Users can now authenticate using Google accounts and get automatic customer profiles
+
 - July 1, 2025: Implemented complete customer authentication system
   - Added customers table to database schema with personal details
   - Created customer authentication API routes with secure bcrypt password hashing
