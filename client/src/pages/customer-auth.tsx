@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -33,6 +33,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
   const [isLogin, setIsLogin] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { toast } = useToast();
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
@@ -59,6 +60,16 @@ export default function CustomerAuth() {
       postalCode: '',
     },
   });
+
+  // Mouse tracking effect for torch lighting
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // Redirect if already authenticated
   if (customerAuthenticated || adminUser) {
@@ -105,27 +116,38 @@ export default function CustomerAuth() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4" 
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" 
       style={{ 
         zoom: '0.9',
-        backgroundImage: `url(${backgroundPattern})`,
-        backgroundRepeat: 'repeat',
-        backgroundSize: '200px 200px',
-        backgroundColor: '#FFC300'
+        backgroundColor: '#000000',
+        cursor: `url("data:image/svg+xml,%3csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3e%3cg%3e%3cpath d='M16 2L14 8L16 14L18 8L16 2Z' fill='%23FFC300'/%3e%3cpath d='M16 14L10 18L16 22L22 18L16 14Z' fill='%23FF6F00'/%3e%3ccircle cx='16' cy='24' r='4' fill='%23333'/%3e%3c/g%3e%3c/svg%3e") 16 16, auto`
       }}
     >
+      {/* Dynamic lighting effect that follows mouse */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle 300px at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(255, 195, 0, 0.3) 0%, 
+            rgba(255, 195, 0, 0.15) 20%, 
+            rgba(255, 111, 0, 0.1) 40%, 
+            transparent 70%)`,
+          transition: 'background 0.1s ease-out'
+        }}
+      />
       {/* Back button */}
       <Button
         variant="ghost"
         onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 text-white bg-navy/90 hover:bg-navy hover:scale-105 transition-all duration-300 px-4 py-2 rounded-lg shadow-md"
+        className="absolute top-6 left-6 text-white bg-navy/90 hover:bg-navy hover:scale-105 transition-all duration-300 px-4 py-2 rounded-lg relative z-10"
+        style={{ boxShadow: '0 0 20px rgba(255, 195, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.6)' }}
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Store
       </Button>
 
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/98 backdrop-blur-md rounded-3xl overflow-hidden ring-1 ring-black/10">
+      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden ring-1 ring-electric/20 relative z-10" style={{ boxShadow: '0 0 50px rgba(255, 195, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8)' }}>
         <CardHeader className="text-center pb-4 pt-8">
           {/* Removed logo to match the design */}
         </CardHeader>
