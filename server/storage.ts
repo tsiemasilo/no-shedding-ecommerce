@@ -1,4 +1,4 @@
-import { categories, products, cartItems, newsletters, subcategories, users, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser } from "@shared/schema";
+import { categories, products, cartItems, newsletters, subcategories, users, customers, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type Customer, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser, type InsertCustomer } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import session from "express-session";
@@ -57,12 +57,14 @@ export class MemStorage implements IStorage {
   private cartItems: Map<number, CartItem>;
   private newsletters: Map<number, Newsletter>;
   private users: Map<number, User>;
+  private customers: Map<number, Customer>;
   private currentCategoryId: number;
   private currentSubcategoryId: number;
   private currentProductId: number;
   private currentCartItemId: number;
   private currentNewsletterId: number;
   private currentUserId: number;
+  private currentCustomerId: number;
 
   constructor() {
     this.categories = new Map();
@@ -71,12 +73,14 @@ export class MemStorage implements IStorage {
     this.cartItems = new Map();
     this.newsletters = new Map();
     this.users = new Map();
+    this.customers = new Map();
     this.currentCategoryId = 1;
     this.currentSubcategoryId = 1;
     this.currentProductId = 1;
     this.currentCartItemId = 1;
     this.currentNewsletterId = 1;
     this.currentUserId = 1;
+    this.currentCustomerId = 1;
     
     this.seedData();
   }
@@ -302,6 +306,25 @@ export class MemStorage implements IStorage {
     const newUser: User = { ...user, id: this.currentUserId++ };
     this.users.set(newUser.id, newUser);
     return newUser;
+  }
+
+  // Customer authentication methods
+  async getCustomer(id: number): Promise<Customer | undefined> {
+    return this.customers.get(id);
+  }
+
+  async getCustomerByEmail(email: string): Promise<Customer | undefined> {
+    return Array.from(this.customers.values()).find(customer => customer.email === email);
+  }
+
+  async createCustomer(customer: InsertCustomer): Promise<Customer> {
+    const newCustomer: Customer = { 
+      ...customer, 
+      id: this.currentCustomerId++,
+      createdAt: new Date()
+    };
+    this.customers.set(newCustomer.id, newCustomer);
+    return newCustomer;
   }
 
   // Product management methods
@@ -550,6 +573,25 @@ export class DatabaseStorage implements IStorage {
   async createUser(user: InsertUser): Promise<User> {
     const [newUser] = await db.insert(users).values(user).returning();
     return newUser;
+  }
+
+  // Customer authentication methods
+  async getCustomer(id: number): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.id, id));
+    return customer || undefined;
+  }
+
+  async getCustomerByEmail(email: string): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.email, email));
+    return customer || undefined;
+  }
+
+  async createCustomer(customer: InsertCustomer): Promise<Customer> {
+    const [newCustomer] = await db
+      .insert(customers)
+      .values(customer)
+      .returning();
+    return newCustomer;
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
