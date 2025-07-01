@@ -1,10 +1,9 @@
-import { Search, User, ShoppingCart, LogOut, UserPlus, ChevronDown } from 'lucide-react';
+import { Search, User, ShoppingCart, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useLocation } from 'wouter';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
@@ -78,36 +77,15 @@ export function Header() {
                 </Button>
               </div>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:text-electric hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="hidden md:inline">Sign In</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-white border border-navy/20 shadow-lg">
-                  <DropdownMenuItem 
-                    onClick={() => setLocation('/customer/auth')}
-                    className="flex items-center space-x-2 cursor-pointer hover:bg-sand"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    <span>Customer Login</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    onClick={() => setLocation('/admin/login')}
-                    className="flex items-center space-x-2 cursor-pointer hover:bg-sand"
-                  >
-                    <User className="w-4 h-4" />
-                    <span>Admin Login</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-white hover:text-electric hover:bg-white/10 p-4 rounded-lg transition-all duration-200"
+                onClick={() => setLocation('/customer/auth')}
+                title="Login"
+              >
+                <User className="w-8 h-8" />
+              </Button>
             )}
 
             {/* Shopping Cart */}

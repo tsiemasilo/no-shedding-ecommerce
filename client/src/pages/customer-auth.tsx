@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useLocation } from 'wouter';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { insertCustomerSchema } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,8 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
-const loginSchema = z.object({
+const customerLoginSchema = z.object({
   email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+const adminLoginSchema = z.object({
+  username: z.string().min(3, 'Username must be at least 3 characters'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -25,24 +31,34 @@ const registerSchema = insertCustomerSchema.extend({
   path: ["confirmPassword"],
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type CustomerLoginFormData = z.infer<typeof customerLoginSchema>;
+type AdminLoginFormData = z.infer<typeof adminLoginSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState('login');
-  const { loginMutation, registerMutation, isAuthenticated } = useCustomerAuth();
+  const [activeTab, setActiveTab] = useState('customer-login');
+  const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
+  const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    setLocation('/');
+  if (customerAuthenticated || adminUser) {
+    setLocation(adminUser ? '/admin/dashboard' : '/');
     return null;
   }
 
-  const loginForm = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const customerLoginForm = useForm<CustomerLoginFormData>({
+    resolver: zodResolver(customerLoginSchema),
     defaultValues: {
       email: '',
+      password: '',
+    },
+  });
+
+  const adminLoginForm = useForm<AdminLoginFormData>({
+    resolver: zodResolver(adminLoginSchema),
+    defaultValues: {
+      username: '',
       password: '',
     },
   });
@@ -62,10 +78,18 @@ export default function CustomerAuth() {
     },
   });
 
-  const handleLogin = (data: LoginFormData) => {
-    loginMutation.mutate(data, {
+  const handleCustomerLogin = (data: CustomerLoginFormData) => {
+    customerLoginMutation.mutate(data, {
       onSuccess: () => {
         setLocation('/');
+      },
+    });
+  };
+
+  const handleAdminLogin = (data: AdminLoginFormData) => {
+    adminLoginMutation.mutate(data, {
+      onSuccess: () => {
+        setLocation('/admin/dashboard');
       },
     });
   };
@@ -113,9 +137,10 @@ export default function CustomerAuth() {
 
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="login" className="text-sm">Sign In</TabsTrigger>
-                  <TabsTrigger value="register" className="text-sm">Create Account</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsTrigger value="customer-login" className="text-sm">Customer</TabsTrigger>
+                  <TabsTrigger value="admin-login" className="text-sm">Admin</TabsTrigger>
+                  <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
                 </TabsList>
 
                 {/* Login Tab */}
