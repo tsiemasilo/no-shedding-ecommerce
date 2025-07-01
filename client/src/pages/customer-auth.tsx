@@ -143,49 +143,96 @@ export default function CustomerAuth() {
                   <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
                 </TabsList>
 
-                {/* Login Tab */}
-                <TabsContent value="login">
-                  <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+                {/* Customer Login Tab */}
+                <TabsContent value="customer-login">
+                  <form onSubmit={customerLoginForm.handleSubmit(handleCustomerLogin)} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="login-email" className="text-navy font-medium">
+                      <Label htmlFor="customer-email" className="text-navy font-medium">
                         <Mail className="w-4 h-4 inline mr-2" />
                         Email
                       </Label>
                       <Input
-                        id="login-email"
+                        id="customer-email"
                         type="email"
                         placeholder="Enter your email"
-                        {...loginForm.register('email')}
+                        {...customerLoginForm.register('email')}
                         className="border-navy/20 focus:ring-electric focus:border-electric"
                       />
-                      {loginForm.formState.errors.email && (
-                        <p className="text-red-500 text-sm">{loginForm.formState.errors.email.message}</p>
+                      {customerLoginForm.formState.errors.email && (
+                        <p className="text-red-500 text-sm">{customerLoginForm.formState.errors.email.message}</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="login-password" className="text-navy font-medium">
+                      <Label htmlFor="customer-password" className="text-navy font-medium">
                         <Lock className="w-4 h-4 inline mr-2" />
                         Password
                       </Label>
                       <Input
-                        id="login-password"
+                        id="customer-password"
                         type="password"
                         placeholder="Enter your password"
-                        {...loginForm.register('password')}
+                        {...customerLoginForm.register('password')}
                         className="border-navy/20 focus:ring-electric focus:border-electric"
                       />
-                      {loginForm.formState.errors.password && (
-                        <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
+                      {customerLoginForm.formState.errors.password && (
+                        <p className="text-red-500 text-sm">{customerLoginForm.formState.errors.password.message}</p>
                       )}
                     </div>
 
                     <Button
                       type="submit"
-                      disabled={loginMutation.isPending}
+                      disabled={customerLoginMutation.isPending}
                       className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
                     >
-                      {loginMutation.isPending ? 'Signing In...' : 'Sign In'}
+                      {customerLoginMutation.isPending ? 'Signing In...' : 'Customer Sign In'}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                {/* Admin Login Tab */}
+                <TabsContent value="admin-login">
+                  <form onSubmit={adminLoginForm.handleSubmit(handleAdminLogin)} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="admin-username" className="text-navy font-medium">
+                        <User className="w-4 h-4 inline mr-2" />
+                        Username
+                      </Label>
+                      <Input
+                        id="admin-username"
+                        type="text"
+                        placeholder="Enter admin username"
+                        {...adminLoginForm.register('username')}
+                        className="border-navy/20 focus:ring-electric focus:border-electric"
+                      />
+                      {adminLoginForm.formState.errors.username && (
+                        <p className="text-red-500 text-sm">{adminLoginForm.formState.errors.username.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="admin-password" className="text-navy font-medium">
+                        <Lock className="w-4 h-4 inline mr-2" />
+                        Password
+                      </Label>
+                      <Input
+                        id="admin-password"
+                        type="password"
+                        placeholder="Enter admin password"
+                        {...adminLoginForm.register('password')}
+                        className="border-navy/20 focus:ring-electric focus:border-electric"
+                      />
+                      {adminLoginForm.formState.errors.password && (
+                        <p className="text-red-500 text-sm">{adminLoginForm.formState.errors.password.message}</p>
+                      )}
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={adminLoginMutation.isPending}
+                      className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
+                    >
+                      {adminLoginMutation.isPending ? 'Signing In...' : 'Admin Sign In'}
                     </Button>
                   </form>
                 </TabsContent>
