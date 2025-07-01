@@ -113,17 +113,9 @@ export default function CustomerAuth() {
       </Button>
 
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/98 backdrop-blur-sm rounded-3xl overflow-hidden">
-        <CardHeader className="text-center pb-6 pt-8">
-          <div className="flex items-center justify-center mb-6">
-            <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center p-2 shadow-lg">
-              <img 
-                src={logoImage} 
-                alt="No Shedding Logo" 
-                className="h-full w-full object-contain"
-              />
-            </div>
-          </div>
+      <Card className="w-full max-w-md border-0 shadow-xl bg-gray-100 rounded-3xl overflow-hidden">
+        <CardHeader className="text-center pb-4 pt-8">
+          {/* Removed logo to match the design */}
         </CardHeader>
 
         <CardContent className="px-8 pb-8">
@@ -131,19 +123,21 @@ export default function CustomerAuth() {
             // Sign Up Form
             <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-6">
               {/* Name Field */}
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-charcoal text-base font-medium">
+              <div className="space-y-3">
+                <Label htmlFor="name" className="text-black text-lg font-medium">
                   Name
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <User className="w-5 h-5" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
                   </div>
                   <Input
                     id="name"
                     placeholder="Enter your Name"
                     {...registerForm.register('firstName')}
-                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
                   />
                 </div>
                 {registerForm.formState.errors.firstName && (
@@ -152,20 +146,20 @@ export default function CustomerAuth() {
               </div>
 
               {/* Email Field */}
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-charcoal text-base font-medium">
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-black text-lg font-medium">
                   Email
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <Mail className="w-5 h-5" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl font-bold">
+                    @
                   </div>
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your Email"
                     {...registerForm.register('email')}
-                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
                   />
                 </div>
                 {registerForm.formState.errors.email && (
@@ -174,20 +168,22 @@ export default function CustomerAuth() {
               </div>
 
               {/* Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-charcoal text-base font-medium">
+              <div className="space-y-3">
+                <Label htmlFor="password" className="text-black text-lg font-medium">
                   Password
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <Lock className="w-5 h-5" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18,8h-1V6c0-2.76-2.24-5-5-5S7,3.24,7,6v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V10 C20,8.9,19.1,8,18,8z M12,17c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,17,12,17z M15.1,8H8.9V6c0-1.71,1.39-3.1,3.1-3.1 s3.1,1.39,3.1,3.1V8z"/>
+                    </svg>
                   </div>
                   <Input
                     id="password"
                     type="password"
                     placeholder="Enter your Password"
                     {...registerForm.register('password')}
-                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
                   />
                 </div>
                 {registerForm.formState.errors.password && (
@@ -207,14 +203,14 @@ export default function CustomerAuth() {
               <Button
                 type="submit"
                 disabled={registerMutation.isPending}
-                className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-6 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
+                className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-semibold rounded-xl transition-all duration-200 mt-8"
               >
                 {registerMutation.isPending ? 'Creating Account...' : 'Sign Up'}
               </Button>
 
               {/* Login Link */}
-              <div className="text-center pt-4">
-                <span className="text-gray-600">Already have a account? </span>
+              <div className="text-center pt-6">
+                <span className="text-gray-700">Already have a account? </span>
                 <button
                   type="button"
                   onClick={() => setIsLogin(true)}
@@ -225,12 +221,12 @@ export default function CustomerAuth() {
               </div>
 
               {/* Google Sign Up */}
-              <div className="pt-4">
+              <div className="pt-6">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleGoogleAuth}
-                  className="w-full py-6 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-[1.02]"
+                  className="w-full py-4 border-2 border-gray-200 bg-white rounded-xl hover:bg-gray-50 transition-all duration-200"
                 >
                   <div className="flex items-center justify-center space-x-3">
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -248,19 +244,19 @@ export default function CustomerAuth() {
             // Login Form
             <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-6">
               {/* Email/Username Field */}
-              <div className="space-y-2">
-                <Label htmlFor="identifier" className="text-charcoal text-base font-medium">
+              <div className="space-y-3">
+                <Label htmlFor="identifier" className="text-black text-lg font-medium">
                   Email or Username
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <Mail className="w-5 h-5" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl font-bold">
+                    @
                   </div>
                   <Input
                     id="identifier"
                     placeholder="Enter your Email or Username"
                     {...loginForm.register('identifier')}
-                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
                   />
                 </div>
                 {loginForm.formState.errors.identifier && (
@@ -269,20 +265,22 @@ export default function CustomerAuth() {
               </div>
 
               {/* Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="loginPassword" className="text-charcoal text-base font-medium">
+              <div className="space-y-3">
+                <Label htmlFor="loginPassword" className="text-black text-lg font-medium">
                   Password
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <Lock className="w-5 h-5" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18,8h-1V6c0-2.76-2.24-5-5-5S7,3.24,7,6v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V10 C20,8.9,19.1,8,18,8z M12,17c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,17,12,17z M15.1,8H8.9V6c0-1.71,1.39-3.1,3.1-3.1 s3.1,1.39,3.1,3.1V8z"/>
+                    </svg>
                   </div>
                   <Input
                     id="loginPassword"
                     type="password"
                     placeholder="Enter your Password"
                     {...loginForm.register('password')}
-                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                    className="pl-12 py-4 border-2 border-gray-200 bg-white rounded-xl text-base placeholder:text-gray-400 focus:ring-0 focus:border-gray-300 transition-all"
                   />
                 </div>
                 {loginForm.formState.errors.password && (
@@ -294,14 +292,14 @@ export default function CustomerAuth() {
               <Button
                 type="submit"
                 disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
-                className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-6 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
+                className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-semibold rounded-xl transition-all duration-200 mt-8"
               >
                 {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Login'}
               </Button>
 
               {/* Sign Up Link */}
-              <div className="text-center pt-4">
-                <span className="text-gray-600">Don't have an account? </span>
+              <div className="text-center pt-6">
+                <span className="text-gray-700">Don't have an account? </span>
                 <button
                   type="button"
                   onClick={() => setIsLogin(false)}
@@ -312,12 +310,12 @@ export default function CustomerAuth() {
               </div>
 
               {/* Google Login */}
-              <div className="pt-4">
+              <div className="pt-6">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleGoogleAuth}
-                  className="w-full py-6 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-[1.02]"
+                  className="w-full py-4 border-2 border-gray-200 bg-white rounded-xl hover:bg-gray-50 transition-all duration-200"
                 >
                   <div className="flex items-center justify-center space-x-3">
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
