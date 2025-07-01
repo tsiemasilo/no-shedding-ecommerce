@@ -291,7 +291,7 @@ export default function Checkout() {
                     <Input
                       id="cardName"
                       {...form.register('cardName')}
-                      className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
                       placeholder="Name as it appears on card"
                     />
                     {form.formState.errors.cardName && (
@@ -308,7 +308,7 @@ export default function Checkout() {
                       id="cardNumber"
                       placeholder="1234 5678 9012 3456"
                       {...form.register('cardNumber')}
-                      className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
                     />
                     {form.formState.errors.cardNumber && (
                       <p className="text-red-500 text-sm flex items-center mt-1">
@@ -325,7 +325,7 @@ export default function Checkout() {
                         id="expiryDate"
                         placeholder="MM/YY"
                         {...form.register('expiryDate')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
                       />
                       {form.formState.errors.expiryDate && (
                         <p className="text-red-500 text-sm flex items-center mt-1">
@@ -340,7 +340,7 @@ export default function Checkout() {
                         id="cvv"
                         placeholder="123"
                         {...form.register('cvv')}
-                        className="h-12 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
                       />
                       {form.formState.errors.cvv && (
                         <p className="text-red-500 text-sm flex items-center mt-1">
