@@ -28,7 +28,7 @@ async function comparePasswords(supplied: string, stored: string) {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
-  setupAuth(app);
+  await setupAuth(app);
 
   // Ensure uploads directory exists
   const uploadsDir = path.join(process.cwd(), 'uploads');

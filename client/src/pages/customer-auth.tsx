@@ -96,8 +96,11 @@ export default function CustomerAuth() {
   };
 
   const handleGoogleAuth = () => {
-    // Redirect to Google OAuth endpoint
-    window.location.href = '/api/auth/google';
+    toast({
+      title: "Google Authentication",
+      description: "Google sign-in is temporarily unavailable. Please use email/password login.",
+      variant: "destructive",
+    });
   };
 
   return (
