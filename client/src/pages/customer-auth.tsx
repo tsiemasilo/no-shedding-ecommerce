@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
@@ -31,7 +30,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function CustomerAuth() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState('login');
+  const [isLogin, setIsLogin] = useState(false);
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
 
@@ -96,6 +95,11 @@ export default function CustomerAuth() {
     });
   };
 
+  const handleGoogleAuth = () => {
+    // This will be implemented when Google OAuth is set up
+    console.log('Google authentication to be implemented');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand flex items-center justify-center p-4" style={{ zoom: '0.9' }}>
       {/* Back button */}
@@ -109,9 +113,9 @@ export default function CustomerAuth() {
       </Button>
 
       {/* Centered Auth Form */}
-      <Card className="w-full max-w-md border-2 border-navy/10 shadow-2xl bg-white/95 backdrop-blur-sm">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center mb-4">
+      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/98 backdrop-blur-sm rounded-3xl overflow-hidden">
+        <CardHeader className="text-center pb-6 pt-8">
+          <div className="flex items-center justify-center mb-6">
             <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center p-2 shadow-lg">
               <img 
                 src={logoImage} 
@@ -120,227 +124,214 @@ export default function CustomerAuth() {
               />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-navy">Welcome</CardTitle>
-          <CardDescription className="text-charcoal">
-            Sign in or create an account
-          </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login" className="text-sm">Sign In</TabsTrigger>
-              <TabsTrigger value="register" className="text-sm">Register</TabsTrigger>
-            </TabsList>
-
-            {/* Login Tab */}
-            <TabsContent value="login">
-              <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="identifier" className="text-navy font-medium">
-                    <User className="w-4 h-4 inline mr-2" />
-                    Email or Username
-                  </Label>
-                  <Input
-                    id="identifier"
-                    type="text"
-                    placeholder="Enter your email or username"
-                    {...loginForm.register('identifier')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
-                  />
-                  {loginForm.formState.errors.identifier && (
-                    <p className="text-red-500 text-sm">{loginForm.formState.errors.identifier.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-navy font-medium">
-                    <Lock className="w-4 h-4 inline mr-2" />
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    {...loginForm.register('password')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
-                  />
-                  {loginForm.formState.errors.password && (
-                    <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
-                  className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                >
-                  {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Sign In'}
-                </Button>
-              </form>
-            </TabsContent>
-
-            {/* Register Tab */}
-            <TabsContent value="register">
-              <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-navy font-medium">
-                      <User className="w-4 h-4 inline mr-2" />
-                      First Name
-                    </Label>
-                    <Input
-                      id="firstName"
-                      placeholder="First name"
-                      {...registerForm.register('firstName')}
-                      className="border-navy/20 focus:ring-electric focus:border-electric"
-                    />
-                    {registerForm.formState.errors.firstName && (
-                      <p className="text-red-500 text-sm">{registerForm.formState.errors.firstName.message}</p>
-                    )}
+        <CardContent className="px-8 pb-8">
+          {!isLogin ? (
+            // Sign Up Form
+            <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-6">
+              {/* Name Field */}
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-charcoal text-base font-medium">
+                  Name
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <User className="w-5 h-5" />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-navy font-medium">
-                      Last Name
-                    </Label>
-                    <Input
-                      id="lastName"
-                      placeholder="Last name"
-                      {...registerForm.register('lastName')}
-                      className="border-navy/20 focus:ring-electric focus:border-electric"
-                    />
-                    {registerForm.formState.errors.lastName && (
-                      <p className="text-red-500 text-sm">{registerForm.formState.errors.lastName.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    id="name"
+                    placeholder="Enter your Name"
+                    {...registerForm.register('firstName')}
+                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                  />
                 </div>
+                {registerForm.formState.errors.firstName && (
+                  <p className="text-red-500 text-sm">{registerForm.formState.errors.firstName.message}</p>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-navy font-medium">
-                    <Mail className="w-4 h-4 inline mr-2" />
-                    Email
-                  </Label>
+              {/* Email Field */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-charcoal text-base font-medium">
+                  Email
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Mail className="w-5 h-5" />
+                  </div>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Enter your Email"
                     {...registerForm.register('email')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
                   />
-                  {registerForm.formState.errors.email && (
-                    <p className="text-red-500 text-sm">{registerForm.formState.errors.email.message}</p>
-                  )}
                 </div>
+                {registerForm.formState.errors.email && (
+                  <p className="text-red-500 text-sm">{registerForm.formState.errors.email.message}</p>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-navy font-medium">
-                    <Phone className="w-4 h-4 inline mr-2" />
-                    Phone
-                  </Label>
-                  <Input
-                    id="phone"
-                    placeholder="Phone number"
-                    {...registerForm.register('phone')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
-                  />
-                  {registerForm.formState.errors.phone && (
-                    <p className="text-red-500 text-sm">{registerForm.formState.errors.phone.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="address" className="text-navy font-medium">
-                    <MapPin className="w-4 h-4 inline mr-2" />
-                    Address
-                  </Label>
-                  <Input
-                    id="address"
-                    placeholder="Street address"
-                    {...registerForm.register('address')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
-                  />
-                  {registerForm.formState.errors.address && (
-                    <p className="text-red-500 text-sm">{registerForm.formState.errors.address.message}</p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city" className="text-navy font-medium">
-                      City
-                    </Label>
-                    <Input
-                      id="city"
-                      placeholder="City"
-                      {...registerForm.register('city')}
-                      className="border-navy/20 focus:ring-electric focus:border-electric"
-                    />
-                    {registerForm.formState.errors.city && (
-                      <p className="text-red-500 text-sm">{registerForm.formState.errors.city.message}</p>
-                    )}
+              {/* Password Field */}
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-charcoal text-base font-medium">
+                  Password
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Lock className="w-5 h-5" />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="postalCode" className="text-navy font-medium">
-                      Postal Code
-                    </Label>
-                    <Input
-                      id="postalCode"
-                      placeholder="Postal code"
-                      {...registerForm.register('postalCode')}
-                      className="border-navy/20 focus:ring-electric focus:border-electric"
-                    />
-                    {registerForm.formState.errors.postalCode && (
-                      <p className="text-red-500 text-sm">{registerForm.formState.errors.postalCode.message}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="registerPassword" className="text-navy font-medium">
-                    <Lock className="w-4 h-4 inline mr-2" />
-                    Password
-                  </Label>
                   <Input
-                    id="registerPassword"
+                    id="password"
                     type="password"
-                    placeholder="Create a password"
+                    placeholder="Enter your Password"
                     {...registerForm.register('password')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
+                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
                   />
-                  {registerForm.formState.errors.password && (
-                    <p className="text-red-500 text-sm">{registerForm.formState.errors.password.message}</p>
-                  )}
                 </div>
+                {registerForm.formState.errors.password && (
+                  <p className="text-red-500 text-sm">{registerForm.formState.errors.password.message}</p>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-navy font-medium">
-                    <Lock className="w-4 h-4 inline mr-2" />
-                    Confirm Password
-                  </Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="Confirm your password"
-                    {...registerForm.register('confirmPassword')}
-                    className="border-navy/20 focus:ring-electric focus:border-electric"
-                  />
-                  {registerForm.formState.errors.confirmPassword && (
-                    <p className="text-red-500 text-sm">{registerForm.formState.errors.confirmPassword.message}</p>
-                  )}
-                </div>
+              {/* Hidden fields for complete registration */}
+              <input type="hidden" {...registerForm.register('lastName')} value="" />
+              <input type="hidden" {...registerForm.register('phone')} value="" />
+              <input type="hidden" {...registerForm.register('address')} value="" />
+              <input type="hidden" {...registerForm.register('city')} value="" />
+              <input type="hidden" {...registerForm.register('postalCode')} value="" />
+              <input type="hidden" {...registerForm.register('confirmPassword')} value={registerForm.watch('password')} />
 
-                <Button
-                  type="submit"
-                  disabled={registerMutation.isPending}
-                  className="w-full bg-navy hover:bg-navy/90 text-white py-3 text-lg font-semibold transition-all duration-300 hover:scale-105"
+              {/* Sign Up Button */}
+              <Button
+                type="submit"
+                disabled={registerMutation.isPending}
+                className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-6 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
+              >
+                {registerMutation.isPending ? 'Creating Account...' : 'Sign Up'}
+              </Button>
+
+              {/* Login Link */}
+              <div className="text-center pt-4">
+                <span className="text-gray-600">Already have a account? </span>
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(true)}
+                  className="text-blue-500 hover:text-blue-600 font-medium transition-colors"
                 >
-                  {registerMutation.isPending ? 'Creating Account...' : 'Create Account'}
+                  login
+                </button>
+              </div>
+
+              {/* Google Sign Up */}
+              <div className="pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGoogleAuth}
+                  className="w-full py-6 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <div className="flex items-center justify-center space-x-3">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span className="text-gray-700 font-medium">Google</span>
+                  </div>
                 </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+              </div>
+            </form>
+          ) : (
+            // Login Form
+            <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-6">
+              {/* Email/Username Field */}
+              <div className="space-y-2">
+                <Label htmlFor="identifier" className="text-charcoal text-base font-medium">
+                  Email or Username
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <Input
+                    id="identifier"
+                    placeholder="Enter your Email or Username"
+                    {...loginForm.register('identifier')}
+                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                  />
+                </div>
+                {loginForm.formState.errors.identifier && (
+                  <p className="text-red-500 text-sm">{loginForm.formState.errors.identifier.message}</p>
+                )}
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-2">
+                <Label htmlFor="loginPassword" className="text-charcoal text-base font-medium">
+                  Password
+                </Label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Lock className="w-5 h-5" />
+                  </div>
+                  <Input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Enter your Password"
+                    {...loginForm.register('password')}
+                    className="pl-12 py-6 border-0 bg-gray-50 rounded-xl text-base placeholder:text-gray-400 focus:ring-2 focus:ring-electric focus:bg-white transition-all"
+                  />
+                </div>
+                {loginForm.formState.errors.password && (
+                  <p className="text-red-500 text-sm">{loginForm.formState.errors.password.message}</p>
+                )}
+              </div>
+
+              {/* Login Button */}
+              <Button
+                type="submit"
+                disabled={customerLoginMutation.isPending || adminLoginMutation.isPending}
+                className="w-full bg-charcoal hover:bg-charcoal/90 text-white py-6 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
+              >
+                {(customerLoginMutation.isPending || adminLoginMutation.isPending) ? 'Signing In...' : 'Login'}
+              </Button>
+
+              {/* Sign Up Link */}
+              <div className="text-center pt-4">
+                <span className="text-gray-600">Don't have an account? </span>
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(false)}
+                  className="text-blue-500 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Sign up
+                </button>
+              </div>
+
+              {/* Google Login */}
+              <div className="pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGoogleAuth}
+                  className="w-full py-6 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <div className="flex items-center justify-center space-x-3">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span className="text-gray-700 font-medium">Google</span>
+                  </div>
+                </Button>
+              </div>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>
