@@ -34,12 +34,6 @@ export default function CustomerAuth() {
   const { loginMutation: customerLoginMutation, registerMutation, isAuthenticated: customerAuthenticated } = useCustomerAuth();
   const { loginMutation: adminLoginMutation, user: adminUser } = useAdminAuth();
 
-  // Redirect if already authenticated
-  if (customerAuthenticated || adminUser) {
-    setLocation(adminUser ? '/admin/dashboard' : '/');
-    return null;
-  }
-
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -62,6 +56,12 @@ export default function CustomerAuth() {
       postalCode: '',
     },
   });
+
+  // Redirect if already authenticated
+  if (customerAuthenticated || adminUser) {
+    setLocation(adminUser ? '/admin/dashboard' : '/');
+    return null;
+  }
 
   const handleLogin = (data: LoginFormData) => {
     const { identifier, password } = data;
