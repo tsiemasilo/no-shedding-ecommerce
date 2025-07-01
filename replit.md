@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 1, 2025: Simplified authentication page design
+  - Removed all torch cursor effects and background animations
+  - Changed to clean, simple webpage with website color theme background
+  - Used Light Sand (#FDF6EC) background matching the main site
+  - Simplified card styling with standard white background and subtle shadow
+  - Maintained all functionality while removing visual effects per user request
+
 - July 1, 2025: Implemented unified authentication system with role-based access control
   - Created single authentication page at /auth that handles both customer and admin login
   - Added missing admin authentication API endpoints (/api/admin/user, /api/admin/login, /api/admin/logout)
