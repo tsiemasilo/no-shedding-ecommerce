@@ -18,6 +18,7 @@ import ProductDetails from "@/pages/product-details";
 import CustomerAuth from "@/pages/customer-auth";
 import Checkout from "@/pages/checkout";
 import Profile from "@/pages/profile";
+import SearchResults from "@/pages/search-results";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/auth" component={CustomerAuth} />
       <Route path="/profile" component={Profile} />
+      <Route path="/search" component={SearchResults} />
       <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
