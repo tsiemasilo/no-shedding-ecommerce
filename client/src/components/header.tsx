@@ -2,6 +2,7 @@ import { Search, User, ShoppingCart, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useLocation, Link } from 'wouter';
@@ -10,13 +11,26 @@ import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_17511365199
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const { cartCount, setIsOpen } = useCart();
-  const { customer, isAuthenticated, logout } = useCustomerAuth();
+  const { customer, isAuthenticated: isCustomerAuth, logout: customerLogout } = useCustomerAuth();
+  const { user: adminUser, logoutMutation: adminLogout } = useAdminAuth();
   const [, setLocation] = useLocation();
+
+  // Check if either customer or admin is authenticated
+  const isAuthenticated = isCustomerAuth || !!adminUser;
+  const currentUser = adminUser || customer;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setLocation(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleLogout = () => {
+    if (adminUser) {
+      adminLogout.mutate();
+    } else {
+      customerLogout();
     }
   };
 
@@ -105,14 +119,14 @@ export function Header() {
                 >
                   <User className="w-5 h-5 mr-2" />
                   <span className="text-sm font-medium hidden md:block">
-                    {customer?.firstName || 'Profile'}
+                    {adminUser ? adminUser.username : (customer?.firstName || 'Profile')}
                   </span>
                 </Button>
                 <Button 
                   variant="ghost" 
                   size="icon" 
                   className="text-white hover:text-electric hover:bg-white/10 p-3 rounded-lg transition-all duration-200"
-                  onClick={logout}
+                  onClick={handleLogout}
                   title="Logout"
                 >
                   <LogOut className="w-6 h-6" />
