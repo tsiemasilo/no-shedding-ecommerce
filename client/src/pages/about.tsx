@@ -8,52 +8,54 @@ export default function About() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-sand">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-12">
           <Button
             onClick={() => setLocation('/')}
             variant="ghost"
-            className="flex items-center space-x-2 text-navy hover:text-electric hover:bg-white/50 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+            className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 hover:bg-white border border-gray-200 rounded-lg px-4 py-2 transition-all duration-200 shadow-sm hover:shadow-md"
           >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:animate-pulse" />
-            <span>Back to Home</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span className="font-medium">Back to Home</span>
           </Button>
         </div>
 
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-navy mb-6">About No Shedding</h1>
-          <p className="text-xl text-charcoal max-w-3xl mx-auto leading-relaxed">
-            Powering South Africa's future with innovative electrical solutions that never let you down.
+        <div className="text-center mb-20">
+          <h1 className="text-6xl font-light text-gray-900 mb-6 tracking-tight">About No Shedding</h1>
+          <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
+            South Africa's premier electrical solutions provider, delivering uninterrupted power and innovative technology solutions for modern businesses and homes.
           </p>
         </div>
 
         {/* Mission Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 mb-16">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-navy mb-6">Our Mission</h2>
-              <p className="text-lg text-charcoal leading-relaxed mb-6">
-                At No Shedding, we're committed to eliminating power outages and electrical disruptions 
-                from your life. Our comprehensive range of electrical solutions ensures continuous power, 
-                enhanced safety, and improved quality of life for homes and businesses across South Africa.
+              <h2 className="text-4xl font-light text-gray-900 mb-8">Our Mission</h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
+                No Shedding is committed to eliminating power outages and electrical disruptions 
+                from your daily operations. Our comprehensive portfolio of electrical solutions ensures 
+                continuous power delivery, enhanced safety protocols, and improved operational efficiency 
+                for businesses and residential clients across South Africa.
               </p>
-              <p className="text-lg text-charcoal leading-relaxed">
-                We believe that reliable electricity is not a luxury—it's a necessity. That's why we've 
-                dedicated ourselves to providing cutting-edge electrical equipment and solutions that 
-                keep the lights on when it matters most.
+              <p className="text-lg text-gray-600 leading-relaxed font-light">
+                We understand that reliable electricity is fundamental to modern life and business success. 
+                Our dedication lies in providing cutting-edge electrical infrastructure and solutions that 
+                deliver uninterrupted power when it matters most.
               </p>
             </div>
             <div className="flex justify-center">
-              <div className="bg-gradient-to-br from-electric to-bright-orange p-8 rounded-2xl text-white">
-                <Zap className="w-16 h-16 mb-4 mx-auto" />
-                <h3 className="text-2xl font-bold text-center">Zero Downtime</h3>
-                <p className="text-center text-white/90 mt-2">
-                  Our solutions ensure your power stays on
+              <div className="bg-gray-900 p-12 rounded-lg">
+                <Zap className="w-20 h-20 mb-6 mx-auto text-blue-400" />
+                <h3 className="text-2xl font-light text-center text-white mb-3">Zero Downtime</h3>
+                <p className="text-center text-gray-300 font-light">
+                  Engineering reliable power solutions for uninterrupted operations
                 </p>
               </div>
             </div>
@@ -61,114 +63,141 @@ export default function About() {
         </div>
 
         {/* Values Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-navy text-center mb-12">Our Values</h2>
+        <div className="mb-20">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light text-gray-900 mb-4">Core Values</h2>
+            <div className="w-16 h-1 bg-blue-600 mx-auto"></div>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-              <Shield className="w-12 h-12 text-electric mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-navy mb-3">Safety First</h3>
-              <p className="text-charcoal">
-                Every product we offer meets the highest safety standards and certifications.
+            <div className="bg-white rounded-lg p-8 text-center shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4">Safety Excellence</h3>
+              <p className="text-gray-600 font-light leading-relaxed">
+                Every solution we provide adheres to international safety standards and undergoes rigorous quality assurance testing.
               </p>
             </div>
-            <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-              <Award className="w-12 h-12 text-electric mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-navy mb-3">Quality Excellence</h3>
-              <p className="text-charcoal">
-                We source only premium electrical equipment from trusted manufacturers worldwide.
+            <div className="bg-white rounded-lg p-8 text-center shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4">Premium Quality</h3>
+              <p className="text-gray-600 font-light leading-relaxed">
+                We partner exclusively with industry-leading manufacturers to deliver superior electrical infrastructure solutions.
               </p>
             </div>
-            <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-              <Users className="w-12 h-12 text-electric mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-navy mb-3">Customer Focus</h3>
-              <p className="text-charcoal">
-                Your satisfaction and power security are our top priorities.
+            <div className="bg-white rounded-lg p-8 text-center shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-4">Client Success</h3>
+              <p className="text-gray-600 font-light leading-relaxed">
+                Your operational continuity and satisfaction drive every decision in our solution design and implementation process.
               </p>
             </div>
           </div>
         </div>
 
         {/* Statistics Section */}
-        <div className="bg-gradient-to-r from-navy to-charcoal rounded-2xl p-8 mb-16 text-white">
-          <h2 className="text-3xl font-bold text-center mb-12">By the Numbers</h2>
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+        <div className="bg-gray-900 rounded-lg p-12 mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-light text-white mb-4">Performance Metrics</h2>
+            <div className="w-16 h-1 bg-blue-400 mx-auto"></div>
+          </div>
+          <div className="grid md:grid-cols-4 gap-12 text-center">
             <div>
-              <div className="text-4xl font-bold text-electric mb-2">10,000+</div>
-              <div className="text-white/80">Happy Customers</div>
+              <div className="text-5xl font-light text-blue-400 mb-3">10,000+</div>
+              <div className="text-gray-300 font-light text-lg">Clients Served</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-electric mb-2">99.9%</div>
-              <div className="text-white/80">Uptime Guarantee</div>
+              <div className="text-5xl font-light text-blue-400 mb-3">99.9%</div>
+              <div className="text-gray-300 font-light text-lg">System Reliability</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-electric mb-2">24/7</div>
-              <div className="text-white/80">Support Available</div>
+              <div className="text-5xl font-light text-blue-400 mb-3">24/7</div>
+              <div className="text-gray-300 font-light text-lg">Technical Support</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-electric mb-2">5 Years</div>
-              <div className="text-white/80">Average Warranty</div>
+              <div className="text-5xl font-light text-blue-400 mb-3">5 Years</div>
+              <div className="text-gray-300 font-light text-lg">Standard Warranty</div>
             </div>
           </div>
         </div>
 
         {/* Why Choose Us Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-          <h2 className="text-3xl font-bold text-navy text-center mb-12">Why Choose No Shedding?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 mb-20">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light text-gray-900 mb-4">Why Choose No Shedding</h2>
+            <div className="w-16 h-1 bg-blue-600 mx-auto"></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <Star className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Star className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Premium Quality Products</h3>
-                  <p className="text-charcoal">
-                    We stock only the finest electrical equipment from internationally recognized brands.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Enterprise-Grade Solutions</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Premium electrical infrastructure sourced from global industry leaders, ensuring maximum reliability and performance.
                   </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <Clock className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Clock className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Fast Delivery</h3>
-                  <p className="text-charcoal">
-                    Quick nationwide shipping ensures you get your power solutions when you need them.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Rapid Deployment</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Streamlined logistics and nationwide distribution network ensuring critical power solutions reach you efficiently.
                   </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <Users className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Users className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Expert Support</h3>
-                  <p className="text-charcoal">
-                    Our team of electrical specialists is ready to help you choose the right solutions.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Technical Excellence</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Certified electrical engineers and specialists providing comprehensive consultation and solution architecture.
                   </p>
                 </div>
               </div>
             </div>
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <Shield className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Shield className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Comprehensive Warranties</h3>
-                  <p className="text-charcoal">
-                    All our products come with extensive warranties for your peace of mind.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Extended Coverage</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Comprehensive warranty programs and service level agreements protecting your investment long-term.
                   </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <Award className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Award className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Certified Installation</h3>
-                  <p className="text-charcoal">
-                    Professional installation services available for complex electrical systems.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Professional Installation</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Certified installation and commissioning services for complex electrical infrastructure deployments.
                   </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <Zap className="w-6 h-6 text-electric flex-shrink-0 mt-1" />
+                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Zap className="w-4 h-4 text-blue-600" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-navy mb-2">Innovation Focus</h3>
-                  <p className="text-charcoal">
-                    We continuously update our inventory with the latest electrical technologies.
+                  <h3 className="font-medium text-gray-900 mb-3 text-lg">Innovation Leadership</h3>
+                  <p className="text-gray-600 font-light leading-relaxed">
+                    Continuous technology advancement and integration of next-generation electrical solutions.
                   </p>
                 </div>
               </div>
@@ -177,16 +206,16 @@ export default function About() {
         </div>
 
         {/* Contact Section */}
-        <div className="text-center bg-gradient-to-r from-electric to-bright-orange rounded-2xl p-8 text-white">
-          <h2 className="text-3xl font-bold mb-4">Ready to Eliminate Load Shedding?</h2>
-          <p className="text-xl mb-6 text-white/90">
-            Join thousands of satisfied customers who've made the switch to reliable power.
+        <div className="text-center bg-blue-600 rounded-lg p-12">
+          <h2 className="text-4xl font-light text-white mb-6">Ready to Secure Your Power Infrastructure?</h2>
+          <p className="text-xl mb-8 text-blue-100 font-light max-w-2xl mx-auto">
+            Join industry leaders who trust No Shedding for their critical electrical infrastructure needs.
           </p>
           <Button
             onClick={() => setLocation('/')}
-            className="bg-white text-navy hover:bg-white/90 font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 hover:scale-105"
+            className="bg-white text-blue-600 hover:bg-gray-50 font-medium py-4 px-10 rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
           >
-            Shop Now
+            Explore Solutions
           </Button>
         </div>
       </main>
