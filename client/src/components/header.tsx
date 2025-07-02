@@ -1,4 +1,4 @@
-import { Search, User, ShoppingCart, LogOut, Shield } from 'lucide-react';
+import { Search, User, ShoppingCart, LogOut, Shield, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
 import { useLocation, Link } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
+import type { Category } from '@shared/schema';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Header() {
@@ -18,6 +20,11 @@ export function Header() {
   const { cartCount, setIsOpen } = useCart();
   const { customer, isAuthenticated, logout } = useCustomerAuth();
   const [, setLocation] = useLocation();
+  
+  // Fetch categories for dropdown
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
+  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +66,43 @@ export function Header() {
           
           {/* Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-6 mr-4">
-            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Categories</a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:text-electric transition-colors text-lg font-medium p-0 h-auto"
+                >
+                  Categories
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {categories.map((category) => (
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      // Navigate to home page and scroll to categories section
+                      setLocation('/');
+                      setTimeout(() => {
+                        const categoryElement = document.querySelector('[data-category="' + category.slug + '"]');
+                        if (categoryElement) {
+                          categoryElement.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                          // If specific category element not found, scroll to categories section
+                          const categoriesSection = document.querySelector('.hero-categories');
+                          if (categoriesSection) {
+                            categoriesSection.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }
+                      }, 100);
+                    }}
+                  >
+                    {category.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link href="/about" className="text-white hover:text-electric transition-colors text-lg font-medium">About</Link>
             <Link href="/support" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</Link>
           </nav>

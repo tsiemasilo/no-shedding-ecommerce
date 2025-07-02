@@ -74,7 +74,7 @@ export function HeroCategories() {
   }
 
   return (
-    <section className="py-12 bg-gradient-to-br from-sand to-white">
+    <section className="hero-categories py-12 bg-gradient-to-br from-sand to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
