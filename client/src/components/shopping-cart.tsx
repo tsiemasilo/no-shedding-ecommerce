@@ -148,7 +148,17 @@ export function ShoppingCart() {
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Your cart is empty</h3>
               <p className="text-gray-500 mb-6">Add some products to get started</p>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  // Navigate to home and scroll to categories section
+                  setLocation('/');
+                  setTimeout(() => {
+                    const categoriesSection = document.querySelector('.hero-categories');
+                    if (categoriesSection) {
+                      categoriesSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }, 300);
+                }}
                 className="px-6 py-3 bg-gradient-to-r from-[#009688] to-[#00acc1] text-white font-semibold rounded-xl hover:from-[#00796b] hover:to-[#0097a7] transition-all duration-300 transform hover:scale-105"
               >
                 Continue Shopping

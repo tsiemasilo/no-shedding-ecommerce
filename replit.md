@@ -99,6 +99,11 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 2, 2025: Fixed shopping cart navigation to categories
+  - Updated "Continue Shopping" button to navigate to categories section
+  - Cart now closes and smoothly scrolls to product categories
+  - Enhanced user shopping flow from empty cart back to product browsing
+
 - July 2, 2025: Created user profile page and fixed profile navigation
   - Added new /profile route to handle user profile display
   - Created comprehensive profile page for both customers and admins
