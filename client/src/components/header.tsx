@@ -10,7 +10,7 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { useLocation } from 'wouter';
+import { useLocation, Link } from 'wouter';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Header() {
@@ -60,7 +60,7 @@ export function Header() {
           {/* Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-6 mr-4">
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Categories</a>
-            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">About</a>
+            <Link href="/about" className="text-white hover:text-electric transition-colors text-lg font-medium">About</Link>
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</a>
           </nav>
           

@@ -10,6 +10,7 @@ import { ShoppingCart } from "@/components/shopping-cart";
 import { CartNotificationWrapper } from "@/components/cart-notification-wrapper";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
+import About from "@/pages/about";
 
 import AdminDashboard from "@/pages/admin-dashboard";
 import ProductDetails from "@/pages/product-details";
@@ -20,6 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/about" component={About} />
       <Route path="/product/:id" component={ProductDetails} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/auth" component={CustomerAuth} />

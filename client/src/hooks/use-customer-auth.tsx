@@ -44,10 +44,6 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (customer: Customer) => {
       queryClient.setQueryData(["/api/customer/user"], customer);
-      toast({
-        title: "Welcome back!",
-        description: `Good to see you again, ${customer.firstName || customer.email}!`,
-      });
     },
     onError: (error: Error) => {
       toast({
