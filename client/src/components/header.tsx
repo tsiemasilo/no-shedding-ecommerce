@@ -24,7 +24,13 @@ export function Header() {
       <div className="w-full px-2">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Far Left */}
-          <div className="flex items-center space-x-3 flex-shrink-0 ml-6">
+          <div 
+            className="flex items-center space-x-3 flex-shrink-0 ml-6 cursor-pointer"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setLocation('/');
+            }}
+          >
             <div 
               className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"
             >
@@ -55,21 +61,34 @@ export function Header() {
           <nav className="hidden lg:flex items-center space-x-6 mr-4">
             <button 
               onClick={() => {
-                // Navigate to home page and scroll to categories section
+                // First scroll to top, then navigate to home page and scroll to categories section
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 setLocation('/');
                 setTimeout(() => {
                   const categoriesSection = document.querySelector('.hero-categories');
                   if (categoriesSection) {
                     categoriesSection.scrollIntoView({ behavior: 'smooth' });
                   }
-                }, 100);
+                }, 300);
               }}
               className="text-white hover:text-electric transition-colors text-lg font-medium"
             >
               Categories
             </button>
-            <Link href="/about" className="text-white hover:text-electric transition-colors text-lg font-medium">About</Link>
-            <Link href="/support" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</Link>
+            <Link 
+              href="/about" 
+              className="text-white hover:text-electric transition-colors text-lg font-medium"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              About
+            </Link>
+            <Link 
+              href="/support" 
+              className="text-white hover:text-electric transition-colors text-lg font-medium"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              Support
+            </Link>
           </nav>
           
           {/* User Actions */}

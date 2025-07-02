@@ -104,6 +104,8 @@ Preferred communication style: Simple, everyday language.
   - Categories button now navigates to home page and smoothly scrolls to categories section
   - Simplified design without dropdown menu as per user preference
   - Added hero-categories class to enable proper scroll targeting
+  - All navbar links now scroll to top first before navigation for better user experience
+  - Logo also navigates to home and scrolls to top when clicked
 
 - July 2, 2025: Standardized all back buttons across website
   - Applied consistent navy blue background with white semi-transparent button styling
