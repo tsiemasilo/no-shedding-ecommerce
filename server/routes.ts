@@ -230,64 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin authentication endpoints
-  app.get("/api/admin/user", (req, res) => {
-    if (!req.isAuthenticated() || !req.user) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
 
-    // Check if this is an admin (has username and role)
-    if (!req.user.username || !req.user.role || req.user.role !== 'admin') {
-      return res.status(401).json({ message: "Not an admin account" });
-    }
-
-    // Remove password from response
-    const { password, ...adminResponse } = req.user;
-    res.json(adminResponse);
-  });
-
-  app.post("/api/admin/login", async (req, res) => {
-    try {
-      const { username, password } = req.body;
-      
-      if (!username || !password) {
-        return res.status(400).json({ message: "Username and password are required" });
-      }
-
-      const user = await storage.getUserByUsername(username);
-      
-      if (!user || !(await comparePasswords(password, user.password))) {
-        return res.status(401).json({ message: "Invalid username or password" });
-      }
-
-      // Check if user is admin
-      if (user.role !== 'admin') {
-        return res.status(403).json({ message: "Access denied - admin role required" });
-      }
-
-      // Log in the admin using passport
-      req.login(user, (err) => {
-        if (err) {
-          return res.status(500).json({ message: "Login failed" });
-        }
-        
-        // Remove password from response
-        const { password: _, ...adminResponse } = user;
-        res.status(200).json(adminResponse);
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to login" });
-    }
-  });
-
-  app.post("/api/admin/logout", (req, res) => {
-    req.logout((err) => {
-      if (err) {
-        return res.status(500).json({ message: "Logout failed" });
-      }
-      res.status(200).json({ message: "Logged out successfully" });
-    });
-  });
 
   // Newsletter
   app.post("/api/newsletter", async (req, res) => {

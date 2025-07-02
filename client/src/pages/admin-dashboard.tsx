@@ -18,10 +18,19 @@ import type { Product, Category, Subcategory, InsertProduct } from '@shared/sche
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
-  const { user, logoutMutation } = useAdminAuth();
+  const { user, logoutMutation, isLoading } = useAdminAuth();
   const { toast } = useToast();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-navy" />
+      </div>
+    );
+  }
 
   // Redirect if not authenticated as admin
   if (!user) {

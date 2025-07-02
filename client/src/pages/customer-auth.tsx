@@ -104,7 +104,7 @@ export default function CustomerAuth() {
       // Try admin login
       adminLoginMutation.mutate({ username: identifier, password }, {
         onSuccess: () => {
-          setLocation('/admin/dashboard');
+          setLocation('/admin');
         },
       });
     }
