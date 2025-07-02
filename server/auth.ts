@@ -154,11 +154,8 @@ export async function setupAuth(app: Express) {
     res.json(req.user);
   });
 
-  // Middleware to check if user is authenticated admin
-  app.use("/api/admin/*", (req, res, next) => {
-    if (req.path === "/api/admin/login" || req.path === "/api/admin/user") {
-      return next();
-    }
+  // Middleware to check if user is authenticated admin (apply after login/user routes)
+  app.use("/api/admin/products*", (req, res, next) => {
     if (!req.isAuthenticated() || req.user?.role !== "admin") {
       return res.status(401).json({ message: "Unauthorized" });
     }
