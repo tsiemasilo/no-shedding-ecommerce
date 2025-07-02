@@ -99,12 +99,11 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 2, 2025: Integrated Stripe payment gateway
-  - Added Stripe payment processing with secure card handling
-  - Implemented payment intent creation and confirmation endpoints
-  - Updated checkout page to use Stripe Elements for payment forms
-  - Added support for South African Rand (ZAR) currency
-  - Integrated real-time payment processing with cart clearing
+- July 2, 2025: Removed Stripe integration and restored simple checkout
+  - Removed all Stripe payment processing dependencies
+  - Restored simple form-based checkout with simulated payment processing
+  - Cleaned up server routes to remove payment gateway endpoints
+  - Checkout now uses basic form validation with success notifications
 
 - July 2, 2025: Fixed shopping cart navigation to categories
   - Updated "Continue Shopping" button to navigate to categories section

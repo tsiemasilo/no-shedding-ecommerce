@@ -1,24 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Shield, Check, Truck, Mail, MapPin, Phone, CreditCard, Lock } from "lucide-react";
+import { ArrowLeft, Shield, Check, Truck, CreditCard, Lock } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { apiRequest } from "@/lib/queryClient";
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const checkoutFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -28,103 +18,19 @@ const checkoutFormSchema = z.object({
   address: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
   postalCode: z.string().min(1, "Postal code is required"),
+  cardName: z.string().min(1, "Cardholder name is required"),
+  cardNumber: z.string().min(16, "Please enter a valid card number"),
+  expiryDate: z.string().min(5, "Please enter expiry date (MM/YY)"),
+  cvv: z.string().min(3, "Please enter CVV"),
 });
 
 type CheckoutFormData = z.infer<typeof checkoutFormSchema>;
-
-const CheckoutForm = ({ 
-  clientSecret, 
-  onPaymentSuccess, 
-  shippingInfo 
-}: { 
-  clientSecret: string;
-  onPaymentSuccess: (paymentIntent: any) => void;
-  shippingInfo: CheckoutFormData;
-}) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { toast } = useToast();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: window.location.origin,
-          shipping: {
-            name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-            address: {
-              line1: shippingInfo.address,
-              city: shippingInfo.city,
-              postal_code: shippingInfo.postalCode,
-              country: 'ZA',
-            },
-          },
-        },
-        redirect: 'if_required',
-      });
-
-      if (error) {
-        toast({
-          title: "Payment Failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        onPaymentSuccess(paymentIntent);
-      }
-    } catch (error) {
-      toast({
-        title: "Payment Error",
-        description: "An unexpected error occurred during payment processing.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <PaymentElement />
-      </div>
-      
-      <Button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 rounded-lg"
-      >
-        {isProcessing ? (
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
-            Processing Payment...
-          </div>
-        ) : (
-          <div className="flex items-center justify-center">
-            <Lock className="w-5 h-5 mr-3" />
-            Complete Order
-          </div>
-        )}
-      </Button>
-    </form>
-  );
-};
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
   const { cartItems, cartTotal, clearCart } = useCart();
   const { toast } = useToast();
-  const [clientSecret, setClientSecret] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchema),
@@ -136,6 +42,10 @@ export default function Checkout() {
       address: "",
       city: "",
       postalCode: "",
+      cardName: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
     },
   });
 
@@ -151,49 +61,32 @@ export default function Checkout() {
   const tax = subtotal * 0.15;
   const total = subtotal + shipping + tax;
 
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    apiRequest("POST", "/api/create-payment-intent", { 
-      amount: Math.round(total * 100), // Convert to cents
-      currency: 'zar'
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-      })
-      .catch((error) => {
-        console.error("Error creating payment intent:", error);
-        toast({
-          title: "Payment Setup Error",
-          description: "Unable to initialize payment. Please try again.",
-          variant: "destructive",
-        });
-      });
-  }, [total]);
-
-  const handlePaymentSuccess = async (paymentIntent: any) => {
+  const handleCheckout = async (data: CheckoutFormData) => {
+    setIsProcessing(true);
+    
     try {
-      toast({
-        title: "Payment Successful!",
-        description: "Your order has been placed successfully. You will receive a confirmation email shortly.",
-      });
-
-      // Clear cart and redirect to home page
+      // Simulate payment processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Clear the cart after successful payment
       clearCart();
+      
+      toast({
+        title: "Order Placed Successfully!",
+        description: `Thank you ${data.firstName}! Your order has been confirmed and will be processed shortly.`,
+      });
+      
+      // Redirect to home page
       setLocation('/');
     } catch (error) {
-      console.error("Error after payment success:", error);
       toast({
-        title: "Order Processing Error",
-        description: "Payment was successful but there was an error processing your order. Please contact support.",
+        title: "Payment Failed",
+        description: "There was an error processing your payment. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsProcessing(false);
     }
-  };
-
-  const handleCheckout = async (data: CheckoutFormData) => {
-    // Form is valid, the actual payment will be handled by Stripe
-    console.log("Shipping information:", data);
   };
 
   return (
@@ -211,7 +104,7 @@ export default function Checkout() {
               </button>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Complete Your Order</h1>
-                <p className="text-gray-600">Secure checkout powered by Stripe</p>
+                <p className="text-gray-600">Secure checkout</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -357,35 +250,107 @@ export default function Checkout() {
                   </div>
                 </div>
               </div>
-            </form>
 
-            {/* Payment Information */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
-                <h2 className="text-lg font-semibold text-white flex items-center">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                    <CreditCard className="w-4 h-4 text-white" />
-                  </div>
-                  Payment Details
-                </h2>
-              </div>
-              <div className="p-6">
-                {clientSecret ? (
-                  <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <CheckoutForm 
-                      clientSecret={clientSecret}
-                      onPaymentSuccess={handlePaymentSuccess}
-                      shippingInfo={form.getValues()}
+              {/* Payment Information */}
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+                  <h2 className="text-lg font-semibold text-white flex items-center">
+                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                      <CreditCard className="w-4 h-4 text-white" />
+                    </div>
+                    Payment Details
+                  </h2>
+                </div>
+                <div className="p-6 space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="cardName" className="text-sm font-medium text-gray-700">Cardholder Name</Label>
+                    <Input
+                      id="cardName"
+                      {...form.register('cardName')}
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
+                      placeholder="Name as it appears on card"
                     />
-                  </Elements>
+                    {form.formState.errors.cardName && (
+                      <p className="text-red-500 text-sm flex items-center mt-1">
+                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                        {form.formState.errors.cardName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="cardNumber" className="text-sm font-medium text-gray-700">Card Number</Label>
+                    <Input
+                      id="cardNumber"
+                      {...form.register('cardNumber')}
+                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
+                      placeholder="1234 5678 9012 3456"
+                      maxLength={19}
+                    />
+                    {form.formState.errors.cardNumber && (
+                      <p className="text-red-500 text-sm flex items-center mt-1">
+                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                        {form.formState.errors.cardNumber.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="expiryDate" className="text-sm font-medium text-gray-700">Expiry Date</Label>
+                      <Input
+                        id="expiryDate"
+                        {...form.register('expiryDate')}
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
+                        placeholder="MM/YY"
+                        maxLength={5}
+                      />
+                      {form.formState.errors.expiryDate && (
+                        <p className="text-red-500 text-sm flex items-center mt-1">
+                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                          {form.formState.errors.expiryDate.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cvv" className="text-sm font-medium text-gray-700">CVV</Label>
+                      <Input
+                        id="cvv"
+                        {...form.register('cvv')}
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
+                        placeholder="123"
+                        maxLength={4}
+                      />
+                      {form.formState.errors.cvv && (
+                        <p className="text-red-500 text-sm flex items-center mt-1">
+                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                          {form.formState.errors.cvv.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={isProcessing}
+                className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 rounded-lg"
+              >
+                {isProcessing ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
+                    Processing Payment...
+                  </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-4 border-green-600 border-t-transparent mx-auto mb-4"></div>
-                    <p className="text-gray-600">Setting up secure payment...</p>
+                  <div className="flex items-center">
+                    <Lock className="w-5 h-5 mr-3" />
+                    Complete Order - R{total.toFixed(2)}
                   </div>
                 )}
-              </div>
-            </div>
+              </Button>
+            </form>
           </div>
 
           {/* Order Summary Sidebar */}
