@@ -15,6 +15,12 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { apiRequest } from '@/lib/queryClient';
 
+// Initialize Stripe
+if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
+}
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
 const checkoutSchema = z.object({
   // Shipping Information
   firstName: z.string().min(1, 'First name is required'),
@@ -24,15 +30,81 @@ const checkoutSchema = z.object({
   address: z.string().min(5, 'Address is required'),
   city: z.string().min(2, 'City is required'),
   postalCode: z.string().min(4, 'Postal code is required'),
-  
-  // Payment Information
-  cardNumber: z.string().min(16, 'Valid card number is required'),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Use MM/YY format'),
-  cvv: z.string().min(3, 'CVV is required'),
-  cardName: z.string().min(2, 'Name on card is required'),
 });
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
+
+// Payment Form Component
+function PaymentForm({ 
+  clientSecret, 
+  onPaymentSuccess, 
+  shippingInfo 
+}: { 
+  clientSecret: string; 
+  onPaymentSuccess: (paymentIntent: any) => void;
+  shippingInfo: CheckoutFormData;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin + "/checkout",
+        payment_method_data: {
+          billing_details: {
+            name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
+            email: shippingInfo.email,
+            phone: shippingInfo.phone,
+            address: {
+              line1: shippingInfo.address,
+              city: shippingInfo.city,
+              postal_code: shippingInfo.postalCode,
+              country: 'ZA',
+            },
+          },
+        },
+      },
+      redirect: 'if_required',
+    });
+
+    setIsProcessing(false);
+
+    if (error) {
+      toast({
+        title: "Payment Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      onPaymentSuccess(paymentIntent);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <PaymentElement />
+      <Button
+        type="submit"
+        disabled={!stripe || isProcessing}
+        className="w-full bg-gradient-to-r from-navy to-charcoal hover:from-navy/90 hover:to-charcoal/90 text-white py-4 text-lg font-semibold"
+      >
+        {isProcessing ? "Processing..." : "Complete Payment"}
+      </Button>
+    </form>
+  );
+}
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
@@ -40,6 +112,9 @@ export default function Checkout() {
   const { customer, isAuthenticated } = useCustomerAuth();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const [clientSecret, setClientSecret] = useState("");
+  const [paymentIntentId, setPaymentIntentId] = useState("");
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -51,12 +126,44 @@ export default function Checkout() {
       address: customer?.address || '',
       city: customer?.city || '',
       postalCode: customer?.postalCode || '',
-      cardNumber: '',
-      expiryDate: '',
-      cvv: '',
-      cardName: '',
     },
   });
+
+  // Create payment intent when component mounts
+  useEffect(() => {
+    if (cartItems.length > 0 && cartTotal > 0) {
+      createPaymentIntent();
+    }
+  }, [cartItems, cartTotal]);
+
+  const createPaymentIntent = async () => {
+    try {
+      const shipping = cartItems.length > 0 ? 4.99 : 0;
+      const totalAmount = cartTotal + shipping;
+      
+      const response = await apiRequest("POST", "/api/create-payment-intent", {
+        amount: totalAmount,
+        cartItems: cartItems.map(item => ({
+          id: item.id,
+          productId: item.productId,
+          quantity: item.quantity,
+          productName: item.product?.name,
+          price: item.product?.price
+        }))
+      });
+      
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      toast({
+        title: "Payment Error",
+        description: "Failed to initialize payment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Redirect if not authenticated
   if (!isAuthenticated) {
@@ -84,31 +191,32 @@ export default function Checkout() {
     return null;
   }
 
-  const handleCheckout = async (data: CheckoutFormData) => {
-    setIsProcessing(true);
-    
+  const handlePaymentSuccess = async (paymentIntent: any) => {
     try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Clear the cart after successful payment
-      clearCart();
-      
-      toast({
-        title: "Order Placed Successfully!",
-        description: `Thank you ${data.firstName}! Your order has been confirmed and will be processed shortly.`,
+      // Confirm payment on the server
+      await apiRequest("POST", "/api/confirm-payment", {
+        paymentIntentId: paymentIntent.id,
+        orderDetails: {
+          ...form.getValues(),
+          cartItems,
+          total: cartTotal + (cartItems.length > 0 ? 4.99 : 0)
+        }
       });
-      
+
+      toast({
+        title: "Payment Successful!",
+        description: "Your order has been placed successfully. You will receive a confirmation email shortly.",
+      });
+
       // Redirect to home page
       setLocation('/');
     } catch (error) {
+      console.error("Error confirming payment:", error);
       toast({
-        title: "Payment Failed",
-        description: "There was an error processing your payment. Please try again.",
+        title: "Payment Processing Error",
+        description: "Payment was successful but there was an error processing your order. Please contact support.",
         variant: "destructive",
       });
-    } finally {
-      setIsProcessing(false);
     }
   };
 
