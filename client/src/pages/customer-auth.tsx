@@ -143,19 +143,32 @@ export default function CustomerAuth() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Back Button Section */}
-      <div className="bg-navy py-4">
+      {/* Navigation Bar */}
+      <header className="bg-navy shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Button
-            variant="outline"
-            onClick={() => setLocation("/")}
-            className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
-            <span className="text-lg">Back to Home</span>
-          </Button>
+          <div className="flex items-center justify-center h-20">
+            {/* Logo - Clickable to go home */}
+            <div 
+              className="flex items-center space-x-3 cursor-pointer"
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setLocation('/');
+              }}
+            >
+              <div 
+                className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"
+              >
+                <img 
+                  src={logoImage} 
+                  alt="No Shedding Logo" 
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <span className="text-white text-2xl font-bold">No Shedding</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
       <div 
         className="flex items-center justify-center p-4" 

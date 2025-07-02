@@ -99,6 +99,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 2, 2025: Updated authentication page with professional navbar
+  - Replaced back button with centered navbar containing logo
+  - Logo is clickable and navigates back to home page
+  - Consistent branding across authentication and main website
+  - Cleaner, more professional look for login/signup page
+
 - July 2, 2025: Implemented functional search system
   - Added working search functionality to header search bar
   - Created comprehensive search results page with product filtering
