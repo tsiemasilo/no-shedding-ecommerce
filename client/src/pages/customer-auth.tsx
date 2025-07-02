@@ -103,8 +103,11 @@ export default function CustomerAuth() {
     } else {
       // Try admin login
       adminLoginMutation.mutate({ username: identifier, password }, {
-        onSuccess: () => {
-          setLocation('/admin');
+        onSuccess: (user) => {
+          // Wait a brief moment for the auth state to update before redirecting
+          setTimeout(() => {
+            setLocation('/admin');
+          }, 100);
         },
       });
     }

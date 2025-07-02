@@ -28,6 +28,7 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/auth" component={CustomerAuth} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin-test" component={() => <div>Admin Test Route Works!</div>} />
       <Route component={NotFound} />
     </Switch>
   );

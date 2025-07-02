@@ -23,6 +23,14 @@ export default function AdminDashboard() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  // Use effect to handle redirect to avoid violating React rules
+  useEffect(() => {
+    if (!isLoading && !user) {
+      console.log('Admin dashboard: No user found, redirecting to auth');
+      setLocation('/auth');
+    }
+  }, [isLoading, user, setLocation]);
+
   // Show loading while checking authentication
   if (isLoading) {
     return (
@@ -32,10 +40,13 @@ export default function AdminDashboard() {
     );
   }
 
-  // Redirect if not authenticated as admin
+  // Show loading if user is not available (while redirecting)
   if (!user) {
-    setLocation('/auth');
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-navy" />
+      </div>
+    );
   }
 
   const { data: products = [], refetch: refetchProducts } = useQuery<Product[]>({
