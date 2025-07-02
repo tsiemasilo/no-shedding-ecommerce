@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Header } from '@/components/header';
@@ -12,9 +13,15 @@ export default function Profile() {
   const { customer, isAuthenticated: isCustomer } = useCustomerAuth();
   const { user: adminUser } = useAdminAuth();
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated using useEffect
+  useEffect(() => {
+    if (!isCustomer && !adminUser) {
+      setLocation('/auth');
+    }
+  }, [isCustomer, adminUser, setLocation]);
+
+  // Show loading or return null while redirecting
   if (!isCustomer && !adminUser) {
-    setLocation('/auth');
     return null;
   }
 

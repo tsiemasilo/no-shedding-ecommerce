@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 2, 2025: Created user profile page and fixed profile navigation
+  - Added new /profile route to handle user profile display
+  - Created comprehensive profile page for both customers and admins
+  - Updated header to include clickable profile button when logged in
+  - Profile page shows different information based on user type (customer vs admin)
+  - Fixed 404 error when clicking profile icon in header
+
 - July 2, 2025: Updated authentication page with professional navbar
   - Replaced back button with centered navbar containing logo
   - Logo is clickable and navigates back to home page
