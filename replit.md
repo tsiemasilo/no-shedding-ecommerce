@@ -99,11 +99,10 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 2, 2025: Fixed categories dropdown navigation in header
-  - Converted non-functional categories link to working dropdown menu
-  - Added ChevronDown icon and proper DropdownMenu components
-  - Categories dropdown now shows all 6 categories with smooth scroll navigation
-  - Clicking category items navigates to home page and scrolls to categories section
+- July 2, 2025: Fixed categories navigation button in header
+  - Converted non-functional categories link to working navigation button
+  - Categories button now navigates to home page and smoothly scrolls to categories section
+  - Simplified design without dropdown menu as per user preference
   - Added hero-categories class to enable proper scroll targeting
 
 - July 2, 2025: Standardized all back buttons across website
