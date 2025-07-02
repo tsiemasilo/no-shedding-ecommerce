@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 2, 2025: Enhanced footer with professional design and trust certificates
+  - Added comprehensive trust badges section with 8 certification logos (UL Listed, CE Certified, FCC Approved, ISO 9001, SABS Approved, RoHS Compliant, Energy Star, 3 Year Warranty)
+  - Implemented glassmorphism effects with backdrop blur and hover animations for certificate badges
+  - Added complete contact information with phone, email, and location details
+  - Enhanced company branding with larger logo and professional tagline
+  - Structured 5-column layout with Product Categories, Customer Support, and Company sections
+  - Added gradient background from charcoal to black for premium appearance
+  - Included South African business registration details and comprehensive legal links
+
 - July 2, 2025: Implemented interactive flip card effect for product displays
   - Products now show image on front and flip to reveal detailed product information on hover
   - Applied to both featured products section and subcategory product listings
