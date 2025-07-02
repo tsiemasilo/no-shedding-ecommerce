@@ -90,22 +90,28 @@ export function FeaturedProducts() {
               <div className="flip-card-inner">
                 {/* Front - Product Image */}
                 <div className="flip-card-front">
-                  <div className="relative w-full h-full">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    {!product.inStock && (
-                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
-                        OUT OF STOCK
-                      </div>
-                    )}
-                    {product.featured && (
-                      <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-                        ⭐ Featured
-                      </div>
-                    )}
+                  <div className="relative w-full h-full flex flex-col">
+                    <div className="relative flex-1">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover rounded-t-lg"
+                      />
+                      {!product.inStock && (
+                        <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                          OUT OF STOCK
+                        </div>
+                      )}
+                      {product.featured && (
+                        <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+                          ⭐ Featured
+                        </div>
+                      )}
+                    </div>
+                    <div className="bg-white p-3 rounded-b-lg border-t">
+                      <h3 className="font-semibold text-navy text-center text-sm line-clamp-2">{product.name}</h3>
+                      <p className="text-charcoal text-center text-xs mt-1">R{product.price}</p>
+                    </div>
                   </div>
                 </div>
                 
