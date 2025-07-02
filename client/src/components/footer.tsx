@@ -30,18 +30,18 @@ export function Footer() {
 
   // Professional Certificate/Trust Badge SVGs
   const CertificateBadge = ({ title, icon }: { title: string; icon: React.ReactNode }) => (
-    <div className="flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/15 transition-all duration-300">
+    <div className="flex flex-col items-center bg-gray-800/60 backdrop-blur-sm rounded-lg p-3 border border-gray-700/50 hover:bg-gray-700/70 transition-all duration-300">
       <div className="text-electric mb-1">
         {icon}
       </div>
-      <span className="text-xs font-semibold text-center leading-tight">{title}</span>
+      <span className="text-xs font-semibold text-center leading-tight text-gray-200">{title}</span>
     </div>
   );
 
   return (
-    <footer className="bg-gradient-to-b from-charcoal to-black text-white">
+    <footer className="bg-gradient-to-b from-black to-gray-900 text-white">
       {/* Trust Badges Section */}
-      <div className="bg-navy/20 border-t border-electric/20">
+      <div className="bg-black/40 border-t border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="text-center mb-4">
             <h3 className="text-lg font-bold text-electric mb-2">Trusted & Certified</h3>
@@ -90,7 +90,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center p-2 shadow-lg">
+              <div className="h-12 w-12 bg-gray-800 rounded-xl flex items-center justify-center p-2 shadow-lg border border-gray-700">
                 <img 
                   src={logoImage} 
                   alt="No Shedding Logo" 
@@ -124,13 +124,13 @@ export function Footer() {
 
             {/* Social Media */}
             <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 p-3 rounded-lg text-gray-300 hover:text-electric hover:bg-white/20 transition-all duration-300">
+              <a href="#" className="bg-gray-800/60 p-3 rounded-lg text-gray-400 hover:text-electric hover:bg-gray-700/70 transition-all duration-300 border border-gray-700/50">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-lg text-gray-300 hover:text-electric hover:bg-white/20 transition-all duration-300">
+              <a href="#" className="bg-gray-800/60 p-3 rounded-lg text-gray-400 hover:text-electric hover:bg-gray-700/70 transition-all duration-300 border border-gray-700/50">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-lg text-gray-300 hover:text-electric hover:bg-white/20 transition-all duration-300">
+              <a href="#" className="bg-gray-800/60 p-3 rounded-lg text-gray-400 hover:text-electric hover:bg-gray-700/70 transition-all duration-300 border border-gray-700/50">
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
@@ -180,15 +180,15 @@ export function Footer() {
         </div>
         
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-12 pt-8">
+        <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
+            <div className="text-gray-500 text-sm">
               &copy; 2025 No Shedding (Pty) Ltd. All rights reserved. Reg No: 2024/123456/07
             </div>
             <div className="flex flex-wrap gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-electric transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-400 hover:text-electric transition-colors">Terms of Service</a>
-              <a href="#" className="text-gray-400 hover:text-electric transition-colors">Cookie Policy</a>
+              <a href="#" className="text-gray-500 hover:text-electric transition-colors">Privacy Policy</a>
+              <a href="#" className="text-gray-500 hover:text-electric transition-colors">Terms of Service</a>
+              <a href="#" className="text-gray-500 hover:text-electric transition-colors">Cookie Policy</a>
               <a href="/admin" className="text-electric hover:text-white transition-colors">Admin Portal</a>
             </div>
           </div>
