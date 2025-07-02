@@ -10,6 +10,15 @@ import fs from "fs";
 import express from "express";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
+import Stripe from "stripe";
+
+// Initialize Stripe
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
 
 const scryptAsync = promisify(scrypt);
 
@@ -382,6 +391,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete product error:", error);
       res.status(500).json({ message: "Failed to delete product", error: error instanceof Error ? error.message : String(error) });
+    }
+  });
+
+  // Stripe Payment Routes
+  app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+      const { amount, cartItems } = req.body;
+      
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: "zar", // South African Rand
+        metadata: {
+          cartItems: JSON.stringify(cartItems || []),
+          sessionId: req.sessionID || 'anonymous'
+        },
+      });
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error: any) {
+      console.error("Stripe payment intent error:", error);
+      res.status(500).json({ 
+        message: "Error creating payment intent: " + error.message 
+      });
+    }
+  });
+
+  app.post("/api/confirm-payment", async (req, res) => {
+    try {
+      const { paymentIntentId, orderDetails } = req.body;
+      
+      // Retrieve the payment intent from Stripe
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      
+      if (paymentIntent.status === 'succeeded') {
+        // Payment was successful, clear the cart
+        if (req.sessionID) {
+          await storage.clearCart(req.sessionID);
+        }
+        
+        // Here you could save order details to database
+        console.log('Payment successful for:', orderDetails);
+        
+        res.json({ 
+          success: true, 
+          message: "Payment successful",
+          paymentIntent: {
+            id: paymentIntent.id,
+            amount: paymentIntent.amount,
+            currency: paymentIntent.currency,
+            status: paymentIntent.status
+          }
+        });
+      } else {
+        res.status(400).json({ 
+          success: false, 
+          message: "Payment not successful",
+          status: paymentIntent.status 
+        });
+      }
+    } catch (error: any) {
+      console.error("Payment confirmation error:", error);
+      res.status(500).json({ 
+        message: "Error confirming payment: " + error.message 
+      });
     }
   });
 
