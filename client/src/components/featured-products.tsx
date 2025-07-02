@@ -84,38 +84,68 @@ export function FeaturedProducts() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer transform hover:scale-105"
+              className="flip-card w-full h-80 cursor-pointer"
               onClick={() => setLocation(`/product/${product.id}`)}
             >
-              <div className="relative">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-cover"
-                />
-                {!product.inStock && (
-                  <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
-                    OUT OF STOCK
+              <div className="flip-card-inner">
+                {/* Front - Product Image */}
+                <div className="flip-card-front">
+                  <div className="relative w-full h-full">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    {!product.inStock && (
+                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                        OUT OF STOCK
+                      </div>
+                    )}
+                    {product.featured && (
+                      <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+                        ⭐ Featured
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h3 className="font-semibold text-navy mb-3 text-lg">{product.name}</h3>
-                <p className="text-charcoal text-base mb-4 line-clamp-2">{product.description}</p>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-navy">R{product.price}</span>
-                  {renderStars(product.rating)}
                 </div>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(product);
-                  }}
-                  disabled={isAddingToCart || !product.inStock}
-                  className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold py-3 text-base"
-                >
-                  {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
-                </Button>
+                
+                {/* Back - Product Details */}
+                <div className="flip-card-back">
+                  <div className="w-full h-full bg-gradient-to-br from-navy to-navy/90 text-white p-6 rounded-lg flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-bold text-xl mb-3 text-electric">{product.name}</h3>
+                      <p className="text-sand text-sm mb-4 line-clamp-3">{product.description}</p>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-2xl font-bold text-white">R{product.price}</span>
+                        {renderStars(product.rating)}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-sand">Rating:</span>
+                        <span className="text-white font-semibold">{product.rating}/5</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-sand">Stock:</span>
+                        <span className={`font-semibold ${product.inStock ? 'text-green-400' : 'text-red-400'}`}>
+                          {product.inStock ? 'Available' : 'Out of Stock'}
+                        </span>
+                      </div>
+                      
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                        }}
+                        disabled={isAddingToCart || !product.inStock}
+                        className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 text-sm mt-4"
+                      >
+                        {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

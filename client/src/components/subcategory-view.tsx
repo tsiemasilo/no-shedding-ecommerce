@@ -125,59 +125,73 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
           ) : products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product) => (
-                <Card 
-                  key={product.id} 
-                  className="overflow-hidden group hover:shadow-xl transition-all duration-300 cursor-pointer"
+                <div
+                  key={product.id}
+                  className="flip-card w-full h-80 cursor-pointer"
                   onClick={() => setLocation(`/product/${product.id}`)}
                 >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {product.featured && (
-                      <div className="absolute top-3 left-3 bg-bright-orange text-white px-2 py-1 rounded-full text-xs font-semibold">
-                        Featured
-                      </div>
-                    )}
-                    {!product.inStock && (
-                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
-                        OUT OF STOCK
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-lg text-navy mb-2 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-charcoal mb-3 line-clamp-2">
-                      {product.description}
-                    </p>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-2xl font-bold text-navy">
-                        R{product.price}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        {renderStars(product.rating)}
-                        <span className="text-sm text-charcoal ml-1">
-                          ({product.rating})
-                        </span>
+                  <div className="flip-card-inner">
+                    {/* Front - Product Image */}
+                    <div className="flip-card-front">
+                      <div className="relative w-full h-full">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                        {!product.inStock && (
+                          <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                            OUT OF STOCK
+                          </div>
+                        )}
+                        {product.featured && (
+                          <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+                            ⭐ Featured
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAddToCart(product);
-                      }}
-                      disabled={!product.inStock || isAddingToCart}
-                      className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold"
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
-                    </Button>
-                  </CardContent>
-                </Card>
+                    
+                    {/* Back - Product Details */}
+                    <div className="flip-card-back">
+                      <div className="w-full h-full bg-gradient-to-br from-navy to-navy/90 text-white p-4 rounded-lg flex flex-col justify-between">
+                        <div>
+                          <h3 className="font-bold text-lg mb-2 text-electric line-clamp-2">{product.name}</h3>
+                          <p className="text-sand text-sm mb-3 line-clamp-3">{product.description}</p>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-2xl font-bold text-white">R{product.price}</span>
+                            {renderStars(product.rating)}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-sand">Rating:</span>
+                            <span className="text-white font-semibold">{product.rating}/5</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-sand">Stock:</span>
+                            <span className={`font-semibold ${product.inStock ? 'text-green-400' : 'text-red-400'}`}>
+                              {product.inStock ? 'Available' : 'Out of Stock'}
+                            </span>
+                          </div>
+                          
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToCart(product);
+                            }}
+                            disabled={isAddingToCart || !product.inStock}
+                            className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 text-sm mt-3"
+                          >
+                            <ShoppingCart className="w-4 h-4 mr-1" />
+                            {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
