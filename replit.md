@@ -99,6 +99,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 2, 2025: Fixed categories dropdown navigation in header
+  - Converted non-functional categories link to working dropdown menu
+  - Added ChevronDown icon and proper DropdownMenu components
+  - Categories dropdown now shows all 6 categories with smooth scroll navigation
+  - Clicking category items navigates to home page and scrolls to categories section
+  - Added hero-categories class to enable proper scroll targeting
+
+- July 2, 2025: Standardized all back buttons across website
+  - Applied consistent navy blue background with white semi-transparent button styling
+  - Updated back buttons in product details, about page, checkout, customer auth, subcategory views, and admin dashboard
+  - Positioned all back buttons in top-left area with hover effects and scale animations
+  - Added proper glassmorphism effects with backdrop blur and pulse icons
+
 - July 2, 2025: Created comprehensive customer support page
   - Built dedicated support page with multiple contact channels (phone, email, live chat)
   - Added support resources section with installation guides, technical support, and warranty information
