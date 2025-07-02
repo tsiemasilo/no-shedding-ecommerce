@@ -116,25 +116,30 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Back Button Section */}
+      <div className="bg-navy py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Button
+            variant="outline"
+            onClick={() => setLocation("/")}
+            className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+          >
+            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+            <span className="text-lg">Back to Home</span>
+          </Button>
+        </div>
+      </div>
+
       {/* Modern Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Button
-              variant="ghost"
-              onClick={() => setLocation('/')}
-              className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg px-3 py-2 transition-all duration-200"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Store
-            </Button>
-            
+          <div className="flex items-center justify-center h-16">
             <div className="text-center">
               <h1 className="text-2xl font-semibold text-gray-900">Secure Checkout</h1>
             </div>
             
             {/* Security Badge */}
-            <div className="flex items-center text-green-600">
+            <div className="absolute right-4 flex items-center text-green-600">
               <Shield className="w-5 h-5 mr-2" />
               <span className="text-sm font-medium">256-bit SSL</span>
             </div>

@@ -139,14 +139,29 @@ export default function CustomerAuth() {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center p-4 bg-gray-50" 
-      style={{ 
-        zoom: '0.9'
-      }}
-    >
-      {/* Centered Auth Form */}
-      <Card className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200">
+    <div className="min-h-screen bg-gray-50">
+      {/* Back Button Section */}
+      <div className="bg-navy py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Button
+            variant="outline"
+            onClick={() => setLocation("/")}
+            className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+          >
+            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+            <span className="text-lg">Back to Home</span>
+          </Button>
+        </div>
+      </div>
+
+      <div 
+        className="flex items-center justify-center p-4" 
+        style={{ 
+          zoom: '0.9'
+        }}
+      >
+        {/* Centered Auth Form */}
+        <Card className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200">
         <CardHeader className="text-center pb-4 pt-8">
           {/* Removed logo to match the design */}
         </CardHeader>
@@ -289,18 +304,7 @@ export default function CustomerAuth() {
                 </Button>
               </div>
 
-              {/* Back to Store Button for Register */}
-              <div className="pt-6 border-t border-gray-200 mt-6">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => setLocation('/')}
-                  className="w-full py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Store
-                </Button>
-              </div>
+
             </form>
           ) : (
             // Login Form
@@ -391,22 +395,12 @@ export default function CustomerAuth() {
                 </Button>
               </div>
 
-              {/* Back to Store Button */}
-              <div className="pt-6 border-t border-gray-200 mt-6">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => setLocation('/')}
-                  className="w-full py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Store
-                </Button>
-              </div>
+
             </form>
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
