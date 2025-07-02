@@ -140,10 +140,9 @@ export default function CustomerAuth() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4" 
+      className="min-h-screen flex items-center justify-center p-4 bg-gray-50" 
       style={{ 
-        zoom: '0.9',
-        backgroundColor: '#FDF6EC' // Light Sand background from website color theme
+        zoom: '0.9'
       }}
     >
       {/* Centered Auth Form */}

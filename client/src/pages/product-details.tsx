@@ -56,7 +56,7 @@ export default function ProductDetails() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sand to-white">
+      <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="animate-pulse">
             <div className="w-32 h-8 bg-gray-200 rounded mb-8"></div>
@@ -77,7 +77,7 @@ export default function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sand to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-navy mb-4">Product not found</h1>
           <Button 
