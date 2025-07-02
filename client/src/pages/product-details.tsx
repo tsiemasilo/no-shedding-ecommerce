@@ -94,7 +94,7 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sand via-white to-sand/50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation Header */}
       <Header />
       
