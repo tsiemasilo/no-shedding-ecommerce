@@ -17,6 +17,7 @@ import AdminDashboard from "@/pages/admin-dashboard";
 import ProductDetails from "@/pages/product-details";
 import CustomerAuth from "@/pages/customer-auth";
 import Checkout from "@/pages/checkout";
+import Profile from "@/pages/profile";
 
 function Router() {
   return (
@@ -27,8 +28,8 @@ function Router() {
       <Route path="/product/:id" component={ProductDetails} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/auth" component={CustomerAuth} />
+      <Route path="/profile" component={Profile} />
       <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin-test" component={() => <div>Admin Test Route Works!</div>} />
       <Route component={NotFound} />
     </Switch>
   );

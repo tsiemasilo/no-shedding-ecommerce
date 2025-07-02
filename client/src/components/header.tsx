@@ -96,9 +96,17 @@ export function Header() {
             {/* Authentication */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-2">
-                <span className="text-white text-sm font-medium hidden md:block">
-                  Welcome, {customer?.firstName}!
-                </span>
+                <Button
+                  variant="ghost"
+                  onClick={() => setLocation('/profile')}
+                  className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg transition-all duration-200"
+                  title="Profile"
+                >
+                  <User className="w-5 h-5 mr-2" />
+                  <span className="text-sm font-medium hidden md:block">
+                    {customer?.firstName || 'Profile'}
+                  </span>
+                </Button>
                 <Button 
                   variant="ghost" 
                   size="icon" 
