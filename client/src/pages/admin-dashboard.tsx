@@ -111,10 +111,10 @@ export default function AdminDashboard() {
             <Button
               variant="outline"
               onClick={() => setLocation('/')}
-              className="group bg-white/90 backdrop-blur-sm border-2 border-white/20 text-navy hover:bg-white hover:text-navy hover:border-white font-semibold px-4 py-2 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
             >
-              <Home className="w-4 h-4 mr-2 group-hover:animate-pulse" />
-              <span>Home</span>
+              <Home className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+              <span className="text-lg">Back to Home</span>
             </Button>
             <Button
               variant="ghost"

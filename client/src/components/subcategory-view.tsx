@@ -89,17 +89,23 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
   // Show products view if a subcategory is selected
   if (selectedSubcategory) {
     return (
-      <div className="bg-gradient-to-br from-sand to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-sand to-white">
+        {/* Back Button Section */}
+        <div className="bg-navy py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Button
               variant="outline"
               onClick={() => setSelectedSubcategory(null)}
-              className="group bg-white/90 backdrop-blur-sm border-2 border-navy/20 text-navy hover:bg-navy hover:text-white hover:border-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl mb-8"
+              className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
             >
               <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
               <span className="text-lg">Back to {categoryName}</span>
             </Button>
+          </div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
             
             <h2 className="text-5xl font-bold text-navy mb-6">
               {selectedSubcategory.name}
@@ -252,17 +258,23 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
   }
 
   return (
-    <div className="bg-gradient-to-br from-sand to-white py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <div className="bg-gradient-to-br from-sand to-white">
+      {/* Back Button Section */}
+      <div className="bg-navy py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button
             variant="outline"
             onClick={onBack}
-            className="group bg-white/90 backdrop-blur-sm border-2 border-navy/20 text-navy hover:bg-navy hover:text-white hover:border-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl mb-8"
+            className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
           >
             <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
             <span className="text-lg">Back to Categories</span>
           </Button>
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
           
           <h2 className="text-5xl font-bold text-navy mb-6">
             {categoryName}
