@@ -103,8 +103,7 @@ export default function SearchResults() {
             {searchResults.map((product) => (
               <Card 
                 key={product.id} 
-                className="group relative overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white border-0 rounded-2xl h-96"
-                style={{ perspective: '1000px' }}
+                className="group relative overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white border-0 rounded-2xl h-auto"
               >
                 {/* Out of Stock Ribbon */}
                 {!product.inStock && (
@@ -115,72 +114,46 @@ export default function SearchResults() {
                   </div>
                 )}
                 
-                <div className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
-                  {/* Front of card */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden">
-                    <CardContent className="p-0 h-full flex flex-col">
-                      <div className="relative h-48 overflow-hidden rounded-t-2xl">
-                        <img
-                          src={product.image || '/api/placeholder/300/200'}
-                          alt={product.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                      </div>
-                      <div className="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="font-bold text-xl text-navy mb-2 line-clamp-2">
-                            {product.name}
-                          </h3>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-electric">
-                            R{product.price}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-electric text-electric" />
-                            <span className="text-sm font-medium text-gray-700">
-                              {product.rating}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
+                <CardContent className="p-0 h-full flex flex-col">
+                  <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                    <img
+                      src={product.image || '/api/placeholder/300/200'}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
-                  
-                  {/* Back of card */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
-                    <CardContent className="p-6 h-full flex flex-col justify-between bg-gradient-to-br from-navy to-navy/80 text-white rounded-2xl">
-                      <div>
-                        <h3 className="font-bold text-xl mb-3 text-electric">
-                          {product.name}
-                        </h3>
-                        <p className="text-white/90 text-sm mb-4 line-clamp-4">
-                          {product.description}
-                        </p>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-2xl font-bold text-electric">
-                            R{product.price}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-electric text-electric" />
-                            <span className="text-sm font-medium">
-                              {product.rating}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="text-sm">
-                          <span className={`font-medium ${product.inStock ? 'text-green-400' : 'text-red-400'}`}>
-                            {product.inStock ? 'In Stock' : 'Out of Stock'}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-bold text-xl text-navy mb-2 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {product.description}
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-electric">
+                          R{product.price}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-electric text-electric" />
+                          <span className="text-sm font-medium text-gray-700">
+                            {product.rating}
                           </span>
                         </div>
                       </div>
-                      
+                      <div className="text-sm">
+                        <span className={`font-medium ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                          {product.inStock ? 'In Stock' : 'Out of Stock'}
+                        </span>
+                      </div>
                       <div className="flex gap-2">
                         <Button
                           onClick={() => setLocation(`/product/${product.id}`)}
                           variant="outline"
-                          className="flex-1 border-white text-white hover:bg-white hover:text-navy"
+                          className="flex-1 border-navy text-navy hover:bg-navy hover:text-white"
                         >
                           View Details
                         </Button>
@@ -193,9 +166,9 @@ export default function SearchResults() {
                           Add to Cart
                         </Button>
                       </div>
-                    </CardContent>
+                    </div>
                   </div>
-                </div>
+                </CardContent>
               </Card>
             ))}
           </div>
