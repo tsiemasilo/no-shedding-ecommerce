@@ -31,7 +31,7 @@ export function FeaturedProducts() {
     const hasHalfStar = numRating % 1 >= 0.5;
 
     return (
-      <div className="flex text-blue-400">
+      <div className="flex text-electric">
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
@@ -48,18 +48,17 @@ export function FeaturedProducts() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-light text-gray-900 mb-4">Featured Products</h2>
-            <div className="w-16 h-1 bg-blue-600 mx-auto mb-6"></div>
-            <p className="text-gray-600 text-lg font-light">Discover our most popular electrical solutions</p>
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-navy mb-4">Featured Products</h2>
+            <p className="text-charcoal text-lg">Discover our most popular electrical solutions</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden animate-pulse">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-sand rounded-lg shadow-md overflow-hidden animate-pulse">
                 <div className="w-full h-48 bg-gray-200"></div>
-                <div className="p-6">
+                <div className="p-4">
                   <div className="h-6 bg-gray-200 rounded mb-2"></div>
                   <div className="h-12 bg-gray-200 rounded mb-3"></div>
                   <div className="h-8 bg-gray-200 rounded mb-3"></div>
@@ -74,19 +73,18 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-light text-gray-900 mb-4">Featured Products</h2>
-          <div className="w-16 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-gray-600 text-lg font-light">Discover our most popular electrical solutions</p>
+    <section className="py-16 bg-navy">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-white mb-4">Featured Products</h2>
+          <p className="text-sand text-lg">Discover our most popular electrical solutions</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer"
+              className="bg-sand rounded-lg shadow-md overflow-hidden border border-gray-200 hover:border-electric transition-all duration-300 cursor-pointer transform hover:scale-105"
               onClick={() => setLocation(`/product/${product.id}`)}
             >
               <div className="relative">
@@ -102,10 +100,10 @@ export function FeaturedProducts() {
                 )}
               </div>
               <div className="p-6">
-                <h3 className="font-medium text-gray-900 mb-3 text-lg">{product.name}</h3>
-                <p className="text-gray-600 text-base mb-4 line-clamp-2 font-light leading-relaxed">{product.description}</p>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-2xl font-medium text-gray-900">R{product.price}</span>
+                <h3 className="font-semibold text-navy mb-3 text-lg">{product.name}</h3>
+                <p className="text-charcoal text-base mb-4 line-clamp-2">{product.description}</p>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-bold text-navy">R{product.price}</span>
                   {renderStars(product.rating)}
                 </div>
                 <Button
@@ -114,7 +112,7 @@ export function FeaturedProducts() {
                     handleAddToCart(product);
                   }}
                   disabled={isAddingToCart || !product.inStock}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-base transition-colors duration-200"
+                  className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold py-3 text-base"
                 >
                   {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
                 </Button>

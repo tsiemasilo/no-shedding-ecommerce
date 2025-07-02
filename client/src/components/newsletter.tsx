@@ -38,27 +38,24 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-light text-white mb-6">Stay Connected</h2>
-          <div className="w-16 h-1 bg-blue-400 mx-auto mb-8"></div>
-          <p className="text-gray-300 mb-8 font-light text-lg leading-relaxed">
-            Receive technical insights, product updates, and industry news from our electrical engineering experts
-          </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+    <section className="py-12" style={{ backgroundColor: '#0A2342' }}>
+      <div className="container mx-auto px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">Stay Powered Up</h2>
+          <p className="text-gray-200 mb-6">Get electrical safety tips, product updates, and exclusive offers</p>
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
             <Input
               type="email"
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-white focus:ring-2 focus:ring-blue-400 border-gray-300 shadow-sm"
+              className="flex-1 bg-white focus:ring-2 focus:ring-electric shadow-sm"
               required
             />
             <Button
               type="submit"
               disabled={subscribeMutation.isPending}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-2 transition-colors duration-200"
+              className="bg-bright-orange hover:bg-orange-600 text-white font-semibold px-8"
             >
               {subscribeMutation.isPending ? 'Subscribing...' : 'Subscribe'}
             </Button>

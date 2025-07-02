@@ -44,21 +44,20 @@ export function HeroCategories() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight">
+      <section className="py-12 bg-gradient-to-br from-sand to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
               Premium Electrical Solutions
             </h1>
-            <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto font-light leading-relaxed">
-              Discover our comprehensive portfolio of electrical products engineered for safety, reliability, and optimal performance
+            <p className="text-xl text-charcoal max-w-3xl mx-auto">
+              Discover our comprehensive range of electrical products designed for safety, reliability, and performance
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden animate-pulse">
-                <div className="w-full h-48 bg-gray-50 flex items-center justify-center">
+              <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+                <div className="w-full h-48 bg-sand flex items-center justify-center">
                   <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
                 </div>
                 <div className="p-6">
@@ -75,15 +74,14 @@ export function HeroCategories() {
   }
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight">
+    <section className="py-12 bg-gradient-to-br from-sand to-white">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
             Premium Electrical Solutions
           </h1>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto font-light leading-relaxed">
-            Discover our comprehensive portfolio of electrical products engineered for safety, reliability, and optimal performance
+          <p className="text-xl text-charcoal max-w-3xl mx-auto">
+            Discover our comprehensive range of electrical products designed for safety, reliability, and performance
           </p>
         </div>
         
@@ -93,22 +91,20 @@ export function HeroCategories() {
             return (
               <div
                 key={category.id}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200"
+                className="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-navy hover:border-electric transition-all duration-300 transform hover:scale-105"
               >
-                <div className="w-full h-48 bg-gray-50 flex items-center justify-center">
-                  <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center">
-                    <IconComponent className="w-10 h-10 text-blue-600" />
-                  </div>
+                <div className="w-full h-48 bg-sand flex items-center justify-center">
+                  <IconComponent className="w-24 h-24 text-navy" />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-medium text-gray-900 mb-3">{category.name}</h3>
-                  <p className="text-gray-600 mb-6 font-light leading-relaxed">{category.description}</p>
+                  <h3 className="text-xl font-bold text-navy mb-2">{category.name}</h3>
+                  <p className="text-charcoal mb-4">{category.description}</p>
                   <Button 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 transition-colors duration-200"
+                    className="w-full bg-bright-orange hover:bg-orange-600 text-white font-semibold"
                     onClick={() => setSelectedCategory(category)}
                   >
                     {(category.name === 'Lighting Solutions' || category.name === 'Power Solutions' || category.name === 'Appliance Alternatives') 
-                      ? 'View Solutions' 
+                      ? 'View Subcategories' 
                       : `Explore ${category.name.split(' ')[0]}`}
                   </Button>
                 </div>
