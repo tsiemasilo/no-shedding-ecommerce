@@ -1,49 +1,46 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useLocation } from 'wouter';
-import { useCart } from '@/hooks/use-cart';
-import { useCustomerAuth } from '@/hooks/use-customer-auth';
-import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, CreditCard, MapPin, User, Phone, Mail, Lock, Shield, Check } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { apiRequest } from '@/lib/queryClient';
+import { loadStripe } from '@stripe/stripe-js';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { ArrowLeft, Shield, Check, Truck, Mail, MapPin, Phone, CreditCard, Lock } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
 
-// Initialize Stripe
+// Make sure to call `loadStripe` outside of a component's render to avoid
+// recreating the `Stripe` object on every render.
 if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
   throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
 }
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const checkoutSchema = z.object({
-  // Shipping Information
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Valid email is required'),
-  phone: z.string().min(10, 'Valid phone number is required'),
-  address: z.string().min(5, 'Address is required'),
-  city: z.string().min(2, 'City is required'),
-  postalCode: z.string().min(4, 'Postal code is required'),
+const checkoutFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(1, "Phone number is required"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  postalCode: z.string().min(1, "Postal code is required"),
 });
 
-type CheckoutFormData = z.infer<typeof checkoutSchema>;
+type CheckoutFormData = z.infer<typeof checkoutFormSchema>;
 
-// Payment Form Component
-function PaymentForm({ 
+const CheckoutForm = ({ 
   clientSecret, 
   onPaymentSuccess, 
   shippingInfo 
 }: { 
-  clientSecret: string; 
+  clientSecret: string;
   onPaymentSuccess: (paymentIntent: any) => void;
   shippingInfo: CheckoutFormData;
-}) {
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
@@ -58,15 +55,13 @@ function PaymentForm({
 
     setIsProcessing(true);
 
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + "/checkout",
-        payment_method_data: {
-          billing_details: {
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin,
+          shipping: {
             name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-            email: shippingInfo.email,
-            phone: shippingInfo.phone,
             address: {
               line1: shippingInfo.address,
               city: shippingInfo.city,
@@ -75,184 +70,155 @@ function PaymentForm({
             },
           },
         },
-      },
-      redirect: 'if_required',
-    });
+        redirect: 'if_required',
+      });
 
-    setIsProcessing(false);
-
-    if (error) {
+      if (error) {
+        toast({
+          title: "Payment Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onPaymentSuccess(paymentIntent);
+      }
+    } catch (error) {
       toast({
-        title: "Payment Failed",
-        description: error.message,
+        title: "Payment Error",
+        description: "An unexpected error occurred during payment processing.",
         variant: "destructive",
       });
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      onPaymentSuccess(paymentIntent);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement />
+      <div className="space-y-4">
+        <PaymentElement />
+      </div>
+      
       <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full bg-gradient-to-r from-navy to-charcoal hover:from-navy/90 hover:to-charcoal/90 text-white py-4 text-lg font-semibold"
+        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 rounded-lg"
       >
-        {isProcessing ? "Processing..." : "Complete Payment"}
+        {isProcessing ? (
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
+            Processing Payment...
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            <Lock className="w-5 h-5 mr-3" />
+            Complete Order
+          </div>
+        )}
       </Button>
     </form>
   );
-}
+};
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
-  const { cartItems, cartTotal, clearCart, isLoading } = useCart();
-  const { customer, isAuthenticated } = useCustomerAuth();
+  const { cartItems, cartTotal, clearCart } = useCart();
   const { toast } = useToast();
-  const [isProcessing, setIsProcessing] = useState(false);
-
   const [clientSecret, setClientSecret] = useState("");
-  const [paymentIntentId, setPaymentIntentId] = useState("");
 
   const form = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
+    resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
-      firstName: customer?.firstName || '',
-      lastName: customer?.lastName || '',
-      email: customer?.email || '',
-      phone: customer?.phone || '',
-      address: customer?.address || '',
-      city: customer?.city || '',
-      postalCode: customer?.postalCode || '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      postalCode: "",
     },
   });
 
-  // Create payment intent when component mounts
-  useEffect(() => {
-    if (cartItems.length > 0 && cartTotal > 0) {
-      createPaymentIntent();
-    }
-  }, [cartItems, cartTotal]);
-
-  const createPaymentIntent = async () => {
-    try {
-      const shipping = cartItems.length > 0 ? 4.99 : 0;
-      const totalAmount = cartTotal + shipping;
-      
-      const response = await apiRequest("POST", "/api/create-payment-intent", {
-        amount: totalAmount,
-        cartItems: cartItems.map(item => ({
-          id: item.id,
-          productId: item.productId,
-          quantity: item.quantity,
-          productName: item.product?.name,
-          price: item.product?.price
-        }))
-      });
-      
-      const data = await response.json();
-      setClientSecret(data.clientSecret);
-      setPaymentIntentId(data.paymentIntentId);
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      toast({
-        title: "Payment Error",
-        description: "Failed to initialize payment. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    // Store the intended destination before redirecting to auth
-    localStorage.setItem('redirectAfterLogin', '/checkout');
-    setLocation('/auth');
-    return null;
-  }
-
-  // Show loading while cart is loading
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading your cart...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Redirect if cart is empty after loading
+  // Redirect if cart is empty
   if (cartItems.length === 0) {
     setLocation('/');
     return null;
   }
 
+  // Calculate totals
+  const subtotal = cartTotal;
+  const shipping = cartItems.length > 0 ? 4.99 : 0;
+  const tax = subtotal * 0.15;
+  const total = subtotal + shipping + tax;
+
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    apiRequest("POST", "/api/create-payment-intent", { 
+      amount: Math.round(total * 100), // Convert to cents
+      currency: 'zar'
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setClientSecret(data.clientSecret);
+      })
+      .catch((error) => {
+        console.error("Error creating payment intent:", error);
+        toast({
+          title: "Payment Setup Error",
+          description: "Unable to initialize payment. Please try again.",
+          variant: "destructive",
+        });
+      });
+  }, [total]);
+
   const handlePaymentSuccess = async (paymentIntent: any) => {
     try {
-      // Confirm payment on the server
-      await apiRequest("POST", "/api/confirm-payment", {
-        paymentIntentId: paymentIntent.id,
-        orderDetails: {
-          ...form.getValues(),
-          cartItems,
-          total: cartTotal + (cartItems.length > 0 ? 4.99 : 0)
-        }
-      });
-
       toast({
         title: "Payment Successful!",
         description: "Your order has been placed successfully. You will receive a confirmation email shortly.",
       });
 
-      // Redirect to home page
+      // Clear cart and redirect to home page
+      clearCart();
       setLocation('/');
     } catch (error) {
-      console.error("Error confirming payment:", error);
+      console.error("Error after payment success:", error);
       toast({
-        title: "Payment Processing Error",
+        title: "Order Processing Error",
         description: "Payment was successful but there was an error processing your order. Please contact support.",
         variant: "destructive",
       });
     }
   };
 
-  const subtotal = cartTotal;
-  const shipping = cartItems.length > 0 ? 4.99 : 0;
-  const tax = subtotal * 0.15; // 15% tax
-  const total = subtotal + shipping + tax;
+  const handleCheckout = async (data: CheckoutFormData) => {
+    // Form is valid, the actual payment will be handled by Stripe
+    console.log("Shipping information:", data);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Back Button Section */}
-      <div className="bg-navy py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Button
-            variant="outline"
-            onClick={() => setLocation("/")}
-            className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white hover:bg-white hover:text-navy font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            <ArrowLeft className="w-5 h-5 mr-3 group-hover:animate-pulse" />
-            <span className="text-lg">Back to Home</span>
-          </Button>
-        </div>
-      </div>
-
-      {/* Modern Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center h-16">
-            <div className="text-center">
-              <h1 className="text-2xl font-semibold text-gray-900">Secure Checkout</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50" style={{ zoom: '90%' }}>
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setLocation('/')}
+                className="bg-white/70 backdrop-blur-sm hover:bg-white/90 text-[#0A2342] p-3 rounded-xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group"
+              >
+                <ArrowLeft className="w-5 h-5 group-hover:animate-pulse" />
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Complete Your Order</h1>
+                <p className="text-gray-600">Secure checkout powered by Stripe</p>
+              </div>
             </div>
-            
-            {/* Security Badge */}
-            <div className="absolute right-4 flex items-center text-green-600">
-              <Shield className="w-5 h-5 mr-2" />
-              <span className="text-sm font-medium">256-bit SSL</span>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center text-green-600">
+                <Shield className="w-5 h-5 mr-2" />
+                <span className="text-sm font-medium">SSL Secured</span>
+              </div>
             </div>
           </div>
         </div>
@@ -268,7 +234,7 @@ export default function Checkout() {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
                   <h2 className="text-lg font-semibold text-white flex items-center">
                     <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                      <MapPin className="w-4 h-4 text-white" />
+                      <Truck className="w-4 h-4 text-white" />
                     </div>
                     Shipping Information
                   </h2>
@@ -307,37 +273,38 @@ export default function Checkout() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...form.register('email')}
-                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
-                      placeholder="Enter email address"
-                    />
-                    {form.formState.errors.email && (
-                      <p className="text-red-500 text-sm flex items-center mt-1">
-                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                        {form.formState.errors.email.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      {...form.register('phone')}
-                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
-                      placeholder="Enter phone number"
-                    />
-                    {form.formState.errors.phone && (
-                      <p className="text-red-500 text-sm flex items-center mt-1">
-                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                        {form.formState.errors.phone.message}
-                      </p>
-                    )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        {...form.register('email')}
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+                        placeholder="Enter email address"
+                      />
+                      {form.formState.errors.email && (
+                        <p className="text-red-500 text-sm flex items-center mt-1">
+                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                          {form.formState.errors.email.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        {...form.register('phone')}
+                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+                        placeholder="Enter phone number"
+                      />
+                      {form.formState.errors.phone && (
+                        <p className="text-red-500 text-sm flex items-center mt-1">
+                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
+                          {form.formState.errors.phone.message}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -390,104 +357,35 @@ export default function Checkout() {
                   </div>
                 </div>
               </div>
+            </form>
 
-              {/* Payment Information */}
-              <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
-                  <h2 className="text-lg font-semibold text-white flex items-center">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                      <CreditCard className="w-4 h-4 text-white" />
-                    </div>
-                    Payment Details
-                  </h2>
-                </div>
-                <div className="p-6 space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="cardName" className="text-sm font-medium text-gray-700">Cardholder Name</Label>
-                    <Input
-                      id="cardName"
-                      {...form.register('cardName')}
-                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
-                      placeholder="Name as it appears on card"
-                    />
-                    {form.formState.errors.cardName && (
-                      <p className="text-red-500 text-sm flex items-center mt-1">
-                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                        {form.formState.errors.cardName.message}
-                      </p>
-                    )}
+            {/* Payment Information */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+                <h2 className="text-lg font-semibold text-white flex items-center">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                    <CreditCard className="w-4 h-4 text-white" />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="cardNumber" className="text-sm font-medium text-gray-700">Card Number</Label>
-                    <Input
-                      id="cardNumber"
-                      placeholder="1234 5678 9012 3456"
-                      {...form.register('cardNumber')}
-                      className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
-                    />
-                    {form.formState.errors.cardNumber && (
-                      <p className="text-red-500 text-sm flex items-center mt-1">
-                        <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                        {form.formState.errors.cardNumber.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="expiryDate" className="text-sm font-medium text-gray-700">Expiry Date</Label>
-                      <Input
-                        id="expiryDate"
-                        placeholder="MM/YY"
-                        {...form.register('expiryDate')}
-                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
-                      />
-                      {form.formState.errors.expiryDate && (
-                        <p className="text-red-500 text-sm flex items-center mt-1">
-                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                          {form.formState.errors.expiryDate.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cvv" className="text-sm font-medium text-gray-700">CVV</Label>
-                      <Input
-                        id="cvv"
-                        placeholder="123"
-                        {...form.register('cvv')}
-                        className="h-12 bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
-                      />
-                      {form.formState.errors.cvv && (
-                        <p className="text-red-500 text-sm flex items-center mt-1">
-                          <span className="w-4 h-4 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center mr-2">!</span>
-                          {form.formState.errors.cvv.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  Payment Details
+                </h2>
               </div>
-
-              {/* Place Order Button */}
-              <Button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-lg font-semibold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70"
-              >
-                {isProcessing ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
-                    Processing Payment...
-                  </div>
+              <div className="p-6">
+                {clientSecret ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <CheckoutForm 
+                      clientSecret={clientSecret}
+                      onPaymentSuccess={handlePaymentSuccess}
+                      shippingInfo={form.getValues()}
+                    />
+                  </Elements>
                 ) : (
-                  <div className="flex items-center">
-                    <Lock className="w-5 h-5 mr-3" />
-                    Complete Order - R{total.toFixed(2)}
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-4 border-green-600 border-t-transparent mx-auto mb-4"></div>
+                    <p className="text-gray-600">Setting up secure payment...</p>
                   </div>
                 )}
-              </Button>
-            </form>
+              </div>
+            </div>
           </div>
 
           {/* Order Summary Sidebar */}
