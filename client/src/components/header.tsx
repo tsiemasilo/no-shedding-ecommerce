@@ -61,7 +61,7 @@ export function Header() {
           <nav className="hidden lg:flex items-center space-x-6 mr-4">
             <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Categories</a>
             <Link href="/about" className="text-white hover:text-electric transition-colors text-lg font-medium">About</Link>
-            <a href="#" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</a>
+            <Link href="/support" className="text-white hover:text-electric transition-colors text-lg font-medium">Support</Link>
           </nav>
           
           {/* User Actions */}
