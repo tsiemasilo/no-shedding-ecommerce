@@ -79,10 +79,18 @@ export async function setupAuth(app: Express) {
         },
         async (accessToken: any, refreshToken: any, profile: any, done: any) => {
           try {
+            console.log("Google OAuth strategy called with profile:", {
+              id: profile.id,
+              displayName: profile.displayName,
+              emails: profile.emails,
+              name: profile.name
+            });
+            
             // Check if customer already exists
             let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
             
             if (!customer) {
+              console.log("Creating new customer from Google profile");
               // Create new customer from Google profile with a default password
               // They can use their email to log in directly with this default password
               const defaultPassword = await hashPassword("google123"); // Default password for Google users
@@ -96,6 +104,9 @@ export async function setupAuth(app: Express) {
                 city: "",
                 postalCode: "",
               });
+              console.log("Created new customer:", { id: customer.id, email: customer.email });
+            } else {
+              console.log("Found existing customer:", { id: customer.id, email: customer.email });
             }
             
             return done(null, customer as any);
@@ -114,14 +125,24 @@ export async function setupAuth(app: Express) {
   }
 
   passport.serializeUser((user: any, done) => {
+    console.log("Serializing user:", { 
+      id: user.id, 
+      username: user.username, 
+      email: user.email, 
+      role: user.role 
+    });
+    
     if (user.username && user.role) {
       // This is an admin user
+      console.log("Serializing as admin user");
       done(null, { id: user.id, type: 'user' });
     } else if (user.email) {
       // This is a customer
+      console.log("Serializing as customer");
       done(null, { id: user.id, type: 'customer' });
     } else {
       // Fallback - assume customer
+      console.log("Serializing as fallback customer");
       done(null, { id: user.id, type: 'customer' });
     }
   });
@@ -176,11 +197,12 @@ export async function setupAuth(app: Express) {
 
   app.get(
     "/api/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/auth" }),
-    (req, res) => {
-      // Successful authentication, redirect to home
-      // Add a query parameter to trigger a refresh on the client side
-      res.redirect("/?oauth=success");
+    (req, res, next) => {
+      console.log("Google OAuth callback hit with query:", req.query);
+      passport.authenticate("google", { 
+        failureRedirect: "/auth",
+        successRedirect: "/?oauth=success"
+      })(req, res, next);
     }
   );
 }
