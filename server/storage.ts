@@ -40,6 +40,7 @@ export interface IStorage {
   getCustomer(id: number): Promise<Customer | undefined>;
   getCustomerByEmail(email: string): Promise<Customer | undefined>;
   createCustomer(customer: InsertCustomer): Promise<Customer>;
+  updateCustomerPassword(id: number, hashedPassword: string): Promise<void>;
   
   // Product management
   createProduct(product: InsertProduct): Promise<Product>;
@@ -327,6 +328,14 @@ export class MemStorage implements IStorage {
     return newCustomer;
   }
 
+  async updateCustomerPassword(id: number, hashedPassword: string): Promise<void> {
+    const customer = this.customers.get(id);
+    if (customer) {
+      customer.password = hashedPassword;
+      this.customers.set(id, customer);
+    }
+  }
+
   // Product management methods
   async createProduct(product: InsertProduct): Promise<Product> {
     const newProduct: Product = { ...product, id: this.currentProductId++ };
@@ -592,6 +601,13 @@ export class DatabaseStorage implements IStorage {
       .values(customer)
       .returning();
     return newCustomer;
+  }
+
+  async updateCustomerPassword(id: number, hashedPassword: string): Promise<void> {
+    await db
+      .update(customers)
+      .set({ password: hashedPassword })
+      .where(eq(customers.id, id));
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {

@@ -275,20 +275,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get current customer from session
   app.get("/api/customer/user", (req, res) => {
-    console.log("Customer endpoint called, authenticated:", req.isAuthenticated());
-    console.log("Customer user data:", req.user);
-    
     if (!req.isAuthenticated() || !req.user) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
     // Check if this is a customer (has email but no username/role)
     if (!req.user.email || req.user.username || req.user.role) {
-      console.log("Rejecting as not a customer:", { 
-        hasEmail: !!req.user.email, 
-        hasUsername: !!req.user.username, 
-        hasRole: !!req.user.role 
-      });
       return res.status(401).json({ message: "Not a customer account" });
     }
 
@@ -323,6 +315,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // Update customer password (for Google users to set their own password)
+  app.post("/api/customer/update-password", async (req, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user?.email) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!newPassword || newPassword.length < 6) {
+        return res.status(400).json({ message: "New password must be at least 6 characters long" });
+      }
+
+      const customer = await storage.getCustomerByEmail(req.user.email);
+      if (!customer) {
+        return res.status(404).json({ message: "Customer not found" });
+      }
+
+      // Verify current password (could be default "google123" or their existing password)
+      const isValidPassword = await comparePasswords(currentPassword, customer.password);
+      if (!isValidPassword) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+
+      // Update to new password
+      const hashedNewPassword = await hashPassword(newPassword);
+      await storage.updateCustomerPassword(customer.id, hashedNewPassword);
+
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error("Password update error:", error);
+      res.status(500).json({ message: "Failed to update password" });
     }
   });
 

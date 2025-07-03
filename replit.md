@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 3, 2025: Fixed Google OAuth admin privilege issue and added dual authentication
+  - Fixed Google OAuth users incorrectly getting admin access
+  - Admin endpoint now properly validates user role before granting access
+  - Added dual authentication: Google users get default password "google123" for direct login
+  - Created password update endpoint for Google users to set custom passwords
+  - Google OAuth users can now log in both via Google and email/password
+
 - July 2, 2025: Removed Stripe integration and restored simple checkout
   - Removed all Stripe payment processing dependencies
   - Restored simple form-based checkout with simulated payment processing

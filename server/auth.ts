@@ -83,12 +83,14 @@ export async function setupAuth(app: Express) {
             let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
             
             if (!customer) {
-              // Create new customer from Google profile
+              // Create new customer from Google profile with a default password
+              // They can use their email to log in directly with this default password
+              const defaultPassword = await hashPassword("google123"); // Default password for Google users
               customer = await storage.createCustomer({
                 firstName: profile.name?.givenName || profile.displayName || "",
                 lastName: profile.name?.familyName || "",
                 email: profile.emails?.[0]?.value || "",
-                password: "", // No password needed for Google auth
+                password: defaultPassword,
                 phone: "",
                 address: "",
                 city: "",
@@ -150,12 +152,9 @@ export async function setupAuth(app: Express) {
 
   // Get current admin user
   app.get("/api/admin/user", (req, res) => {
-    console.log("Admin endpoint called, authenticated:", req.isAuthenticated());
-    console.log("User data:", req.user);
     if (!req.isAuthenticated()) return res.sendStatus(401);
     // Only return user data if they are actually an admin
     if (req.user?.role !== "admin") {
-      console.log("User role is not admin:", req.user?.role);
       return res.sendStatus(401);
     }
     res.json(req.user);
