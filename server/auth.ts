@@ -204,17 +204,16 @@ export async function setupAuth(app: Express) {
     passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
   });
 
-  app.get(
-    "/api/auth/google/callback", 
+  app.get("/api/auth/google/callback", 
     (req, res, next) => {
-      console.log("Google OAuth callback hit!");
+      console.log("=== CALLBACK ROUTE HIT ===");
       console.log("Query params:", req.query);
       console.log("URL:", req.url);
       next();
     },
     passport.authenticate("google", { failureRedirect: "/auth" }),
     (req, res) => {
-      console.log("Google OAuth success, redirecting");
+      console.log("Google OAuth success, redirecting to home with oauth=success");
       res.redirect("/?oauth=success");
     }
   );
