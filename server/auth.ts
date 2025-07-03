@@ -83,14 +83,13 @@ export async function setupAuth(app: Express) {
             let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
             
             if (!customer) {
-              // Create new customer from Google profile with a default password
-              // They can use their email to log in directly with this default password
-              const defaultPassword = await hashPassword("google123"); // Default password for Google users
+              // Create new customer from Google profile without password
+              // They will need to set a password if they want to log in directly
               customer = await storage.createCustomer({
                 firstName: profile.name?.givenName || profile.displayName || "",
                 lastName: profile.name?.familyName || "",
                 email: profile.emails?.[0]?.value || "",
-                password: defaultPassword,
+                password: "", // Empty password - will be set later if they want direct login
                 phone: "",
                 address: "",
                 city: "",

@@ -299,7 +299,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const customer = await storage.getCustomerByEmail(email);
       
-      if (!customer || !(await comparePasswords(password, customer.password))) {
+      if (!customer) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      // Check if customer has a password set (Google users might not have one initially)
+      if (!customer.password || customer.password === "") {
+        return res.status(400).json({ 
+          message: "No password set for this account. Please set a password first or log in with Google.",
+          needsPasswordSetup: true 
+        });
+      }
+
+      if (!(await comparePasswords(password, customer.password))) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
@@ -318,17 +330,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update customer password (for Google users to set their own password)
-  app.post("/api/customer/update-password", async (req, res) => {
+  // Set password for Google users or update existing password
+  app.post("/api/customer/set-password", async (req, res) => {
     try {
       if (!req.isAuthenticated() || !req.user?.email) {
         return res.status(401).json({ message: "Not authenticated" });
       }
 
-      const { currentPassword, newPassword } = req.body;
+      const { password } = req.body;
       
-      if (!newPassword || newPassword.length < 6) {
-        return res.status(400).json({ message: "New password must be at least 6 characters long" });
+      if (!password || password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters long" });
       }
 
       const customer = await storage.getCustomerByEmail(req.user.email);
@@ -336,20 +348,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Customer not found" });
       }
 
-      // Verify current password (could be default "google123" or their existing password)
-      const isValidPassword = await comparePasswords(currentPassword, customer.password);
-      if (!isValidPassword) {
-        return res.status(400).json({ message: "Current password is incorrect" });
-      }
+      // Hash and set the new password
+      const hashedPassword = await hashPassword(password);
+      await storage.updateCustomerPassword(customer.id, hashedPassword);
 
-      // Update to new password
-      const hashedNewPassword = await hashPassword(newPassword);
-      await storage.updateCustomerPassword(customer.id, hashedNewPassword);
-
-      res.json({ message: "Password updated successfully" });
+      res.json({ message: "Password set successfully. You can now log in directly with your email and password." });
     } catch (error) {
-      console.error("Password update error:", error);
-      res.status(500).json({ message: "Failed to update password" });
+      console.error("Password set error:", error);
+      res.status(500).json({ message: "Failed to set password" });
     }
   });
 
