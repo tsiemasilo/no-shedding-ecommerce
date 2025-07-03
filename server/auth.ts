@@ -151,6 +151,10 @@ export async function setupAuth(app: Express) {
   // Get current admin user
   app.get("/api/admin/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
+    // Only return user data if they are actually an admin
+    if (req.user?.role !== "admin") {
+      return res.sendStatus(401);
+    }
     res.json(req.user);
   });
 
