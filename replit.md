@@ -99,6 +99,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 3, 2025: Fixed signup navigation and navbar scrolling behavior
+  - Fixed new user signup flow to redirect to home page instead of checkout
+  - Registration now automatically logs in new users and redirects appropriately
+  - Updated navbar buttons to scroll to top before navigating for better page positioning
+  - Only users who actually clicked "Proceed to Checkout" are redirected to checkout after login
+
 - July 3, 2025: Fixed Google OAuth admin privilege issue and added dual authentication
   - Fixed Google OAuth users incorrectly getting admin access
   - Admin endpoint now properly validates user role before granting access

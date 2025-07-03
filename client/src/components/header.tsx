@@ -113,7 +113,10 @@ export function Header() {
               <div className="flex items-center space-x-2">
                 <Button
                   variant="ghost"
-                  onClick={() => setLocation('/profile')}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setLocation('/profile');
+                  }}
                   className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg transition-all duration-200"
                   title="Profile"
                 >

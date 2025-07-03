@@ -128,10 +128,28 @@ export default function CustomerAuth() {
     
     registerMutation.mutate(customerData, {
       onSuccess: () => {
-        // Switch to login form instead of redirecting to home
-        setIsLogin(true);
-        // Clear the registration form
-        registerForm.reset();
+        // After successful registration, automatically log in the user
+        customerLoginMutation.mutate({ 
+          email: registerData.email, 
+          password: registerData.password 
+        }, {
+          onSuccess: () => {
+            // Check if there's a redirect destination stored
+            const redirectTo = localStorage.getItem('redirectAfterLogin');
+            if (redirectTo) {
+              localStorage.removeItem('redirectAfterLogin');
+              setLocation(redirectTo);
+            } else {
+              // For new registrations, always go to home page
+              setLocation('/');
+            }
+          },
+          onError: () => {
+            // If auto-login fails, show login form
+            setIsLogin(true);
+            registerForm.reset();
+          }
+        });
       },
     });
   };
