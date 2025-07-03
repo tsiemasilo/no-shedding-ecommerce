@@ -173,10 +173,11 @@ export async function setupAuth(app: Express) {
 
   app.get(
     "/api/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/customer/auth" }),
+    passport.authenticate("google", { failureRedirect: "/auth" }),
     (req, res) => {
       // Successful authentication, redirect to home
-      res.redirect("/");
+      // Add a query parameter to trigger a refresh on the client side
+      res.redirect("/?oauth=success");
     }
   );
 }

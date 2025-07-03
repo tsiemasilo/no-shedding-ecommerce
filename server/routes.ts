@@ -279,8 +279,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
-    // Check if this is a customer (has email but no username/role)
-    if (!req.user.email || req.user.username || req.user.role) {
+    // Check if this is a customer (has email and firstName properties, but not admin role)
+    if (!req.user.email || req.user.role === 'admin') {
       return res.status(401).json({ message: "Not a customer account" });
     }
 
