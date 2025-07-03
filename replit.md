@@ -99,13 +99,6 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 3, 2025: Fixed Google OAuth login to properly show enhanced customer profile
-  - Fixed customer session detection logic to properly identify Google OAuth users
-  - Improved customer session endpoint to allow Google OAuth customers
-  - Added OAuth success parameter to trigger client-side session refresh
-  - Added automatic customer data refetch after Google OAuth redirect
-  - Both manual login and Google OAuth now show the same enhanced profile page
-
 - July 3, 2025: Enhanced customer profile page with comprehensive professional details
   - Redesigned profile layout with improved 3-column grid structure for customers
   - Added detailed customer information display with proper formatting and icons

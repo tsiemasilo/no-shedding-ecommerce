@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import {
   useQuery,
   useMutation,
@@ -32,24 +32,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
     data: customer,
     error,
     isLoading,
-    refetch,
   } = useQuery<Customer | undefined, Error>({
     queryKey: ["/api/customer/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
-
-  // Handle OAuth success redirect
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('oauth') === 'success') {
-      // Remove the oauth parameter from URL
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, '', newUrl);
-      
-      // Refetch customer data to update the session
-      refetch();
-    }
-  }, [refetch]);
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {

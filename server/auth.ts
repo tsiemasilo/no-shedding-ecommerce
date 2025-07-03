@@ -75,22 +75,14 @@ export async function setupAuth(app: Express) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "/api/auth/google/callback",
+          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
         },
         async (accessToken: any, refreshToken: any, profile: any, done: any) => {
           try {
-            console.log("Google OAuth strategy called with profile:", {
-              id: profile.id,
-              displayName: profile.displayName,
-              emails: profile.emails,
-              name: profile.name
-            });
-            
             // Check if customer already exists
             let customer = await storage.getCustomerByEmail(profile.emails?.[0]?.value || "");
             
             if (!customer) {
-              console.log("Creating new customer from Google profile");
               // Create new customer from Google profile with a default password
               // They can use their email to log in directly with this default password
               const defaultPassword = await hashPassword("google123"); // Default password for Google users
@@ -104,9 +96,6 @@ export async function setupAuth(app: Express) {
                 city: "",
                 postalCode: "",
               });
-              console.log("Created new customer:", { id: customer.id, email: customer.email });
-            } else {
-              console.log("Found existing customer:", { id: customer.id, email: customer.email });
             }
             
             return done(null, customer as any);
@@ -125,24 +114,11 @@ export async function setupAuth(app: Express) {
   }
 
   passport.serializeUser((user: any, done) => {
-    console.log("Serializing user:", { 
-      id: user.id, 
-      username: user.username, 
-      email: user.email, 
-      role: user.role 
-    });
-    
-    if (user.username && user.role) {
+    if (user.username) {
       // This is an admin user
-      console.log("Serializing as admin user");
       done(null, { id: user.id, type: 'user' });
-    } else if (user.email) {
-      // This is a customer
-      console.log("Serializing as customer");
-      done(null, { id: user.id, type: 'customer' });
     } else {
-      // Fallback - assume customer
-      console.log("Serializing as fallback customer");
+      // This is a customer
       done(null, { id: user.id, type: 'customer' });
     }
   });
@@ -192,36 +168,15 @@ export async function setupAuth(app: Express) {
     next();
   });
 
-  // Test callback endpoint
-  app.get("/api/auth/google/test", (req, res) => {
-    console.log("Test callback hit with query:", req.query);
-    res.json({ message: "Test callback received", query: req.query });
-  });
-
-  // Catch any other google auth related requests
-  app.get("/api/auth/google/*", (req, res) => {
-    console.log("UNKNOWN GOOGLE AUTH ROUTE:", req.url);
-    console.log("Query:", req.query);
-    res.json({ message: "Unknown Google auth route", url: req.url, query: req.query });
-  });
-
   // Google OAuth routes
-  app.get("/api/auth/google", (req, res, next) => {
-    console.log("Starting Google OAuth flow");
-    passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
-  });
+  app.get("/api/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-  app.get("/api/auth/google/callback", 
-    (req, res, next) => {
-      console.log("=== CALLBACK ROUTE HIT ===");
-      console.log("Query params:", req.query);
-      console.log("URL:", req.url);
-      next();
-    },
-    passport.authenticate("google", { failureRedirect: "/auth" }),
+  app.get(
+    "/api/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/customer/auth" }),
     (req, res) => {
-      console.log("Google OAuth success, redirecting to home with oauth=success");
-      res.redirect("/?oauth=success");
+      // Successful authentication, redirect to home
+      res.redirect("/");
     }
   );
 }
