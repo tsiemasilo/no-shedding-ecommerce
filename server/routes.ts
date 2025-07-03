@@ -275,12 +275,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get current customer from session
   app.get("/api/customer/user", (req, res) => {
+    console.log("Customer endpoint called, authenticated:", req.isAuthenticated());
+    console.log("Customer user data:", req.user);
+    
     if (!req.isAuthenticated() || !req.user) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
     // Check if this is a customer (has email but no username/role)
     if (!req.user.email || req.user.username || req.user.role) {
+      console.log("Rejecting as not a customer:", { 
+        hasEmail: !!req.user.email, 
+        hasUsername: !!req.user.username, 
+        hasRole: !!req.user.role 
+      });
       return res.status(401).json({ message: "Not a customer account" });
     }
 
