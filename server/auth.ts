@@ -75,7 +75,7 @@ export async function setupAuth(app: Express) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
+          callbackURL: "/api/auth/google/callback",
         },
         async (accessToken: any, refreshToken: any, profile: any, done: any) => {
           try {
@@ -193,12 +193,16 @@ export async function setupAuth(app: Express) {
   });
 
   // Google OAuth routes
-  app.get("/api/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+  app.get("/api/auth/google", (req, res, next) => {
+    console.log("Starting Google OAuth flow");
+    passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+  });
 
   app.get(
     "/api/auth/google/callback",
     (req, res, next) => {
       console.log("Google OAuth callback hit with query:", req.query);
+      console.log("Google OAuth callback hit with URL:", req.url);
       passport.authenticate("google", { 
         failureRedirect: "/auth",
         successRedirect: "/?oauth=success"
