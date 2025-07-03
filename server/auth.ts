@@ -75,7 +75,7 @@ export async function setupAuth(app: Express) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
+          callbackURL: "/api/auth/google/callback",
         },
         async (accessToken: any, refreshToken: any, profile: any, done: any) => {
           try {
@@ -196,6 +196,13 @@ export async function setupAuth(app: Express) {
   app.get("/api/auth/google/test", (req, res) => {
     console.log("Test callback hit with query:", req.query);
     res.json({ message: "Test callback received", query: req.query });
+  });
+
+  // Catch any other google auth related requests
+  app.get("/api/auth/google/*", (req, res) => {
+    console.log("UNKNOWN GOOGLE AUTH ROUTE:", req.url);
+    console.log("Query:", req.query);
+    res.json({ message: "Unknown Google auth route", url: req.url, query: req.query });
   });
 
   // Google OAuth routes
