@@ -48,7 +48,6 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
     onError: (error: Error) => {
       toast({
         title: "Login failed",
-        description: error.message,
         variant: "destructive",
       });
     },
@@ -62,14 +61,13 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
     onSuccess: (customer: Customer) => {
       // Don't automatically log in the user
       toast({
-        title: "Account created successfully!",
-        description: `Account created for ${customer.firstName || customer.email}. Please sign in with your credentials.`,
+        title: "Account created",
+        variant: "success",
       });
     },
     onError: (error: Error) => {
       toast({
         title: "Registration failed",
-        description: error.message,
         variant: "destructive",
       });
     },
@@ -78,8 +76,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     queryClient.setQueryData(["/api/customer/user"], null);
     toast({
-      title: "Goodbye!",
-      description: "You've been logged out successfully.",
+      title: "Logged out",
     });
   };
 

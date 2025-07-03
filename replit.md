@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 3, 2025: Simplified toast notifications for cleaner professional messaging
+  - Removed verbose descriptions from all toast notifications
+  - Login/logout toasts now show simple titles only
+  - Cart notifications simplified to just "Cart cleared" and "Login required"
+  - Cart notification popup redesigned with simpler, cleaner styling
+  - View Cart button changed to subtle text link instead of full orange button
+
 - July 3, 2025: Fixed signup navigation and navbar scrolling behavior
   - Fixed new user signup flow to redirect to home page instead of checkout
   - Registration now automatically logs in new users and redirects appropriately

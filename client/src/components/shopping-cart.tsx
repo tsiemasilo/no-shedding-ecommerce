@@ -40,15 +40,13 @@ export function ShoppingCart() {
     clearCart();
     toast({
       title: "Cart cleared",
-      description: "All items have been removed from your cart.",
     });
   };
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
       toast({
-        title: "Login Required",
-        description: "Please log in to proceed with checkout.",
+        title: "Login required",
         variant: "destructive",
       });
       setIsOpen(false);

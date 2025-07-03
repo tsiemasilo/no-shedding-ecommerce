@@ -51,8 +51,7 @@ export function CartNotification({ isVisible, onClose, productName, productPrice
               <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-gray-900">Added to cart</p>
-                  <p className="text-sm text-gray-600 truncate">{productName}</p>
-                  <p className="text-sm font-medium text-gray-900">R{productPrice}</p>
+                  <p className="text-xs text-gray-500 truncate">{productName}</p>
                 </div>
                 
                 {/* Close button */}
@@ -69,7 +68,7 @@ export function CartNotification({ isVisible, onClose, productName, productPrice
               {/* View Cart Button */}
               <button
                 onClick={handleViewCart}
-                className="mt-3 w-full bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors duration-200"
+                className="mt-2 text-xs text-navy hover:text-orange-600 font-medium transition-colors duration-200"
                 type="button"
               >
                 View Cart

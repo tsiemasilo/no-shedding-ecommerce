@@ -60,13 +60,11 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/admin/user"], null);
       toast({
         title: "Logged out",
-        description: "You have been logged out successfully",
       });
     },
     onError: (error: Error) => {
       toast({
         title: "Logout failed",
-        description: error.message,
         variant: "destructive",
       });
     },
