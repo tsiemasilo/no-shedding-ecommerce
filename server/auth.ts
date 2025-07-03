@@ -114,11 +114,14 @@ export async function setupAuth(app: Express) {
   }
 
   passport.serializeUser((user: any, done) => {
-    if (user.username) {
+    if (user.username && user.role) {
       // This is an admin user
       done(null, { id: user.id, type: 'user' });
-    } else {
+    } else if (user.email) {
       // This is a customer
+      done(null, { id: user.id, type: 'customer' });
+    } else {
+      // Fallback - assume customer
       done(null, { id: user.id, type: 'customer' });
     }
   });
