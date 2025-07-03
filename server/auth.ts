@@ -75,7 +75,7 @@ export async function setupAuth(app: Express) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: "/api/auth/google/callback",
+          callbackURL: "https://no-shedding.replit.app/api/auth/google/callback",
         },
         async (accessToken: any, refreshToken: any, profile: any, done: any) => {
           try {

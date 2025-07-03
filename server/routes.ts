@@ -28,8 +28,16 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup authentication
+  // Setup authentication first - this registers OAuth routes
   await setupAuth(app);
+  
+  // Add debugging for auth routes
+  app.use((req, res, next) => {
+    if (req.url.includes('/api/auth/google')) {
+      console.log(`AUTH ROUTE: ${req.method} ${req.url}`);
+    }
+    next();
+  });
 
   // Ensure uploads directory exists
   const uploadsDir = path.join(process.cwd(), 'uploads');
