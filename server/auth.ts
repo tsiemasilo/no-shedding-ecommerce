@@ -192,6 +192,12 @@ export async function setupAuth(app: Express) {
     next();
   });
 
+  // Test callback endpoint
+  app.get("/api/auth/google/test", (req, res) => {
+    console.log("Test callback hit with query:", req.query);
+    res.json({ message: "Test callback received", query: req.query });
+  });
+
   // Google OAuth routes
   app.get("/api/auth/google", (req, res, next) => {
     console.log("Starting Google OAuth flow");
@@ -199,14 +205,17 @@ export async function setupAuth(app: Express) {
   });
 
   app.get(
-    "/api/auth/google/callback",
+    "/api/auth/google/callback", 
     (req, res, next) => {
-      console.log("Google OAuth callback hit with query:", req.query);
-      console.log("Google OAuth callback hit with URL:", req.url);
-      passport.authenticate("google", { 
-        failureRedirect: "/auth",
-        successRedirect: "/?oauth=success"
-      })(req, res, next);
+      console.log("Google OAuth callback hit!");
+      console.log("Query params:", req.query);
+      console.log("URL:", req.url);
+      next();
+    },
+    passport.authenticate("google", { failureRedirect: "/auth" }),
+    (req, res) => {
+      console.log("Google OAuth success, redirecting");
+      res.redirect("/?oauth=success");
     }
   );
 }
