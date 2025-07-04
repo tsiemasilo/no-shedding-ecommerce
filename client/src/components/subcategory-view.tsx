@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield, Flame, Coffee } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartphone, Shield, Flame, Coffee, Settings, Wind, Package, Eye, Zap, Fan } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import type { Subcategory, Product } from '@shared/schema';
@@ -32,24 +32,32 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
     enabled: !!selectedSubcategory
   });
 
-  const getSubcategoryIcon = (name: string) => {
-    switch (name) {
-      case 'Rechargeable LED Lanterns':
-        return Lightbulb;
-      case 'Solar Powered Lamp':
+  const getSubcategoryIcon = (iconName: string | null) => {
+    switch (iconName) {
+      case 'Zap':
+        return Zap;
+      case 'Sun':
         return Sun;
-      case 'Rechargeable Bulbs':
-        return Battery;
-      case 'Motion Sensor Lights':
-        return Radar;
-      case 'Power Banks':
+      case 'Lightbulb':
+        return Lightbulb;
+      case 'Eye':
+        return Eye;
+      case 'Smartphone':
         return Smartphone;
-      case 'UPS Devices':
+      case 'Shield':
         return Shield;
-      case 'Gas Stoves':
+      case 'Flame':
         return Flame;
-      case 'Kettles':
+      case 'Coffee':
         return Coffee;
+      case 'Settings':
+        return Settings;
+      case 'Wind':
+        return Wind;
+      case 'Package':
+        return Package;
+      case 'Fan':
+        return Fan;
       default:
         return Lightbulb;
     }
@@ -292,7 +300,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
         {subcategories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {subcategories.map((subcategory) => {
-              const IconComponent = getSubcategoryIcon(subcategory.name);
+              const IconComponent = getSubcategoryIcon(subcategory.icon);
               return (
                 <div
                   key={subcategory.id}

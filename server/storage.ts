@@ -485,14 +485,14 @@ export class DatabaseStorage implements IStorage {
         name: "Manual Coffee Grinders",
         description: "Hand-operated coffee grinders for fresh coffee anywhere",
         categoryId: 3,
-        icon: "Coffee",
+        icon: "Settings",
         slug: "manual-coffee-grinders"
       },
       {
         name: "Battery Operated Fans",
         description: "Portable fans powered by rechargeable batteries",
         categoryId: 3,
-        icon: "Fan",
+        icon: "Wind",
         slug: "battery-operated-fans"
       },
       // Comfort and Utility Kits subcategories
