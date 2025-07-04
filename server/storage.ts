@@ -480,6 +480,35 @@ export class DatabaseStorage implements IStorage {
         categoryId: 3,
         icon: "Coffee",
         slug: "kettles"
+      },
+      {
+        name: "Manual Coffee Grinders",
+        description: "Hand-operated coffee grinders for fresh coffee anywhere",
+        categoryId: 3,
+        icon: "Coffee",
+        slug: "manual-coffee-grinders"
+      },
+      {
+        name: "Battery Operated Fans",
+        description: "Portable fans powered by rechargeable batteries",
+        categoryId: 3,
+        icon: "Fan",
+        slug: "battery-operated-fans"
+      },
+      // Comfort and Utility Kits subcategories
+      {
+        name: "Load Shedding Survival Kits",
+        description: "Complete emergency kits for power outages and load shedding",
+        categoryId: 4,
+        icon: "Package",
+        slug: "load-shedding-survival-kits"
+      },
+      {
+        name: "Surge Protectors",
+        description: "Advanced surge protection for sensitive electronics",
+        categoryId: 4,
+        icon: "Shield",
+        slug: "surge-protectors"
       }
     ];
 
