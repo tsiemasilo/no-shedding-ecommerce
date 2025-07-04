@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 3, 2025: Added new subcategories and integrated icon system
+  - Added "Manual Coffee Grinders" and "Battery Operated Fans" under Appliance Alternatives
+  - Added "Load Shedding Survival Kits" and "Surge Protectors" under Comfort & Utility Kits
+  - Enhanced database schema to include icon column for subcategories
+  - Assigned appropriate icons to all subcategories (Coffee, Fan, Package, Shield, Zap, Sun, etc.)
+  - All subcategories now have proper iconography for better visual navigation
+
 - July 3, 2025: Enhanced customer profile page with comprehensive professional details
   - Redesigned profile layout with improved 3-column grid structure for customers
   - Added detailed customer information display with proper formatting and icons

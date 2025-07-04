@@ -16,6 +16,7 @@ export const subcategories = pgTable("subcategories", {
   description: text("description").notNull(),
   categoryId: integer("category_id").references(() => categories.id).notNull(),
   slug: text("slug").notNull().unique(),
+  icon: text("icon"),
 });
 
 export const products = pgTable("products", {
