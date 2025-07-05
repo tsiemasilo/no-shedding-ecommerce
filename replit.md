@@ -99,13 +99,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 5, 2025: Removed flip card animation for mobile version
+  - Disabled flip card animation completely on mobile devices
+  - Mobile cards now show only the front side with no flip behavior
+  - Added mobile-specific Add to Cart buttons on product card fronts
+  - Applied changes to both featured products and subcategory product displays
+  - Desktop version retains full flip card functionality
+
 - July 5, 2025: Fixed mobile version and optimized for mobile devices
   - Created responsive mobile header with separate layout for mobile/desktop
   - Mobile header includes compact logo, search bar, and navigation
   - Fixed shopping cart to be full-width on mobile (w-full sm:w-[500px])
   - Added mobile-specific CSS styles with proper touch targets (44px minimum)
   - Disabled zoom on mobile to prevent responsive layout issues
-  - Improved mobile flip card experience with smaller heights
   - All components now properly responsive for mobile screens
 
 - July 5, 2025: Implemented automatic scroll-to-top functionality for all page navigation

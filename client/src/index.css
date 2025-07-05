@@ -41,19 +41,31 @@ body {
   }
 }
 
-/* Improve mobile flip card experience */
+/* Disable flip card animation on mobile */
 @media (max-width: 767px) {
   .flip-card {
-    height: 350px !important; /* Smaller height for mobile */
+    height: auto !important; /* Auto height for mobile */
   }
   
   .flip-card-inner {
-    transform-style: preserve-3d;
+    transform-style: flat !important;
+    transform: none !important;
   }
   
-  /* Disable hover on mobile, use click instead */
+  /* Hide the back side completely on mobile */
+  .flip-card .flip-card-back {
+    display: none !important;
+  }
+  
+  /* Ensure front is always visible on mobile */
+  .flip-card .flip-card-front {
+    transform: none !important;
+    backface-visibility: visible !important;
+  }
+  
+  /* Disable hover effects completely on mobile */
   .flip-card:hover .flip-card-inner {
-    transform: none;
+    transform: none !important;
   }
 }
 

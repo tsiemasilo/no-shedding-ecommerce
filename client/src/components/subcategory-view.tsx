@@ -166,9 +166,24 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                             </div>
                           )}
                         </div>
-                        <div className="bg-white p-4 rounded-b-lg border-t h-20 flex flex-col justify-center z-10 relative">
+                        <div className="bg-white p-4 rounded-b-lg border-t flex flex-col justify-center z-10 relative">
                           <h3 className="font-semibold text-navy text-center text-sm line-clamp-2 mb-1 opacity-100">{product.name}</h3>
-                          <p className="text-charcoal text-center text-sm font-medium opacity-100">R{product.price}</p>
+                          <p className="text-charcoal text-center text-sm font-medium mb-2 opacity-100">R{product.price}</p>
+                          
+                          {/* Mobile Add to Cart Button - only visible on mobile */}
+                          <div className="md:hidden">
+                            <Button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddToCart(product);
+                              }}
+                              disabled={isAddingToCart || !product.inStock}
+                              className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 text-xs"
+                              size="sm"
+                            >
+                              {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
