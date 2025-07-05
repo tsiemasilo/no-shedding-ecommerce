@@ -33,7 +33,7 @@ export default function ProductDetails() {
     });
   };
 
-  const renderStars = (rating: string) => {
+  const renderStars = (rating: string, size: string = 'w-5 h-5') => {
     const numRating = parseFloat(rating);
     const fullStars = Math.floor(numRating);
     const hasHalfStar = numRating % 1 >= 0.5;
@@ -43,7 +43,7 @@ export default function ProductDetails() {
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
-            className={`w-5 h-5 ${
+            className={`${size} ${
               i < fullStars || (i === fullStars && hasHalfStar)
                 ? 'fill-current'
                 : 'stroke-current fill-transparent'
@@ -113,21 +113,21 @@ export default function ProductDetails() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Product Image Gallery */}
           <div className="relative lg:sticky lg:top-8">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-              <div className="relative bg-gradient-to-br from-sand/30 to-white p-6">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
+              <div className="relative bg-gradient-to-br from-sand/20 to-white p-4">
                 {/* Main Image Display */}
-                <div className="bg-white rounded-lg p-4 shadow-inner">
+                <div className="bg-white rounded-lg p-3 shadow-inner">
                   <img
                     src={currentImageIndex === -1 || !product.images || product.images.length === 0 || !product.images[currentImageIndex]
                       ? product.image 
                       : product.images[currentImageIndex]}
                     alt={product.name}
-                    className="w-full h-[500px] object-contain rounded-lg hover:scale-105 transition-transform duration-500 product-detail-image"
+                    className="w-full h-[400px] object-contain rounded-lg hover:scale-105 transition-transform duration-500 product-detail-image"
                     style={{ 
                       imageRendering: 'auto',
                       filter: 'brightness(1.05) contrast(1.1) saturate(1.05)',
@@ -151,20 +151,20 @@ export default function ProductDetails() {
 
             {/* Image Thumbnails */}
             {product.images && product.images.length > 0 && (
-              <div className="mt-4 grid grid-cols-4 gap-3">
+              <div className="mt-3 grid grid-cols-5 gap-2">
                 {/* Main image thumbnail */}
                 <button
                   onClick={() => setCurrentImageIndex(-1)}
-                  className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 bg-white p-1 ${
+                  className={`relative overflow-hidden rounded border transition-all duration-200 bg-white p-1 ${
                     currentImageIndex === -1 || (currentImageIndex === 0 && !product.images[0])
-                      ? 'border-navy shadow-lg scale-105' 
+                      ? 'border-navy shadow-md scale-105' 
                       : 'border-gray-200 hover:border-navy/50'
                   }`}
                 >
                   <img
                     src={product.image}
                     alt={`${product.name} - Main`}
-                    className="w-full h-16 object-contain rounded"
+                    className="w-full h-12 object-contain rounded"
                     style={{ 
                       imageRendering: 'auto',
                       filter: 'brightness(1.02) contrast(1.05)',
@@ -178,16 +178,16 @@ export default function ProductDetails() {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 bg-white p-1 ${
+                    className={`relative overflow-hidden rounded border transition-all duration-200 bg-white p-1 ${
                       currentImageIndex === index 
-                        ? 'border-navy shadow-lg scale-105' 
+                        ? 'border-navy shadow-md scale-105' 
                         : 'border-gray-200 hover:border-navy/50'
                     }`}
                   >
                     <img
                       src={image}
                       alt={`${product.name} - Image ${index + 2}`}
-                      className="w-full h-16 object-contain rounded"
+                      className="w-full h-12 object-contain rounded"
                       style={{ 
                         imageRendering: 'auto',
                         filter: 'brightness(1.02) contrast(1.05)',
@@ -200,23 +200,23 @@ export default function ProductDetails() {
             )}
             
             {/* Trust Indicators */}
-            <div className="mt-4 bg-white rounded-lg p-4 shadow-md border border-gray-100">
-              <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="mt-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+              <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="space-y-1">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                    <ShoppingCart className="w-4 h-4 text-green-600" />
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <ShoppingCart className="w-3 h-3 text-green-600" />
                   </div>
                   <p className="text-xs font-medium text-navy">Secure Payment</p>
                 </div>
                 <div className="space-y-1">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                    <Star className="w-4 h-4 text-blue-600" />
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                    <Star className="w-3 h-3 text-blue-600" />
                   </div>
                   <p className="text-xs font-medium text-navy">Quality Assured</p>
                 </div>
                 <div className="space-y-1">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                    <Heart className="w-4 h-4 text-purple-600" />
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+                    <Heart className="w-3 h-3 text-purple-600" />
                   </div>
                   <p className="text-xs font-medium text-navy">Customer Favorite</p>
                 </div>
@@ -225,36 +225,36 @@ export default function ProductDetails() {
           </div>
 
           {/* Product Information */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Product Header */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="space-y-4">
+            <div className="bg-white rounded-lg p-4 shadow-md border border-gray-100">
+              <div className="space-y-3">
                 <div>
-                  <h1 className="text-3xl font-bold text-navy leading-tight mb-3">{product.name}</h1>
-                  <div className="flex items-center space-x-6">
+                  <h1 className="text-2xl font-bold text-navy leading-tight mb-2">{product.name}</h1>
+                  <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center space-x-1">
                         {renderStars(product.rating)}
                       </div>
-                      <span className="text-lg font-semibold text-charcoal">({product.rating})</span>
-                      <span className="text-gray-500 text-sm">• Premium Quality</span>
+                      <span className="text-sm font-semibold text-charcoal">({product.rating})</span>
+                      <span className="text-gray-500 text-xs">• Premium Quality</span>
                     </div>
                     {product.inStock ? (
-                      <Badge className="bg-green-50 border-green-200 text-green-800 px-4 py-2 text-sm font-semibold">
+                      <Badge className="bg-green-50 border-green-200 text-green-800 px-3 py-1 text-xs font-semibold">
                         ✓ In Stock - Ready to Ship
                       </Badge>
                     ) : (
-                      <Badge variant="destructive" className="px-4 py-2 text-sm font-semibold">
+                      <Badge variant="destructive" className="px-3 py-1 text-xs font-semibold">
                         Out of Stock
                       </Badge>
                     )}
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-lg p-4 border border-gray-100">
+                <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-lg p-3 border border-gray-100">
                   <div className="flex items-baseline space-x-2">
-                    <span className="text-4xl font-bold text-navy">R{product.price}</span>
-                    <span className="text-gray-500 text-base">ZAR</span>
+                    <span className="text-3xl font-bold text-navy">R{product.price}</span>
+                    <span className="text-gray-500 text-sm">ZAR</span>
                   </div>
                   <p className="text-xs text-gray-600 mt-1">Competitive pricing • Free delivery on orders over R500</p>
                 </div>
@@ -262,35 +262,35 @@ export default function ProductDetails() {
             </div>
 
             {/* Product Description */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                <div className="w-6 h-6 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
+            <div className="bg-white rounded-lg p-4 shadow-md border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-3 flex items-center">
+                <div className="w-5 h-5 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
                   <Star className="w-3 h-3 text-electric" />
                 </div>
                 Product Overview
               </h3>
-              <p className="text-charcoal text-base leading-relaxed">{product.description}</p>
+              <p className="text-charcoal text-sm leading-relaxed">{product.description}</p>
             </div>
 
             {/* Key Features */}
             {product.keyFeatures && product.keyFeatures.length > 0 && (
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-                <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                  <div className="w-6 h-6 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
+              <div className="bg-white rounded-lg p-4 shadow-md border border-gray-100">
+                <h3 className="text-lg font-bold text-navy mb-3 flex items-center">
+                  <div className="w-5 h-5 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
                     <ShoppingCart className="w-3 h-3 text-electric" />
                   </div>
                   Key Features
                 </h3>
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {product.keyFeatures
                     .filter(feature => feature.trim().length > 0)
                     .map((feature, index) => {
                       // Split long features into bullet points if they contain multiple sentences
                       const bulletPoints = feature.includes('  ') ? feature.split('  ').filter(p => p.trim()) : [feature];
                       return bulletPoints.map((point, pointIndex) => (
-                        <div key={`${index}-${pointIndex}`} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-sand/20 to-electric/5 rounded-lg border border-gray-100">
-                          <div className="w-2 h-2 bg-electric rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-charcoal text-sm leading-relaxed">{point.trim()}</span>
+                        <div key={`${index}-${pointIndex}`} className="flex items-start space-x-2 p-2 bg-gradient-to-r from-sand/20 to-electric/5 rounded border border-gray-100">
+                          <div className="w-2 h-2 bg-electric rounded-full mt-1.5 flex-shrink-0"></div>
+                          <span className="text-charcoal text-xs leading-relaxed">{point.trim()}</span>
                         </div>
                       ));
                     })}
@@ -299,75 +299,77 @@ export default function ProductDetails() {
             )}
 
             {/* Action Buttons */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex space-x-4">
+            <div className="bg-white rounded-lg p-4 shadow-md border border-gray-100">
+              <div className="flex space-x-3">
                 <Button
                   onClick={handleAddToCart}
                   disabled={!product.inStock || isAddingToCart}
-                  className="flex-1 bg-gradient-to-r from-electric to-electric/90 hover:from-electric/90 hover:to-electric/80 text-navy font-bold py-4 text-lg shadow-lg rounded-lg border-2 border-electric/20 transition-all duration-300 hover:scale-105"
+                  className="flex-1 bg-gradient-to-r from-electric to-electric/90 hover:from-electric/90 hover:to-electric/80 text-navy font-bold py-3 text-base shadow-lg rounded-lg border-2 border-electric/20 transition-all duration-300 hover:scale-105"
                 >
-                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  <ShoppingCart className="w-4 h-4 mr-2" />
                   {!product.inStock ? 'Currently Unavailable' : 'Add to Cart'}
                 </Button>
                 
                 <Button
                   variant="outline"
-                  className="px-6 py-4 border-2 border-navy/20 text-navy hover:bg-navy hover:text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+                  className="px-4 py-3 border-2 border-navy/20 text-navy hover:bg-navy hover:text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                 >
-                  <Heart className="w-6 h-6 mr-2" />
+                  <Heart className="w-4 h-4 mr-2" />
                   Save
                 </Button>
               </div>
               
               {/* Additional Actions */}
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center text-gray-600">
-                    <ShoppingCart className="w-5 h-5 mr-2 text-green-600" />
-                    <span className="text-sm">Secure checkout</span>
+                    <ShoppingCart className="w-4 h-4 mr-2 text-green-600" />
+                    <span className="text-xs">Secure checkout</span>
                   </div>
                   <div className="flex items-center text-gray-600">
-                    <Star className="w-5 h-5 mr-2 text-blue-600" />
-                    <span className="text-sm">Quality guaranteed</span>
+                    <Star className="w-4 h-4 mr-2 text-blue-600" />
+                    <span className="text-xs">Quality guaranteed</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Product Specifications */}
-            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-              <h3 className="text-2xl font-bold text-navy mb-8 flex items-center">
-                <div className="w-8 h-8 bg-navy/20 rounded-lg flex items-center justify-center mr-3">
-                  <Star className="w-4 h-4 text-navy" />
+            <div className="bg-white rounded-lg p-4 shadow-md border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-4 flex items-center">
+                <div className="w-5 h-5 bg-navy/20 rounded-lg flex items-center justify-center mr-2">
+                  <Star className="w-3 h-3 text-navy" />
                 </div>
                 Product Specifications
               </h3>
               
-              <div className="grid grid-cols-1 gap-6">
-                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
+              <div className="grid grid-cols-1 gap-3">
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-lg p-3 border border-gray-100">
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-electric/20 rounded-full flex items-center justify-center">
-                        <Star className="w-5 h-5 text-electric" />
+                    <div className="flex items-center space-x-2">
+                      <div className="w-6 h-6 bg-electric/20 rounded-full flex items-center justify-center">
+                        <Star className="w-3 h-3 text-electric" />
                       </div>
-                      <span className="text-navy font-semibold text-lg">Quality Rating</span>
+                      <span className="text-navy font-semibold text-sm">Quality Rating</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      {renderStars(product.rating)}
-                      <span className="text-navy font-bold text-xl">{product.rating}/5</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1">
+                        {renderStars(product.rating, 'w-3 h-3')}
+                      </div>
+                      <span className="text-navy font-bold text-sm">{product.rating}/5</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100">
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-lg p-3 border border-gray-100">
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${product.inStock ? 'bg-green-100' : 'bg-red-100'}`}>
-                        <ShoppingCart className={`w-5 h-5 ${product.inStock ? 'text-green-600' : 'text-red-600'}`} />
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${product.inStock ? 'bg-green-100' : 'bg-red-100'}`}>
+                        <ShoppingCart className={`w-3 h-3 ${product.inStock ? 'text-green-600' : 'text-red-600'}`} />
                       </div>
-                      <span className="text-navy font-semibold text-lg">Availability Status</span>
+                      <span className="text-navy font-semibold text-sm">Availability Status</span>
                     </div>
-                    <span className={`font-bold text-xl ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`font-bold text-sm ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
                       {product.inStock ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </div>
