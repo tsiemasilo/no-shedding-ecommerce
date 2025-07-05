@@ -141,7 +141,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
               {products.map((product) => (
                 <div
                   key={product.id}
-                  className="flip-card w-full h-80 cursor-pointer"
+                  className="flip-card w-full h-96 cursor-pointer"
                   onClick={() => setLocation(`/product/${product.id}`)}
                 >
                   <div className="flip-card-inner">
@@ -166,9 +166,9 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                             </div>
                           )}
                         </div>
-                        <div className="bg-white p-3 rounded-b-lg border-t">
-                          <h3 className="font-semibold text-navy text-center text-sm line-clamp-2">{product.name}</h3>
-                          <p className="text-charcoal text-center text-xs mt-1">R{product.price}</p>
+                        <div className="bg-white p-4 rounded-b-lg border-t min-h-[4rem] flex flex-col justify-center">
+                          <h3 className="font-semibold text-navy text-center text-sm line-clamp-2 mb-1">{product.name}</h3>
+                          <p className="text-charcoal text-center text-sm font-medium">R{product.price}</p>
                         </div>
                       </div>
                     </div>
