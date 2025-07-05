@@ -31,6 +31,7 @@ export const products = pgTable("products", {
   featured: boolean("featured").default(false).notNull(),
   rating: decimal("rating", { precision: 2, scale: 1 }).default("0").notNull(),
   inStock: boolean("in_stock").default(true).notNull(),
+  keyFeatures: text("key_features").array().notNull().default([]), // Array of key features
 });
 
 export const cartItems = pgTable("cart_items", {

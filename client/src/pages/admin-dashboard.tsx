@@ -264,6 +264,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
     featured: product?.featured || false,
     rating: product?.rating || '0',
     inStock: product?.inStock || true,
+    keyFeatures: product?.keyFeatures || [],
   });
   
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('none');
@@ -282,6 +283,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         featured: product.featured,
         rating: product.rating,
         inStock: product.inStock,
+        keyFeatures: product.keyFeatures || [],
       });
       setSelectedSubcategoryId(product.subcategoryId ? product.subcategoryId.toString() : 'none');
     } else {
@@ -297,6 +299,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         featured: false,
         rating: '0',
         inStock: true,
+        keyFeatures: [],
       });
       setSelectedSubcategoryId('none');
     }
@@ -361,6 +364,49 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
             className="bg-white shadow-sm"
             required
           />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="keyFeatures">Key Features</Label>
+          <div className="space-y-2">
+            {formData.keyFeatures.map((feature, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Input
+                  value={feature}
+                  onChange={(e) => {
+                    const newFeatures = [...formData.keyFeatures];
+                    newFeatures[index] = e.target.value;
+                    setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
+                  }}
+                  placeholder="Enter a key feature"
+                  className="bg-white shadow-sm"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newFeatures = formData.keyFeatures.filter((_, i) => i !== index);
+                    setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
+                  }}
+                  disabled={isLoading}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, keyFeatures: [...prev.keyFeatures, ''] }));
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              + Add Key Feature
+            </Button>
+          </div>
         </div>
         
         <div className="space-y-2">

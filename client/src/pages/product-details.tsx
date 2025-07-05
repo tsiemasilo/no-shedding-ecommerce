@@ -272,6 +272,26 @@ export default function ProductDetails() {
               <p className="text-charcoal text-base leading-relaxed">{product.description}</p>
             </div>
 
+            {/* Key Features */}
+            {product.keyFeatures && product.keyFeatures.length > 0 && (
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                  <div className="w-6 h-6 bg-electric/20 rounded-lg flex items-center justify-center mr-2">
+                    <ShoppingCart className="w-3 h-3 text-electric" />
+                  </div>
+                  Key Features
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {product.keyFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-sand/20 to-electric/5 rounded-lg border border-gray-100">
+                      <div className="w-2 h-2 bg-electric rounded-full mt-2 flex-shrink-0"></div>
+                      <span className="text-charcoal text-sm leading-relaxed">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Action Buttons */}
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
               <div className="flex space-x-4">
