@@ -36,8 +36,9 @@ export function Header() {
 
   return (
     <header className="bg-navy shadow-lg sticky top-0 z-50">
-      <div className="w-full px-2">
-        <div className="flex items-center justify-between h-20">
+      <div className="w-full px-2 md:px-4">
+        {/* Desktop Header */}
+        <div className="hidden md:flex items-center justify-between h-20">
           {/* Logo - Far Left */}
           <div 
             className="flex items-center space-x-3 flex-shrink-0 ml-6 cursor-pointer"
@@ -151,6 +152,125 @@ export function Header() {
                 </span>
               )}
             </Button>
+          </div>
+        </div>
+
+        {/* Mobile Header */}
+        <div className="md:hidden">
+          {/* Top row - Logo and Actions */}
+          <div className="flex items-center justify-between h-16 px-4">
+            {/* Mobile Logo */}
+            <div 
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => setLocation('/')}
+            >
+              <div 
+                className="h-10 w-10 bg-white rounded-lg flex items-center justify-center p-1"
+              >
+                <img 
+                  src={logoImage} 
+                  alt="No Shedding Logo" 
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <span className="text-white text-lg font-bold">No Shedding</span>
+            </div>
+
+            {/* Mobile Actions */}
+            <div className="flex items-center space-x-2">
+              {/* Authentication */}
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setLocation('/profile')}
+                    className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg"
+                    title="Profile"
+                  >
+                    <User className="w-5 h-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg"
+                    onClick={handleLogout}
+                    title="Logout"
+                  >
+                    <LogOut className="w-5 h-5" />
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg"
+                  onClick={() => setLocation('/auth')}
+                  title="Sign In"
+                >
+                  <User className="w-5 h-5" />
+                </Button>
+              )}
+
+              {/* Mobile Shopping Cart */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="relative text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg"
+                onClick={() => setIsOpen(true)}
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-bright-orange text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold border border-navy">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Search Bar */}
+          <div className="px-4 pb-3">
+            <form onSubmit={handleSearch} className="relative">
+              <Input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 text-base bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-electric w-4 h-4" />
+            </form>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="flex justify-around py-2 border-t border-white/20">
+            <button 
+              onClick={() => {
+                setLocation('/');
+                setTimeout(() => {
+                  const categoriesSection = document.querySelector('.hero-categories');
+                  if (categoriesSection) {
+                    categoriesSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }, 300);
+              }}
+              className="text-white hover:text-electric transition-colors text-sm font-medium py-2"
+            >
+              Categories
+            </button>
+            <Link 
+              href="/about" 
+              className="text-white hover:text-electric transition-colors text-sm font-medium py-2"
+            >
+              About
+            </Link>
+            <Link 
+              href="/support" 
+              className="text-white hover:text-electric transition-colors text-sm font-medium py-2"
+            >
+              Support
+            </Link>
           </div>
         </div>
       </div>

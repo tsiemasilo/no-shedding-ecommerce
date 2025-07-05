@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 5, 2025: Fixed mobile version and optimized for mobile devices
+  - Created responsive mobile header with separate layout for mobile/desktop
+  - Mobile header includes compact logo, search bar, and navigation
+  - Fixed shopping cart to be full-width on mobile (w-full sm:w-[500px])
+  - Added mobile-specific CSS styles with proper touch targets (44px minimum)
+  - Disabled zoom on mobile to prevent responsive layout issues
+  - Improved mobile flip card experience with smaller heights
+  - All components now properly responsive for mobile screens
+
 - July 5, 2025: Implemented automatic scroll-to-top functionality for all page navigation
   - Created useScrollToTop hook that automatically scrolls to top when route changes
   - Applied to all pages via Router component in App.tsx

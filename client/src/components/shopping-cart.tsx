@@ -86,7 +86,7 @@ export function ShoppingCart() {
       />
       
       {/* Cart Sidebar */}
-      <div className="fixed right-0 top-0 h-full w-[500px] bg-gradient-to-b from-white to-gray-50 z-50 shadow-2xl transform transition-transform duration-300 ease-out">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-[500px] bg-gradient-to-b from-white to-gray-50 z-50 shadow-2xl transform transition-transform duration-300 ease-out">
         {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50 p-6 z-10">
           <div className="flex items-center justify-between">

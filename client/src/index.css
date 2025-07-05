@@ -2,12 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set website to 90% zoom level with increased font size */
+/* Set website to 90% zoom level with increased font size for desktop */
 body {
-  zoom: 0.9;
-  transform-origin: 0 0;
   font-size: 18px; /* Increased from default 16px */
   line-height: 1.6;
+}
+
+/* Apply zoom only on larger screens */
+@media (min-width: 768px) {
+  body {
+    zoom: 0.9;
+    transform-origin: 0 0;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  body {
+    font-size: 16px; /* Standard mobile font size */
+    line-height: 1.5;
+  }
+  
+  /* Ensure mobile viewport is not zoomed */
+  html {
+    overflow-x: hidden;
+  }
+  
+  /* Improve touch targets on mobile */
+  button, .button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent horizontal scroll on mobile */
+  .container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* Improve mobile flip card experience */
+@media (max-width: 767px) {
+  .flip-card {
+    height: 350px !important; /* Smaller height for mobile */
+  }
+  
+  .flip-card-inner {
+    transform-style: preserve-3d;
+  }
+  
+  /* Disable hover on mobile, use click instead */
+  .flip-card:hover .flip-card-inner {
+    transform: none;
+  }
 }
 
 :root {
