@@ -27,8 +27,8 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
 
   // Fetch products for the selected subcategory
   const { data: products = [], isLoading: isLoadingProducts } = useQuery<Product[]>({
-    queryKey: ['/api/products', { categoryId, subcategoryId: selectedSubcategory?.id }],
-    queryFn: () => fetch(`/api/products?categoryId=${categoryId}`).then(res => res.json()),
+    queryKey: ['/api/products', { subcategoryId: selectedSubcategory?.id }],
+    queryFn: () => fetch(`/api/products?subcategoryId=${selectedSubcategory?.id}`).then(res => res.json()),
     enabled: !!selectedSubcategory
   });
 

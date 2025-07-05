@@ -179,6 +179,7 @@ export default function AdminDashboard() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Subcategory</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Featured</TableHead>
                   <TableHead>In Stock</TableHead>
@@ -188,10 +189,12 @@ export default function AdminDashboard() {
               <TableBody>
                 {products.map((product) => {
                   const category = categories.find(c => c.id === product.categoryId);
+                  const subcategory = subcategories.find(s => s.id === product.subcategoryId);
                   return (
                     <TableRow key={product.id}>
                       <TableCell className="font-medium">{product.name}</TableCell>
                       <TableCell>{category?.name || 'Unknown'}</TableCell>
+                      <TableCell>{subcategory?.name || '-'}</TableCell>
                       <TableCell>R{product.price}</TableCell>
                       <TableCell>{product.featured ? 'Yes' : 'No'}</TableCell>
                       <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
@@ -257,6 +260,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
     image: product?.image || '',
     images: product?.images || [],
     categoryId: product?.categoryId || 1,
+    subcategoryId: product?.subcategoryId || null,
     featured: product?.featured || false,
     rating: product?.rating || '0',
     inStock: product?.inStock || true,
@@ -274,10 +278,12 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         image: product.image,
         images: product.images || [],
         categoryId: product.categoryId,
+        subcategoryId: product.subcategoryId || null,
         featured: product.featured,
         rating: product.rating,
         inStock: product.inStock,
       });
+      setSelectedSubcategoryId(product.subcategoryId ? product.subcategoryId.toString() : '');
     } else {
       // Reset form for new product
       setFormData({
@@ -287,16 +293,22 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         image: '',
         images: [],
         categoryId: 1,
+        subcategoryId: null,
         featured: false,
         rating: '0',
         inStock: true,
       });
+      setSelectedSubcategoryId('');
     }
   }, [product]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const submitData = {
+      ...formData,
+      subcategoryId: selectedSubcategoryId ? parseInt(selectedSubcategoryId) : null
+    };
+    onSubmit(submitData);
   };
 
   return (
@@ -430,7 +442,8 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
                 <SelectValue placeholder="Select subcategory..." />
               </SelectTrigger>
               <SelectContent>
-                {subcategories
+                <SelectItem value="">No subcategory</SelectItem>
+                {subcategories.filter(sub => sub.categoryId === formData.categoryId)
                   .filter(sub => sub.categoryId === formData.categoryId)
                   .map((subcategory) => (
                     <SelectItem key={subcategory.id} value={subcategory.id.toString()}>

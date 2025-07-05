@@ -119,11 +119,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Products
   app.get("/api/products", async (req, res) => {
     try {
-      const { categoryId, featured } = req.query;
+      const { categoryId, subcategoryId, featured } = req.query;
       
       let products;
       if (featured === "true") {
         products = await storage.getFeaturedProducts();
+      } else if (subcategoryId) {
+        products = await storage.getProductsBySubcategory(parseInt(subcategoryId as string));
       } else if (categoryId) {
         products = await storage.getProductsByCategory(parseInt(categoryId as string));
       } else {

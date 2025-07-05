@@ -19,6 +19,7 @@ export interface IStorage {
   getProducts(): Promise<Product[]>;
   getFeaturedProducts(): Promise<Product[]>;
   getProductsByCategory(categoryId: number): Promise<Product[]>;
+  getProductsBySubcategory(subcategoryId: number): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   
   // Cart
@@ -235,6 +236,10 @@ export class MemStorage implements IStorage {
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
     return Array.from(this.products.values()).filter(product => product.categoryId === categoryId);
+  }
+
+  async getProductsBySubcategory(subcategoryId: number): Promise<Product[]> {
+    return Array.from(this.products.values()).filter(product => product.subcategoryId === subcategoryId);
   }
 
   async getProduct(id: number): Promise<Product | undefined> {
@@ -556,6 +561,10 @@ export class DatabaseStorage implements IStorage {
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
     return await db.select().from(products).where(eq(products.categoryId, categoryId));
+  }
+
+  async getProductsBySubcategory(subcategoryId: number): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.subcategoryId, subcategoryId));
   }
 
   async getProduct(id: number): Promise<Product | undefined> {
