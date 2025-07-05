@@ -90,25 +90,24 @@ export function FeaturedProducts() {
               <div className="flip-card-inner">
                 {/* Front - Product Image */}
                 <div className="flip-card-front">
-                  <div className="relative w-full h-full flex flex-col">
-                    <div className="relative flex-1">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover rounded-t-lg"
-                      />
-                      {!product.inStock && (
-                        <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
-                          OUT OF STOCK
-                        </div>
-                      )}
-                      {product.featured && (
-                        <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-                          ⭐ Featured
-                        </div>
-                      )}
-                    </div>
-                    <div className="bg-white p-3 rounded-b-lg border-t">
+                  <div className="relative w-full h-full">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain bg-white rounded-lg"
+                      style={{ imageRendering: 'auto' }}
+                    />
+                    {!product.inStock && (
+                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded-tl-md rounded-br-md font-bold text-xs shadow-lg transform rotate-12 z-10">
+                        OUT OF STOCK
+                      </div>
+                    )}
+                    {product.featured && (
+                      <div className="absolute top-3 left-3 bg-electric text-navy px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+                        ⭐ Featured
+                      </div>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-3 rounded-b-lg">
                       <h3 className="font-semibold text-navy text-center text-sm line-clamp-2">{product.name}</h3>
                       <p className="text-charcoal text-center text-xs mt-1">R{product.price}</p>
                     </div>
@@ -117,25 +116,22 @@ export function FeaturedProducts() {
                 
                 {/* Back - Product Details */}
                 <div className="flip-card-back">
-                  <div className="w-full h-full bg-gradient-to-br from-navy to-navy/90 text-white p-6 rounded-lg flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-bold text-xl mb-3 text-electric">{product.name}</h3>
-                      <p className="text-sand text-sm mb-4 line-clamp-3">{product.description}</p>
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-2xl font-bold text-white">R{product.price}</span>
+                  <div className="w-full h-full bg-gradient-to-br from-navy to-navy/90 text-white p-6 rounded-lg flex flex-col justify-center items-center">
+                    <div className="text-center mb-6">
+                      <h3 className="font-bold text-2xl mb-4 text-electric">{product.name}</h3>
+                      <div className="flex items-center justify-center mb-4">
+                        <span className="text-3xl font-bold text-white">R{product.price}</span>
+                      </div>
+                      <div className="flex items-center justify-center mb-4">
                         {renderStars(product.rating)}
                       </div>
                     </div>
                     
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-sand">Rating:</span>
-                        <span className="text-white font-semibold">{product.rating}/5</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-sand">Stock:</span>
+                    <div className="space-y-4 w-full">
+                      <div className="flex items-center justify-between text-sm bg-white bg-opacity-10 p-3 rounded-lg">
+                        <span className="text-sand">Stock Status:</span>
                         <span className={`font-semibold ${product.inStock ? 'text-green-400' : 'text-red-400'}`}>
-                          {product.inStock ? 'Available' : 'Out of Stock'}
+                          {product.inStock ? 'In Stock' : 'Out of Stock'}
                         </span>
                       </div>
                       
@@ -145,7 +141,7 @@ export function FeaturedProducts() {
                           handleAddToCart(product);
                         }}
                         disabled={isAddingToCart || !product.inStock}
-                        className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-2 text-sm mt-4"
+                        className="w-full bg-electric hover:bg-electric/90 text-navy font-semibold py-3"
                       >
                         {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
                       </Button>

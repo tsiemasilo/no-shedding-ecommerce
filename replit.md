@@ -99,6 +99,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 5, 2025: Enhanced product flip card image display and quality
+  - Changed product images from object-cover to object-contain for full image visibility
+  - Removed product descriptions from flip card back side for cleaner layout
+  - Improved image quality with CSS filters (brightness and contrast boost)
+  - Enhanced flip animation duration and added better shadow effects
+  - Product name and price now overlay on front image with semi-transparent background
+  - Centered layout on flip side with better spacing and visual hierarchy
+
 - July 3, 2025: Added new subcategories and integrated icon system
   - Added "Manual Coffee Grinders" and "Battery Operated Fans" under Appliance Alternatives
   - Added "Load Shedding Survival Kits" and "Surge Protectors" under Comfort & Utility Kits
