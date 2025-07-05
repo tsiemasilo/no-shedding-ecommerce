@@ -119,15 +119,22 @@ export default function ProductDetails() {
           {/* Product Image Gallery */}
           <div className="relative lg:sticky lg:top-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-              <div className="relative bg-gradient-to-br from-sand/30 to-white p-4">
+              <div className="relative bg-gradient-to-br from-sand/30 to-white p-6">
                 {/* Main Image Display */}
-                <img
-                  src={currentImageIndex === -1 || !product.images || product.images.length === 0 || !product.images[currentImageIndex]
-                    ? product.image 
-                    : product.images[currentImageIndex]}
-                  alt={product.name}
-                  className="w-full h-[400px] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-500"
-                />
+                <div className="bg-white rounded-lg p-4 shadow-inner">
+                  <img
+                    src={currentImageIndex === -1 || !product.images || product.images.length === 0 || !product.images[currentImageIndex]
+                      ? product.image 
+                      : product.images[currentImageIndex]}
+                    alt={product.name}
+                    className="w-full h-[500px] object-contain rounded-lg hover:scale-105 transition-transform duration-500 product-detail-image"
+                    style={{ 
+                      imageRendering: 'auto',
+                      filter: 'brightness(1.05) contrast(1.1) saturate(1.05)',
+                      backgroundColor: 'white'
+                    }}
+                  />
+                </div>
                 {product.featured && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-bright-orange to-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
                     <Star className="w-3 h-3 inline mr-1" />
@@ -144,11 +151,11 @@ export default function ProductDetails() {
 
             {/* Image Thumbnails */}
             {product.images && product.images.length > 0 && (
-              <div className="mt-4 grid grid-cols-4 gap-2">
+              <div className="mt-4 grid grid-cols-4 gap-3">
                 {/* Main image thumbnail */}
                 <button
                   onClick={() => setCurrentImageIndex(-1)}
-                  className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                  className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 bg-white p-1 ${
                     currentImageIndex === -1 || (currentImageIndex === 0 && !product.images[0])
                       ? 'border-navy shadow-lg scale-105' 
                       : 'border-gray-200 hover:border-navy/50'
@@ -157,7 +164,12 @@ export default function ProductDetails() {
                   <img
                     src={product.image}
                     alt={`${product.name} - Main`}
-                    className="w-full h-14 object-cover"
+                    className="w-full h-16 object-contain rounded"
+                    style={{ 
+                      imageRendering: 'auto',
+                      filter: 'brightness(1.02) contrast(1.05)',
+                      backgroundColor: 'white'
+                    }}
                   />
                 </button>
                 
@@ -166,7 +178,7 @@ export default function ProductDetails() {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                    className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 bg-white p-1 ${
                       currentImageIndex === index 
                         ? 'border-navy shadow-lg scale-105' 
                         : 'border-gray-200 hover:border-navy/50'
@@ -175,7 +187,12 @@ export default function ProductDetails() {
                     <img
                       src={image}
                       alt={`${product.name} - Image ${index + 2}`}
-                      className="w-full h-14 object-cover"
+                      className="w-full h-16 object-contain rounded"
+                      style={{ 
+                        imageRendering: 'auto',
+                        filter: 'brightness(1.02) contrast(1.05)',
+                        backgroundColor: 'white'
+                      }}
                     />
                   </button>
                 ))}

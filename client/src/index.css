@@ -181,8 +181,19 @@ body {
 .flip-card-front img {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  image-rendering: pixelated;
+  image-rendering: auto;
   filter: brightness(1.05) contrast(1.1);
+}
+
+/* Product Detail Page Image Quality */
+.product-detail-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .flip-card-back {
