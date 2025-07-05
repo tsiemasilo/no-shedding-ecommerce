@@ -49,10 +49,11 @@ export interface IStorage {
   deleteProduct(id: number): Promise<boolean>;
   
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class MemStorage implements IStorage {
+  sessionStore: any;
   private categories: Map<number, Category>;
   private subcategories: Map<number, Subcategory>;
   private products: Map<number, Product>;
@@ -69,6 +70,7 @@ export class MemStorage implements IStorage {
   private currentCustomerId: number;
 
   constructor() {
+    this.sessionStore = null; // Initialize sessionStore for interface compliance
     this.categories = new Map();
     this.subcategories = new Map();
     this.products = new Map();
@@ -189,7 +191,11 @@ export class MemStorage implements IStorage {
     ];
 
     subcategoriesData.forEach(subcat => {
-      const subcategory: Subcategory = { ...subcat, id: this.currentSubcategoryId++ };
+      const subcategory: Subcategory = { 
+        ...subcat, 
+        id: this.currentSubcategoryId++,
+        icon: subcat.icon || null
+      };
       this.subcategories.set(subcategory.id, subcategory);
     });
 
@@ -309,7 +315,11 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const newUser: User = { ...user, id: this.currentUserId++ };
+    const newUser: User = { 
+      ...user, 
+      id: this.currentUserId++,
+      role: user.role || "user"
+    };
     this.users.set(newUser.id, newUser);
     return newUser;
   }
@@ -325,8 +335,15 @@ export class MemStorage implements IStorage {
 
   async createCustomer(customer: InsertCustomer): Promise<Customer> {
     const newCustomer: Customer = { 
-      ...customer, 
       id: this.currentCustomerId++,
+      email: customer.email,
+      password: customer.password,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      phone: customer.phone || null,
+      address: customer.address || null,
+      city: customer.city || null,
+      postalCode: customer.postalCode || null,
       createdAt: new Date()
     };
     this.customers.set(newCustomer.id, newCustomer);
@@ -343,7 +360,19 @@ export class MemStorage implements IStorage {
 
   // Product management methods
   async createProduct(product: InsertProduct): Promise<Product> {
-    const newProduct: Product = { ...product, id: this.currentProductId++ };
+    const newProduct: Product = { 
+      id: this.currentProductId++,
+      name: product.name,
+      description: product.description,
+      image: product.image,
+      price: product.price,
+      categoryId: product.categoryId,
+      images: product.images || [],
+      subcategoryId: product.subcategoryId || null,
+      featured: product.featured || false,
+      rating: product.rating || "0",
+      inStock: product.inStock || true
+    };
     this.products.set(newProduct.id, newProduct);
     return newProduct;
   }
@@ -366,14 +395,15 @@ export class MemStorage implements IStorage {
 const PostgresSessionStore = connectPg(session);
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
       pool, 
       createTableIfMissing: true 
     });
-    this.seedData();
+    // Don't call seedData() in constructor - it's async and blocks initialization
+    this.seedData().catch(console.error);
   }
 
   private async seedData() {
