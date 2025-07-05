@@ -169,12 +169,13 @@ body {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .flip-card-front {
   background-color: #fff;
   border: 2px solid #e5e7eb;
+  overflow: hidden;
 }
 
 .flip-card-front img {

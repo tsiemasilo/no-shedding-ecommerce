@@ -148,7 +148,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                     {/* Front - Product Image */}
                     <div className="flip-card-front">
                       <div className="relative w-full h-full flex flex-col">
-                        <div className="relative flex-1">
+                        <div className="relative h-72">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -166,9 +166,9 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                             </div>
                           )}
                         </div>
-                        <div className="bg-white p-4 rounded-b-lg border-t min-h-[4rem] flex flex-col justify-center">
-                          <h3 className="font-semibold text-navy text-center text-sm line-clamp-2 mb-1">{product.name}</h3>
-                          <p className="text-charcoal text-center text-sm font-medium">R{product.price}</p>
+                        <div className="bg-white p-4 rounded-b-lg border-t h-20 flex flex-col justify-center z-10 relative">
+                          <h3 className="font-semibold text-navy text-center text-sm line-clamp-2 mb-1 opacity-100">{product.name}</h3>
+                          <p className="text-charcoal text-center text-sm font-medium opacity-100">R{product.price}</p>
                         </div>
                       </div>
                     </div>
