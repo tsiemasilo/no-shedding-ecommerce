@@ -369,12 +369,12 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         <div className="space-y-2">
           <Label htmlFor="keyFeatures">Key Features</Label>
           <div className="space-y-2">
-            {formData.keyFeatures.map((feature, index) => (
+            {(formData.keyFeatures || []).map((feature, index) => (
               <div key={index} className="flex items-center space-x-2">
                 <Input
                   value={feature}
                   onChange={(e) => {
-                    const newFeatures = [...formData.keyFeatures];
+                    const newFeatures = [...(formData.keyFeatures || [])];
                     newFeatures[index] = e.target.value;
                     setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
                   }}
@@ -386,7 +386,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    const newFeatures = formData.keyFeatures.filter((_, i) => i !== index);
+                    const newFeatures = (formData.keyFeatures || []).filter((_, i) => i !== index);
                     setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
                   }}
                   disabled={isLoading}
@@ -399,7 +399,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
               type="button"
               variant="outline"
               onClick={() => {
-                setFormData(prev => ({ ...prev, keyFeatures: [...prev.keyFeatures, ''] }));
+                setFormData(prev => ({ ...prev, keyFeatures: [...(prev.keyFeatures || []), ''] }));
               }}
               disabled={isLoading}
               className="w-full"

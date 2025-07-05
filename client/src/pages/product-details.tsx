@@ -281,13 +281,19 @@ export default function ProductDetails() {
                   </div>
                   Key Features
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {product.keyFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-sand/20 to-electric/5 rounded-lg border border-gray-100">
-                      <div className="w-2 h-2 bg-electric rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-charcoal text-sm leading-relaxed">{feature}</span>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-1 gap-3">
+                  {product.keyFeatures
+                    .filter(feature => feature.trim().length > 0)
+                    .map((feature, index) => {
+                      // Split long features into bullet points if they contain multiple sentences
+                      const bulletPoints = feature.includes('  ') ? feature.split('  ').filter(p => p.trim()) : [feature];
+                      return bulletPoints.map((point, pointIndex) => (
+                        <div key={`${index}-${pointIndex}`} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-sand/20 to-electric/5 rounded-lg border border-gray-100">
+                          <div className="w-2 h-2 bg-electric rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-charcoal text-sm leading-relaxed">{point.trim()}</span>
+                        </div>
+                      ));
+                    })}
                 </div>
               </div>
             )}
