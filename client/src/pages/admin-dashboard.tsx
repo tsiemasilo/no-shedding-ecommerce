@@ -266,7 +266,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
     inStock: product?.inStock || true,
   });
   
-  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('');
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('none');
 
   // Update form data when product changes (for editing)
   useEffect(() => {
@@ -283,7 +283,7 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         rating: product.rating,
         inStock: product.inStock,
       });
-      setSelectedSubcategoryId(product.subcategoryId ? product.subcategoryId.toString() : '');
+      setSelectedSubcategoryId(product.subcategoryId ? product.subcategoryId.toString() : 'none');
     } else {
       // Reset form for new product
       setFormData({
@@ -298,15 +298,22 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
         rating: '0',
         inStock: true,
       });
-      setSelectedSubcategoryId('');
+      setSelectedSubcategoryId('none');
     }
   }, [product]);
+
+  // Reset subcategory when category changes
+  useEffect(() => {
+    if (!product) {
+      setSelectedSubcategoryId('none');
+    }
+  }, [formData.categoryId, product]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const submitData = {
       ...formData,
-      subcategoryId: selectedSubcategoryId ? parseInt(selectedSubcategoryId) : null
+      subcategoryId: selectedSubcategoryId && selectedSubcategoryId !== 'none' ? parseInt(selectedSubcategoryId) : null
     };
     onSubmit(submitData);
   };
@@ -442,9 +449,8 @@ function ProductDialog({ categories, subcategories, product, onSubmit, isLoading
                 <SelectValue placeholder="Select subcategory..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">No subcategory</SelectItem>
+                <SelectItem value="none">No subcategory</SelectItem>
                 {subcategories.filter(sub => sub.categoryId === formData.categoryId)
-                  .filter(sub => sub.categoryId === formData.categoryId)
                   .map((subcategory) => (
                     <SelectItem key={subcategory.id} value={subcategory.id.toString()}>
                       {subcategory.name}
