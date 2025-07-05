@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 5, 2025: Implemented automatic scroll-to-top functionality for all page navigation
+  - Created useScrollToTop hook that automatically scrolls to top when route changes
+  - Applied to all pages via Router component in App.tsx
+  - Cleaned up manual scroll implementations from header navigation
+  - Preserved special scroll behavior for categories section navigation
+  - Every page now automatically scrolls to top when accessed
+
 - July 5, 2025: Redesigned product page layout to reduce cramped feeling and improve readability
   - Reduced image size from 500px to 400px height for better proportions
   - Made thumbnails smaller (h-12 instead of h-16) with 5-column grid layout

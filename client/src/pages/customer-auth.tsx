@@ -168,10 +168,7 @@ export default function CustomerAuth() {
             {/* Logo - Clickable to go home */}
             <div 
               className="flex items-center space-x-3 cursor-pointer"
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                setLocation('/');
-              }}
+              onClick={() => setLocation('/')}
             >
               <div 
                 className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"

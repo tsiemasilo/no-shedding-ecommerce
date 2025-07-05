@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { CustomerAuthProvider } from "@/hooks/use-customer-auth";
 import { CartProvider } from "@/hooks/use-cart";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ShoppingCart } from "@/components/shopping-cart";
 import { CartNotificationWrapper } from "@/components/cart-notification-wrapper";
 import Home from "@/pages/home";
@@ -21,6 +22,9 @@ import Profile from "@/pages/profile";
 import SearchResults from "@/pages/search-results";
 
 function Router() {
+  // Automatically scroll to top when route changes
+  useScrollToTop();
+  
   return (
     <Switch>
       <Route path="/" component={Home} />

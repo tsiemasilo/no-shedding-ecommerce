@@ -41,10 +41,7 @@ export function Header() {
           {/* Logo - Far Left */}
           <div 
             className="flex items-center space-x-3 flex-shrink-0 ml-6 cursor-pointer"
-            onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-              setLocation('/');
-            }}
+            onClick={() => setLocation('/')}
           >
             <div 
               className="h-16 w-16 bg-white rounded-lg flex items-center justify-center p-1"
@@ -76,8 +73,6 @@ export function Header() {
           <nav className="hidden lg:flex items-center space-x-6 mr-4">
             <button 
               onClick={() => {
-                // First scroll to top, then navigate to home page and scroll to categories section
-                window.scrollTo({ top: 0, behavior: 'smooth' });
                 setLocation('/');
                 setTimeout(() => {
                   const categoriesSection = document.querySelector('.hero-categories');
@@ -93,14 +88,12 @@ export function Header() {
             <Link 
               href="/about" 
               className="text-white hover:text-electric transition-colors text-lg font-medium"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               About
             </Link>
             <Link 
               href="/support" 
               className="text-white hover:text-electric transition-colors text-lg font-medium"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               Support
             </Link>
@@ -113,10 +106,7 @@ export function Header() {
               <div className="flex items-center space-x-2">
                 <Button
                   variant="ghost"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setLocation('/profile');
-                  }}
+                  onClick={() => setLocation('/profile')}
                   className="text-white hover:text-electric hover:bg-white/10 p-2 rounded-lg transition-all duration-200"
                   title="Profile"
                 >
