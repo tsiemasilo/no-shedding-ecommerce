@@ -99,6 +99,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Added Motion Sensor Alarms subcategory to Safety & Security category
+  - Created new subcategory "Motion Sensor Alarms" under Safety & Security (ID: 6)
+  - Added comprehensive description for motion detection alarm systems
+  - Assigned ShieldAlert icon for security-focused visual representation
+  - Available at slug: motion-sensor-alarms
+  - Ready for product additions through admin dashboard
+
 - July 5, 2025: Extended automatic product synchronization to include Alarms subcategory
   - Motion Sensor products now automatically appear in three subcategories: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
   - Three-way synchronization ensures products appear in both Lighting Solutions and Safety & Security categories
