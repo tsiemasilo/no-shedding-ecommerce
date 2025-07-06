@@ -40,6 +40,12 @@ export function Header() {
       .map((product: any) => product.name)
     : [];
 
+  // Debug logging
+  console.log('Search query:', searchQuery);
+  console.log('Products available:', products.length);
+  console.log('Suggestions generated:', suggestions);
+  console.log('Show suggestions:', showSuggestions);
+
   // Handle clicking outside search to close suggestions
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
