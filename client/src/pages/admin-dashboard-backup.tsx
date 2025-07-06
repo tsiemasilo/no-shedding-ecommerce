@@ -10,12 +10,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ImageUpload } from '@/components/ui/image-upload';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { useLocation } from 'wouter';
 import { Loader2, Plus, Edit, Trash2, LogOut, Home, MessageSquare, Mail, Reply, Calendar, User, Phone, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import type { Product, Category, Subcategory, InsertProduct, SupportRequest } from '@shared/schema';
 
@@ -249,85 +249,106 @@ export default function AdminDashboard() {
                     <ProductDialog
                       categories={categories}
                       subcategories={subcategories}
-                      onSubmit={(data: InsertProduct) => createProductMutation.mutate(data)}
+                      onSubmit={(data) => createProductMutation.mutate(data)}
                       isLoading={createProductMutation.isPending}
                     />
                   </Dialog>
                 </div>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Subcategory</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Featured</TableHead>
-                      <TableHead>In Stock</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {products.map((product) => {
-                      const category = categories.find(c => c.id === product.categoryId);
-                      const subcategory = subcategories.find(s => s.id === product.subcategoryId);
-                      
-                      return (
-                        <TableRow key={product.id}>
-                          <TableCell className="font-medium">{product.name}</TableCell>
-                          <TableCell>{category?.name || 'Unknown'}</TableCell>
-                          <TableCell>{subcategory?.name || 'None'}</TableCell>
-                          <TableCell>R{product.price}</TableCell>
-                          <TableCell>
-                            <Badge variant={product.featured ? "default" : "secondary"}>
-                              {product.featured ? "Featured" : "Regular"}
-                            </Badge>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Subcategory</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Featured</TableHead>
+                  <TableHead>In Stock</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(() => {
+                  // Group products by category
+                  const productsByCategory = new Map<string, Product[]>();
+                  products.forEach(product => {
+                    const category = categories.find(c => c.id === product.categoryId);
+                    const categoryName = category?.name || 'Unknown';
+                    if (!productsByCategory.has(categoryName)) {
+                      productsByCategory.set(categoryName, []);
+                    }
+                    productsByCategory.get(categoryName)!.push(product);
+                  });
+
+                  // Sort categories alphabetically
+                  const sortedCategories = Array.from(productsByCategory.keys()).sort();
+
+                  return sortedCategories.map(categoryName => {
+                    const categoryProducts = productsByCategory.get(categoryName)!;
+                    return (
+                      <React.Fragment key={categoryName}>
+                        {/* Category Header */}
+                        <TableRow className="bg-sand/20 hover:bg-sand/30">
+                          <TableCell colSpan={7} className="font-bold text-navy py-4 px-6">
+                            {categoryName} ({categoryProducts.length} products)
                           </TableCell>
-                          <TableCell>
-                            <Badge variant={product.inStock ? "default" : "destructive"}>
-                              {product.inStock ? "In Stock" : "Out of Stock"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Dialog>
-                                <DialogTrigger asChild>
+                        </TableRow>
+                        {/* Products in this category */}
+                        {categoryProducts.map((product) => {
+                          const category = categories.find(c => c.id === product.categoryId);
+                          const subcategory = subcategories.find(s => s.id === product.subcategoryId);
+                          return (
+                            <TableRow key={product.id} className="hover:bg-sand/10">
+                              <TableCell className="font-medium pl-8">{product.name}</TableCell>
+                              <TableCell>{category?.name || 'Unknown'}</TableCell>
+                              <TableCell>{subcategory?.name || '-'}</TableCell>
+                              <TableCell>R{product.price}</TableCell>
+                              <TableCell>{product.featured ? 'Yes' : 'No'}</TableCell>
+                              <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
+                              <TableCell>
+                                <div className="flex gap-2">
+                                  <Dialog open={editingProduct?.id === product.id} onOpenChange={(open) => !open && setEditingProduct(null)}>
+                                    <DialogTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setEditingProduct(product)}
+                                      >
+                                        <Edit className="w-4 h-4" />
+                                      </Button>
+                                    </DialogTrigger>
+                                    <ProductDialog
+                                      categories={categories}
+                                      subcategories={subcategories}
+                                      product={editingProduct}
+                                      onSubmit={(data) => updateProductMutation.mutate({ id: product.id, data })}
+                                      isLoading={updateProductMutation.isPending}
+                                    />
+                                  </Dialog>
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setEditingProduct(product)}
+                                    onClick={() => {
+                                      if (confirm('Are you sure you want to delete this product?')) {
+                                        deleteProductMutation.mutate(product.id);
+                                      }
+                                    }}
+                                    disabled={deleteProductMutation.isPending}
                                   >
-                                    <Edit className="w-4 h-4" />
+                                    <Trash2 className="w-4 h-4" />
                                   </Button>
-                                </DialogTrigger>
-                                <ProductDialog
-                                  categories={categories}
-                                  subcategories={subcategories}
-                                  product={editingProduct}
-                                  onSubmit={(data: InsertProduct) => updateProductMutation.mutate({ id: product.id, data })}
-                                  isLoading={updateProductMutation.isPending}
-                                />
-                              </Dialog>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to delete this product?')) {
-                                    deleteProductMutation.mutate(product.id);
-                                  }
-                                }}
-                                disabled={deleteProductMutation.isPending}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </React.Fragment>
+                    );
+                  });
+                })()}
+              </TableBody>
+            </Table>
               </CardContent>
             </Card>
           </TabsContent>
@@ -385,7 +406,7 @@ export default function AdminDashboard() {
                                 )}
                                 <div className="flex items-center gap-2 text-sm text-gray-600">
                                   <Calendar className="w-4 h-4" />
-                                  <span>{request.createdAt ? format(new Date(request.createdAt), 'PPp') : 'No date'}</span>
+                                  <span>{format(new Date(request.createdAt), 'PPp')}</span>
                                 </div>
                               </div>
 
@@ -431,7 +452,7 @@ export default function AdminDashboard() {
                     <Badge className={`${getSupportTypeColor(replyingTo.supportType)} text-white mr-2`}>
                       {getSupportTypeLabel(replyingTo.supportType)}
                     </Badge>
-                    {replyingTo.createdAt ? format(new Date(replyingTo.createdAt), 'PPp') : 'No date'}
+                    {format(new Date(replyingTo.createdAt), 'PPp')}
                   </p>
                   <p className="text-gray-700 whitespace-pre-wrap">{replyingTo.description}</p>
                 </div>
@@ -481,25 +502,326 @@ export default function AdminDashboard() {
   );
 }
 
-// Product Dialog Component placeholder - this should be extracted from the original file
-function ProductDialog({ categories, subcategories, product, onSubmit, isLoading }: {
+interface ProductDialogProps {
   categories: Category[];
   subcategories: Subcategory[];
   product?: Product | null;
   onSubmit: (data: InsertProduct) => void;
   isLoading: boolean;
-}) {
+}
+
+function ProductDialog({ categories, subcategories, product, onSubmit, isLoading }: ProductDialogProps) {
+  const [formData, setFormData] = useState<InsertProduct>({
+    name: product?.name || '',
+    description: product?.description || '',
+    price: product?.price || '0',
+    image: product?.image || '',
+    images: product?.images || [],
+    categoryId: product?.categoryId || 1,
+    subcategoryId: product?.subcategoryId || null,
+    featured: product?.featured || false,
+    rating: product?.rating || '0',
+    inStock: product?.inStock || true,
+    keyFeatures: product?.keyFeatures || [],
+  });
+  
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('none');
+
+  // Update form data when product changes (for editing)
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        images: product.images || [],
+        categoryId: product.categoryId,
+        subcategoryId: product.subcategoryId || null,
+        featured: product.featured,
+        rating: product.rating,
+        inStock: product.inStock,
+        keyFeatures: product.keyFeatures || [],
+      });
+      setSelectedSubcategoryId(product.subcategoryId ? product.subcategoryId.toString() : 'none');
+    } else {
+      // Reset form for new product
+      setFormData({
+        name: '',
+        description: '',
+        price: '0',
+        image: '',
+        images: [],
+        categoryId: 1,
+        subcategoryId: null,
+        featured: false,
+        rating: '0',
+        inStock: true,
+        keyFeatures: [],
+      });
+      setSelectedSubcategoryId('none');
+    }
+  }, [product]);
+
+  // Reset subcategory when category changes
+  useEffect(() => {
+    if (!product) {
+      setSelectedSubcategoryId('none');
+    }
+  }, [formData.categoryId, product]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const submitData = {
+      ...formData,
+      subcategoryId: selectedSubcategoryId && selectedSubcategoryId !== 'none' ? parseInt(selectedSubcategoryId) : null
+    };
+    onSubmit(submitData);
+  };
+
   return (
-    <DialogContent>
+    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
         <DialogDescription>
-          {product ? 'Update product information' : 'Create a new product for your store'}
+          {product ? 'Update the product details below' : 'Fill in the details for the new product'}
         </DialogDescription>
       </DialogHeader>
-      <div className="p-4">
-        <p>Product dialog implementation needed</p>
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Product Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              className="bg-white shadow-sm"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="price">Price</Label>
+            <Input
+              id="price"
+              type="number"
+              step="0.01"
+              value={formData.price}
+              onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+              className="bg-white shadow-sm"
+              required
+            />
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            value={formData.description}
+            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            className="bg-white shadow-sm"
+            required
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="keyFeatures">Key Features</Label>
+          <div className="space-y-2">
+            {(formData.keyFeatures || []).map((feature, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Input
+                  value={feature}
+                  onChange={(e) => {
+                    const newFeatures = [...(formData.keyFeatures || [])];
+                    newFeatures[index] = e.target.value;
+                    setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
+                  }}
+                  placeholder="Enter a key feature"
+                  className="bg-white shadow-sm"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newFeatures = (formData.keyFeatures || []).filter((_, i) => i !== index);
+                    setFormData(prev => ({ ...prev, keyFeatures: newFeatures }));
+                  }}
+                  disabled={isLoading}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, keyFeatures: [...(prev.keyFeatures || []), ''] }));
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              + Add Key Feature
+            </Button>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="image">Main Product Image</Label>
+          <ImageUpload
+            value={formData.image}
+            onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="images">Additional Product Images</Label>
+          <div className="space-y-4">
+            {(formData.images || []).map((imageUrl, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <div className="flex-1">
+                  <ImageUpload
+                    value={imageUrl}
+                    onChange={(url) => {
+                      const newImages = [...(formData.images || [])];
+                      newImages[index] = url;
+                      setFormData(prev => ({ ...prev, images: newImages }));
+                    }}
+                    disabled={isLoading}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newImages = (formData.images || []).filter((_, i) => i !== index);
+                    setFormData(prev => ({ ...prev, images: newImages }));
+                  }}
+                  disabled={isLoading}
+                  className="mt-2"
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData(prev => ({ ...prev, images: [...(prev.images || []), ''] }));
+              }}
+              disabled={isLoading}
+              className="w-full"
+            >
+              + Add Another Image
+            </Button>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="category">Category</Label>
+            <Select 
+              value={formData.categoryId.toString()} 
+              onValueChange={(value) => {
+                setFormData(prev => ({ ...prev, categoryId: parseInt(value) }));
+                setSelectedSubcategoryId(''); // Reset subcategory when category changes
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="subcategory">Subcategory (Optional)</Label>
+            <Select 
+              value={selectedSubcategoryId} 
+              onValueChange={(value) => setSelectedSubcategoryId(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select subcategory..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">No subcategory</SelectItem>
+                {subcategories.filter(sub => sub.categoryId === formData.categoryId)
+                  .map((subcategory) => (
+                    <SelectItem key={subcategory.id} value={subcategory.id.toString()}>
+                      {subcategory.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="rating">Rating</Label>
+          <Input
+            id="rating"
+            type="number"
+            step="0.1"
+            min="0"
+            max="5"
+            value={formData.rating}
+            onChange={(e) => setFormData(prev => ({ ...prev, rating: e.target.value }))}
+            required
+          />
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="featured"
+              checked={formData.featured}
+              onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+              className="w-4 h-4 text-navy border-gray-300 rounded focus:ring-navy"
+            />
+            <Label htmlFor="featured" className="text-sm font-medium">Featured Product</Label>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="stockStatus" className="text-sm font-medium">Stock Status</Label>
+            <Select 
+              value={formData.inStock ? "in-stock" : "out-of-stock"} 
+              onValueChange={(value) => setFormData(prev => ({ ...prev, inStock: value === "in-stock" }))}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="in-stock">✅ In Stock</SelectItem>
+                <SelectItem value="out-of-stock">❌ Out of Stock</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
+        <Button 
+          type="submit" 
+          className="w-full bg-navy hover:bg-navy/90 text-white"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              {product ? 'Updating...' : 'Creating...'}
+            </>
+          ) : (
+            product ? 'Update Product' : 'Create Product'
+          )}
+        </Button>
+      </form>
     </DialogContent>
   );
 }

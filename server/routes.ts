@@ -568,7 +568,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Support Management Routes
+  app.get("/api/admin/support-requests", async (req, res) => {
+    try {
+      const supportRequests = await storage.getAllSupportRequests();
+      res.json(supportRequests);
+    } catch (error) {
+      console.error('Error fetching support requests:', error);
+      res.status(500).json({ message: "Failed to fetch support requests" });
+    }
+  });
 
+  app.post("/api/admin/support-reply", async (req, res) => {
+    try {
+      const { supportRequestId, message } = req.body;
+      
+      if (!supportRequestId || !message) {
+        return res.status(400).json({ message: "Support request ID and message are required" });
+      }
+
+      // Get the support request
+      const supportRequest = await storage.getSupportRequest(supportRequestId);
+      if (!supportRequest) {
+        return res.status(404).json({ message: "Support request not found" });
+      }
+
+      // Send reply email
+      await emailService.sendSupportReply({
+        name: supportRequest.name,
+        email: supportRequest.email,
+        supportType: supportRequest.supportType,
+        originalMessage: supportRequest.description,
+        replyMessage: message
+      });
+
+      res.json({ message: "Reply sent successfully" });
+    } catch (error) {
+      console.error('Error sending support reply:', error);
+      res.status(500).json({ message: "Failed to send reply" });
+    }
+  });
+
+  // Support endpoint (customer-facing)
+  app.post("/api/support", async (req, res) => {
+    try {
+      const supportRequest = insertSupportRequestSchema.parse(req.body);
+      
+      // Save to database
+      const request = await storage.createSupportRequest(supportRequest);
+      
+      // Send support emails
+      try {
+        await emailService.sendSupportRequest({
+          name: supportRequest.name,
+          email: supportRequest.email,
+          phone: supportRequest.phone || undefined,
+          supportType: supportRequest.supportType,
+          description: supportRequest.description
+        });
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+        // Continue with success response even if email fails
+      }
+
+      res.json({ message: "Support request submitted successfully" });
+    } catch (error) {
+      console.error('Support request error:', error);
+      res.status(500).json({ message: "Failed to submit support request" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

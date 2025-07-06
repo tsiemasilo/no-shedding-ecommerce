@@ -1,6 +1,6 @@
 import { categories, products, cartItems, newsletters, subcategories, users, customers, supportRequests, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type Customer, type SupportRequest, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser, type InsertCustomer, type InsertSupportRequest } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import session from "express-session";
 import MemoryStore from "memorystore";
 
@@ -33,6 +33,8 @@ export interface IStorage {
   
   // Support
   createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest>;
+  getAllSupportRequests(): Promise<SupportRequest[]>;
+  getSupportRequest(id: number): Promise<SupportRequest | undefined>;
   
   // Users/Auth
   getUser(id: number): Promise<User | undefined>;
@@ -334,6 +336,19 @@ export class MemStorage implements IStorage {
     };
     this.supportRequests.set(newRequest.id, newRequest);
     return newRequest;
+  }
+
+  async getAllSupportRequests(): Promise<SupportRequest[]> {
+    const requests = Array.from(this.supportRequests.values());
+    return requests.sort((a, b) => {
+      const timeA = a.createdAt?.getTime() || 0;
+      const timeB = b.createdAt?.getTime() || 0;
+      return timeB - timeA;
+    });
+  }
+
+  async getSupportRequest(id: number): Promise<SupportRequest | undefined> {
+    return this.supportRequests.get(id);
   }
 
   // User/Auth methods
@@ -701,6 +716,15 @@ export class DatabaseStorage implements IStorage {
   async createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest> {
     const [newRequest] = await db.insert(supportRequests).values(request).returning();
     return newRequest;
+  }
+
+  async getAllSupportRequests(): Promise<SupportRequest[]> {
+    return await db.select().from(supportRequests).orderBy(desc(supportRequests.createdAt));
+  }
+
+  async getSupportRequest(id: number): Promise<SupportRequest | undefined> {
+    const [supportRequest] = await db.select().from(supportRequests).where(eq(supportRequests.id, id));
+    return supportRequest;
   }
 
   async getUser(id: number): Promise<User | undefined> {
