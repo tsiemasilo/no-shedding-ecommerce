@@ -707,20 +707,69 @@ function ProductDialog({
           </div>
         </div>
 
-        {/* Description Section */}
+        {/* Description & Key Features Section */}
         <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
-          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Description</h3>
-          <div>
-            <Label htmlFor="description" className="text-[#333333] font-medium">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              required
-              rows={4}
-              className="mt-2 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
-              placeholder="Enter detailed product description..."
-            />
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Description & Features</h3>
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="description" className="text-[#333333] font-medium">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                required
+                rows={4}
+                className="mt-2 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+                placeholder="Enter detailed product description..."
+              />
+            </div>
+
+            {/* Key Features Sub-section */}
+            <div>
+              <h4 className="text-md font-medium text-[#0A2342] mb-3">Key Features</h4>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Input
+                    value={newFeature}
+                    onChange={(e) => setNewFeature(e.target.value)}
+                    placeholder="Add a key feature..."
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addFeature();
+                      }
+                    }}
+                    className="flex-1 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+                  />
+                  <Button 
+                    type="button" 
+                    onClick={addFeature}
+                    className="h-12 px-6 bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </Button>
+                </div>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {keyFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-3 p-4 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
+                      <span className="flex-1 text-[#333333]">{feature}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFeature(index)}
+                        className="h-8 w-8 p-0 text-[#FF6F00] hover:bg-[#FF6F00] hover:text-white"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  {keyFeatures.length === 0 && (
+                    <p className="text-[#333333]/60 text-center py-4 italic">No key features added yet</p>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -788,7 +837,7 @@ function ProductDialog({
         {/* Product Status & Options Section */}
         <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
           <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Status & Options</h3>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 gap-6">
             <div>
               <Label htmlFor="rating" className="text-[#333333] font-medium">Rating (0-5)</Label>
               <Input
@@ -815,64 +864,52 @@ function ProductDialog({
                 <Label htmlFor="featured" className="text-[#333333] font-medium">Featured Product</Label>
               </div>
             </div>
-            <div className="flex flex-col justify-center">
-              <div className="flex items-center space-x-3 p-3 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
-                <input
-                  type="checkbox"
-                  id="inStock"
-                  checked={formData.inStock}
-                  onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
-                  className="w-5 h-5 text-[#FFC300] border-[#333333]/20 rounded focus:ring-[#FFC300]"
-                />
-                <Label htmlFor="inStock" className="text-[#333333] font-medium">In Stock</Label>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* Key Features Section */}
-        <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
-          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Key Features</h3>
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <Input
-                value={newFeature}
-                onChange={(e) => setNewFeature(e.target.value)}
-                placeholder="Add a key feature..."
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addFeature();
-                  }
-                }}
-                className="flex-1 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
-              />
-              <Button 
-                type="button" 
-                onClick={addFeature}
-                className="h-12 px-6 bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none"
+          
+          {/* Stock Status Options */}
+          <div className="mt-6">
+            <Label className="text-[#333333] font-medium mb-3 block">Stock Status</Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  formData.inStock 
+                    ? 'bg-[#FDF6EC] border-[#FFC300] ring-2 ring-[#FFC300]/20' 
+                    : 'bg-gray-50 border-gray-200 hover:border-[#FFC300]/50'
+                }`}
+                onClick={() => setFormData({ ...formData, inStock: true })}
               >
-                <Plus className="w-5 h-5" />
-              </Button>
-            </div>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
-              {keyFeatures.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
-                  <span className="flex-1 text-[#333333]">{feature}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeFeature(index)}
-                    className="h-8 w-8 p-0 text-[#FF6F00] hover:bg-[#FF6F00] hover:text-white"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    id="inStock"
+                    name="stockStatus"
+                    checked={formData.inStock}
+                    onChange={() => setFormData({ ...formData, inStock: true })}
+                    className="w-5 h-5 text-[#FFC300] border-[#333333]/20 focus:ring-[#FFC300]"
+                  />
+                  <Label htmlFor="inStock" className="text-[#333333] font-medium cursor-pointer">In Stock</Label>
                 </div>
-              ))}
-              {keyFeatures.length === 0 && (
-                <p className="text-[#333333]/60 text-center py-4 italic">No key features added yet</p>
-              )}
+              </div>
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  !formData.inStock 
+                    ? 'bg-[#FDF6EC] border-[#FF6F00] ring-2 ring-[#FF6F00]/20' 
+                    : 'bg-gray-50 border-gray-200 hover:border-[#FF6F00]/50'
+                }`}
+                onClick={() => setFormData({ ...formData, inStock: false })}
+              >
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    id="outOfStock"
+                    name="stockStatus"
+                    checked={!formData.inStock}
+                    onChange={() => setFormData({ ...formData, inStock: false })}
+                    className="w-5 h-5 text-[#FF6F00] border-[#333333]/20 focus:ring-[#FF6F00]"
+                  />
+                  <Label htmlFor="outOfStock" className="text-[#333333] font-medium cursor-pointer">Out of Stock</Label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
