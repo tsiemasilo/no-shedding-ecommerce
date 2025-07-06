@@ -48,6 +48,7 @@ export function Header() {
   if (searchQuery.length > 0) {
     console.log('Search query:', searchQuery);
     console.log('Products available:', products.length);
+    console.log('First product:', products[0]);
     console.log('Suggestions generated:', suggestions);
     console.log('Show suggestions:', showSuggestions);
   }
