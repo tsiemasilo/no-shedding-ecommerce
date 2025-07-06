@@ -62,7 +62,17 @@ export default function AdminDashboard() {
           }
         }
       });
-      return apiRequest('/api/admin/products', { method: 'POST', body: formData });
+      const response = await fetch('/api/admin/products', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return response;
     },
     onSuccess: () => {
       toast({ title: "Product created successfully" });
@@ -85,7 +95,17 @@ export default function AdminDashboard() {
           }
         }
       });
-      return apiRequest(`/api/admin/products/${id}`, { method: 'PUT', body: formData });
+      const response = await fetch(`/api/admin/products/${id}`, {
+        method: 'PUT',
+        body: formData,
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return response;
     },
     onSuccess: () => {
       toast({ title: "Product updated successfully" });
@@ -99,7 +119,7 @@ export default function AdminDashboard() {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/admin/products/${id}`, { method: 'DELETE' });
+      return apiRequest('DELETE', `/api/admin/products/${id}`);
     },
     onSuccess: () => {
       toast({ title: "Product deleted successfully" });
@@ -134,10 +154,7 @@ export default function AdminDashboard() {
   // Reply mutation
   const replyMutation = useMutation({
     mutationFn: async ({ id, message }: { id: number; message: string }) => {
-      return apiRequest('/api/admin/support-reply', {
-        method: 'POST',
-        body: { id, message }
-      });
+      return apiRequest('POST', '/api/admin/support-reply', { id, message });
     },
     onSuccess: () => {
       toast({ title: "Reply sent successfully" });

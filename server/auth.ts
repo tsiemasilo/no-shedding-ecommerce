@@ -161,7 +161,29 @@ export async function setupAuth(app: Express) {
   });
 
   // Middleware to check if user is authenticated admin (apply after login/user routes)
-  app.use("/api/admin/products*", (req, res, next) => {
+  app.use("/api/admin/products", (req, res, next) => {
+    if (!req.isAuthenticated() || req.user?.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  });
+  
+  app.use("/api/admin/products/:id", (req, res, next) => {
+    if (!req.isAuthenticated() || req.user?.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  });
+  
+  // Admin support request middleware
+  app.use("/api/admin/support-requests", (req, res, next) => {
+    if (!req.isAuthenticated() || req.user?.role !== "admin") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  });
+  
+  app.use("/api/admin/support-requests/:id", (req, res, next) => {
     if (!req.isAuthenticated() || req.user?.role !== "admin") {
       return res.status(401).json({ message: "Unauthorized" });
     }
