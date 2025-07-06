@@ -667,167 +667,228 @@ function ProductDialog({
   );
 
   return (
-    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-      <DialogHeader>
-        <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
+    <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">
+      <DialogHeader className="border-b border-[#333333]/20 pb-4 mb-6">
+        <DialogTitle className="text-2xl font-bold text-[#0A2342]">
+          {product ? 'Edit Product' : 'Add New Product'}
+        </DialogTitle>
+        <p className="text-sm text-[#333333]/70 mt-1">
+          Fill in the details below to {product ? 'update' : 'create'} your product
+        </p>
       </DialogHeader>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Information Section */}
+        <div className="bg-[#FDF6EC] p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Basic Information</h3>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="name" className="text-[#333333] font-medium">Product Name</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+                placeholder="Enter product name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="price" className="text-[#333333] font-medium">Price (R)</Label>
+              <Input
+                id="price"
+                type="number"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                required
+                className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Description Section */}
+        <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Description</h3>
           <div>
-            <Label htmlFor="name">Product Name</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            <Label htmlFor="description" className="text-[#333333] font-medium">Description</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
+              rows={4}
+              className="mt-2 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+              placeholder="Enter detailed product description..."
             />
           </div>
+        </div>
+
+        {/* Image Upload Section */}
+        <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Image</h3>
           <div>
-            <Label htmlFor="price">Price (R)</Label>
-            <Input
-              id="price"
-              type="number"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-              required
-            />
+            <Label htmlFor="image" className="text-[#333333] font-medium">Product Image</Label>
+            <div className="mt-2">
+              <ImageUpload
+                value={formData.image}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+              />
+            </div>
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            required
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="image">Product Image</Label>
-          <ImageUpload
-            value={formData.image}
-            onChange={(url) => setFormData({ ...formData, image: url })}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="category">Category</Label>
-            <Select
-              value={formData.categoryId.toString()}
-              onValueChange={(value) => setFormData({ 
-                ...formData, 
-                categoryId: Number(value),
-                subcategoryId: 0 
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    {category.name}
-                  </SelectItem>
+        {/* Category & Classification Section */}
+        <div className="bg-[#FDF6EC] p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Category & Classification</h3>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="category" className="text-[#333333] font-medium">Category</Label>
+              <Select
+                value={formData.categoryId.toString()}
+                onValueChange={(value) => setFormData({ 
+                  ...formData, 
+                  categoryId: Number(value),
+                  subcategoryId: 0 
+                })}
+              >
+                <SelectTrigger className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id.toString()}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="subcategory" className="text-[#333333] font-medium">Subcategory</Label>
+              <Select
+                value={formData.subcategoryId.toString()}
+                onValueChange={(value) => setFormData({ ...formData, subcategoryId: Number(value) })}
+              >
+                <SelectTrigger className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]">
+                  <SelectValue placeholder="Select subcategory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredSubcategories.map((subcategory) => (
+                    <SelectItem key={subcategory.id} value={subcategory.id.toString()}>
+                      {subcategory.name}
+                    </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-          </div>
-          <div>
-            <Label htmlFor="subcategory">Subcategory</Label>
-            <Select
-              value={formData.subcategoryId.toString()}
-              onValueChange={(value) => setFormData({ ...formData, subcategoryId: Number(value) })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select subcategory" />
-              </SelectTrigger>
-              <SelectContent>
-                {filteredSubcategories.map((subcategory) => (
-                  <SelectItem key={subcategory.id} value={subcategory.id.toString()}>
-                    {subcategory.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="rating">Rating</Label>
-            <Input
-              id="rating"
-              type="number"
-              min="0"
-              max="5"
-              step="0.1"
-              value={formData.rating}
-              onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="featured"
-              checked={formData.featured}
-              onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-            />
-            <Label htmlFor="featured">Featured Product</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="inStock"
-              checked={formData.inStock}
-              onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
-            />
-            <Label htmlFor="inStock">In Stock</Label>
-          </div>
-        </div>
-
-        <div>
-          <Label>Key Features</Label>
-          <div className="flex gap-2 mb-2">
-            <Input
-              value={newFeature}
-              onChange={(e) => setNewFeature(e.target.value)}
-              placeholder="Add a key feature..."
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  addFeature();
-                }
-              }}
-            />
-            <Button type="button" onClick={addFeature}>
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div>
-          <div className="space-y-2">
-            {keyFeatures.map((feature, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                <span className="flex-1 text-sm">{feature}</span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeFeature(index)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+        {/* Product Status & Options Section */}
+        <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Product Status & Options</h3>
+          <div className="grid grid-cols-3 gap-6">
+            <div>
+              <Label htmlFor="rating" className="text-[#333333] font-medium">Rating (0-5)</Label>
+              <Input
+                id="rating"
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                value={formData.rating}
+                onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
+                className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+                placeholder="4.5"
+              />
+            </div>
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center space-x-3 p-3 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  checked={formData.featured}
+                  onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                  className="w-5 h-5 text-[#FFC300] border-[#333333]/20 rounded focus:ring-[#FFC300]"
+                />
+                <Label htmlFor="featured" className="text-[#333333] font-medium">Featured Product</Label>
               </div>
-            ))}
+            </div>
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center space-x-3 p-3 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
+                <input
+                  type="checkbox"
+                  id="inStock"
+                  checked={formData.inStock}
+                  onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
+                  className="w-5 h-5 text-[#FFC300] border-[#333333]/20 rounded focus:ring-[#FFC300]"
+                />
+                <Label htmlFor="inStock" className="text-[#333333] font-medium">In Stock</Label>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-end space-x-2">
-          <Button type="submit" disabled={isLoading}>
+        {/* Key Features Section */}
+        <div className="bg-white p-6 rounded-lg border border-[#333333]/20">
+          <h3 className="text-lg font-semibold text-[#0A2342] mb-4">Key Features</h3>
+          <div className="space-y-4">
+            <div className="flex gap-3">
+              <Input
+                value={newFeature}
+                onChange={(e) => setNewFeature(e.target.value)}
+                placeholder="Add a key feature..."
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addFeature();
+                  }
+                }}
+                className="flex-1 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
+              />
+              <Button 
+                type="button" 
+                onClick={addFeature}
+                className="h-12 px-6 bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none"
+              >
+                <Plus className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="space-y-3 max-h-60 overflow-y-auto">
+              {keyFeatures.map((feature, index) => (
+                <div key={index} className="flex items-center gap-3 p-4 bg-[#FDF6EC] rounded-lg border border-[#FFC300]/30">
+                  <span className="flex-1 text-[#333333]">{feature}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeFeature(index)}
+                    className="h-8 w-8 p-0 text-[#FF6F00] hover:bg-[#FF6F00] hover:text-white"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+              {keyFeatures.length === 0 && (
+                <p className="text-[#333333]/60 text-center py-4 italic">No key features added yet</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-4 pt-6 border-t border-[#333333]/20">
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className="h-12 px-8 bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none font-semibold text-base"
+          >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : null}
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+            ) : (
+              <Box className="w-5 h-5 mr-2" />
+            )}
             {product ? 'Update Product' : 'Create Product'}
           </Button>
         </div>
