@@ -508,6 +508,13 @@ export class DatabaseStorage implements IStorage {
         icon: "Eye",
         slug: "motion-sensor-lights"
       },
+      {
+        name: "Rechargeable Flash Lights",
+        description: "Portable rechargeable flashlights for emergency and everyday use",
+        categoryId: 1,
+        icon: "Flashlight",
+        slug: "rechargeable-flash-lights"
+      },
       // Power Solutions subcategories
       {
         name: "Power Banks",
