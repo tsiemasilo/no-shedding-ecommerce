@@ -1,101 +1,32 @@
 import { Search, User, ShoppingCart, LogOut } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useCustomerAuth } from '@/hooks/use-customer-auth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useLocation, Link } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
 import logoImage from '@assets/WhatsApp Image 2025-06-28 at 20.45.26_1751136519966.jpeg';
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const { cartCount, setIsOpen } = useCart();
   const { customer, isAuthenticated: isCustomerAuth, logout: customerLogout } = useCustomerAuth();
   const { user: adminUser, logoutMutation: adminLogout } = useAdminAuth();
   const [, setLocation] = useLocation();
-  const searchRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Fetch all products for search suggestions
-  const { data: products = [] } = useQuery({
-    queryKey: ['/api/products'],
-  });
 
   // Check if either customer or admin is authenticated
   const isAuthenticated = isCustomerAuth || !!adminUser;
   const currentUser = adminUser || customer;
 
-  // Generate search suggestions based on products
-  const suggestions = searchQuery.trim().length >= 2 ? 
-    products
-      .filter((product: any) => 
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      .slice(0, 6)
-      .map((product: any) => product.name)
-    : [];
 
 
 
-  // Handle clicking outside search to close suggestions
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-        setSelectedSuggestion(-1);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setLocation(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setShowSuggestions(false);
-    }
-  };
-
-  const handleSuggestionClick = (suggestion: string) => {
-    console.log('Suggestion clicked:', suggestion);
-    setSearchQuery(suggestion);
-    setShowSuggestions(false);
-    
-    // Find the product that matches this suggestion
-    const matchedProduct = products.find((product: any) => product.name === suggestion);
-    
-    if (matchedProduct) {
-      // Navigate to the specific product details page
-      setLocation(`/product/${matchedProduct.id}`);
-    } else {
-      // If no specific product found, go to search results
-      setLocation(`/search?q=${encodeURIComponent(suggestion)}`);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (suggestions.length === 0) return;
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setSelectedSuggestion(prev => 
-        prev < suggestions.length - 1 ? prev + 1 : prev
-      );
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setSelectedSuggestion(prev => prev > 0 ? prev - 1 : -1);
-    } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
-      e.preventDefault();
-      handleSuggestionClick(suggestions[selectedSuggestion]);
-    } else if (e.key === 'Escape') {
-      setShowSuggestions(false);
-      setSelectedSuggestion(-1);
     }
   };
 
@@ -130,56 +61,16 @@ export function Header() {
           </div>
           
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8" ref={searchRef}>
+          <div className="flex-1 max-w-2xl mx-8">
             <form onSubmit={handleSearch} className="relative">
               <Input
-                ref={inputRef}
                 type="text"
                 placeholder="Search for electrical solutions..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowSuggestions(e.target.value.trim().length >= 2);
-                  setSelectedSuggestion(-1);
-                }}
-                onKeyDown={handleKeyDown}
-                onFocus={() => {
-                  if (searchQuery.trim().length >= 2) {
-                    setShowSuggestions(true);
-                  }
-                }}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 text-lg bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-electric w-5 h-5" />
-              
-              {/* Search Suggestions Dropdown */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`px-4 py-3 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0 ${
-                        index === selectedSuggestion ? 'bg-electric/10 text-navy' : 'text-gray-800'
-                      }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleSuggestionClick(suggestion);
-                      }}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <Search className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm font-medium">{suggestion}</span>
-                      </div>
-                    </div>
-                  ))}
-                  {searchQuery.trim().length >= 2 && suggestions.length === 0 && (
-                    <div className="px-4 py-3 text-gray-500 text-sm">
-                      No products found matching "{searchQuery}"
-                    </div>
-                  )}
-                </div>
-              )}
             </form>
           </div>
           
@@ -343,50 +234,16 @@ export function Header() {
           </div>
 
           {/* Mobile Search Bar */}
-          <div className="px-4 pb-3" ref={searchRef}>
+          <div className="px-4 pb-3">
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowSuggestions(e.target.value.trim().length >= 2);
-                  setSelectedSuggestion(-1);
-                }}
-                onKeyDown={handleKeyDown}
-                onFocus={() => {
-                  if (searchQuery.trim().length >= 2) {
-                    setShowSuggestions(true);
-                  }
-                }}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 text-base bg-white border border-gray-300 focus:ring-2 focus:ring-electric focus:border-electric"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-electric w-4 h-4" />
-              
-              {/* Mobile Search Suggestions Dropdown */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-b-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`px-3 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0 ${
-                        index === selectedSuggestion ? 'bg-electric/10 text-navy' : 'text-gray-800'
-                      }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleSuggestionClick(suggestion);
-                      }}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Search className="w-3 h-3 text-gray-400" />
-                        <span className="text-xs font-medium">{suggestion}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </form>
           </div>
 
