@@ -384,14 +384,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const productData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(productData);
       
-      // Auto-duplicate products between Motion Sensor Lights and Alarms subcategories
+      // Auto-duplicate products between Motion Sensor Lights and Alarms subcategories (excluding Motion Sensor Alarms)
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
-      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
+      // Note: Motion Sensor Alarms (ID: 17) is excluded from auto-sync to allow independent product management
       
       if (productData.subcategoryId === MOTION_SENSOR_LIGHTING_ID) {
-        // Create duplicates in Security subcategories (Motion Sensor Lights, Alarms, and Motion Sensor Alarms)
+        // Create duplicates in Security subcategories (Motion Sensor Lights and Alarms only)
         const motionSensorSecurityData = {
           ...productData,
           subcategoryId: MOTION_SENSOR_SECURITY_ID,
@@ -405,13 +405,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(alarmsData);
-        
-        const motionSensorAlarmsData = {
-          ...productData,
-          subcategoryId: MOTION_SENSOR_ALARMS_ID,
-          categoryId: 6 // Safety & Security category
-        };
-        await storage.createProduct(motionSensorAlarmsData);
       } else if (productData.subcategoryId === MOTION_SENSOR_SECURITY_ID) {
         // Create duplicates in Lighting and Alarms subcategories
         const lightingData = {
@@ -427,13 +420,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(alarmsData);
-        
-        const motionSensorAlarmsData = {
-          ...productData,
-          subcategoryId: MOTION_SENSOR_ALARMS_ID,
-          categoryId: 6 // Safety & Security category
-        };
-        await storage.createProduct(motionSensorAlarmsData);
       } else if (productData.subcategoryId === ALARMS_ID) {
         // Create duplicates in Motion Sensor subcategories
         const lightingData = {
@@ -449,36 +435,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(motionSensorSecurityData);
-        
-        const motionSensorAlarmsData = {
-          ...productData,
-          subcategoryId: MOTION_SENSOR_ALARMS_ID,
-          categoryId: 6 // Safety & Security category
-        };
-        await storage.createProduct(motionSensorAlarmsData);
-      } else if (productData.subcategoryId === MOTION_SENSOR_ALARMS_ID) {
-        // Create duplicates in all other Motion Sensor subcategories
-        const lightingData = {
-          ...productData,
-          subcategoryId: MOTION_SENSOR_LIGHTING_ID,
-          categoryId: 1 // Lighting Solutions category
-        };
-        await storage.createProduct(lightingData);
-        
-        const motionSensorSecurityData = {
-          ...productData,
-          subcategoryId: MOTION_SENSOR_SECURITY_ID,
-          categoryId: 6 // Safety & Security category
-        };
-        await storage.createProduct(motionSensorSecurityData);
-        
-        const alarmsData = {
-          ...productData,
-          subcategoryId: ALARMS_ID,
-          categoryId: 6 // Safety & Security category
-        };
-        await storage.createProduct(alarmsData);
       }
+      // Motion Sensor Alarms (ID: 17) products are not auto-synced - they remain independent
       
       res.status(201).json(product);
     } catch (error) {
@@ -497,19 +455,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Product not found" });
       }
       
-      // Auto-sync updates between Motion Sensor Lights and Alarms subcategories
+      // Auto-sync updates between Motion Sensor Lights and Alarms subcategories (excluding Motion Sensor Alarms)
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
-      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
+      // Note: Motion Sensor Alarms (ID: 17) is excluded from auto-sync to allow independent product management
       
-      if (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID || product.subcategoryId === MOTION_SENSOR_ALARMS_ID) {
-        // Find and update all corresponding duplicate products
+      if (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID) {
+        // Find and update all corresponding duplicate products (excluding Motion Sensor Alarms)
         const allProducts = await storage.getProducts();
         const duplicateProducts = allProducts.filter(p => 
           p.name === product.name && 
           p.id !== product.id &&
-          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID || p.subcategoryId === MOTION_SENSOR_ALARMS_ID)
+          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID)
         );
         
         for (const duplicateProduct of duplicateProducts) {
@@ -549,19 +507,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Product not found" });
       }
       
-      // Auto-delete duplicates from Motion Sensor Lights and Alarms subcategories
+      // Auto-delete duplicates from Motion Sensor Lights and Alarms subcategories (excluding Motion Sensor Alarms)
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
-      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
+      // Note: Motion Sensor Alarms (ID: 17) is excluded from auto-sync to allow independent product management
       
-      if (product && (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID || product.subcategoryId === MOTION_SENSOR_ALARMS_ID)) {
-        // Find and delete all corresponding duplicate products
+      if (product && (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID)) {
+        // Find and delete all corresponding duplicate products (excluding Motion Sensor Alarms)
         const allProducts = await storage.getProducts();
         const duplicateProducts = allProducts.filter(p => 
           p.name === product.name && 
           p.id !== product.id &&
-          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID || p.subcategoryId === MOTION_SENSOR_ALARMS_ID)
+          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID)
         );
         
         for (const duplicateProduct of duplicateProducts) {

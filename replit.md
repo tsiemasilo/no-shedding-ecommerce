@@ -99,16 +99,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 6, 2025: Added Motion Sensor Alarms subcategory and fixed product duplication
+- July 6, 2025: Added Motion Sensor Alarms subcategory and fixed synchronization
   - Created new subcategory "Motion Sensor Alarms" under Safety & Security (ID: 17)
   - Added comprehensive description for motion detection alarm systems
   - Assigned ShieldAlert icon for security-focused visual representation
   - Available at slug: motion-sensor-alarms
-  - Fixed automatic synchronization system to include new subcategory
-  - Updated all Motion Sensor product sync logic (CREATE, UPDATE, DELETE operations)
-  - Resolved duplicate product issues by integrating four-way synchronization
-  - Products now sync between: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), Alarms, and Motion Sensor Alarms
-  - Cleaned up existing duplicate products and ensured proper cross-category synchronization
+  - Excluded Motion Sensor Alarms from automatic synchronization system
+  - Motion Sensor Alarms now operates independently from other Motion Sensor subcategories
+  - Three-way sync maintained between: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
+  - Motion Sensor Alarms products are managed separately to prevent unwanted cross-posting
+  - Fixed issue where products added to Motion Sensor Lights were appearing in Motion Sensor Alarms
 
 - July 5, 2025: Extended automatic product synchronization to include Alarms subcategory
   - Motion Sensor products now automatically appear in three subcategories: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
