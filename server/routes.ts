@@ -383,6 +383,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const productData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(productData);
+      
+      // Auto-duplicate products between Motion Sensor Lights subcategories
+      const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
+      const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
+      
+      if (productData.subcategoryId === MOTION_SENSOR_LIGHTING_ID) {
+        // Create duplicate in Security subcategory
+        const duplicateData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_SECURITY_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(duplicateData);
+      } else if (productData.subcategoryId === MOTION_SENSOR_SECURITY_ID) {
+        // Create duplicate in Lighting subcategory
+        const duplicateData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_LIGHTING_ID,
+          categoryId: 1 // Lighting Solutions category
+        };
+        await storage.createProduct(duplicateData);
+      }
+      
       res.status(201).json(product);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -399,6 +422,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+      
+      // Auto-sync updates between Motion Sensor Lights subcategories
+      const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
+      const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
+      
+      if (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID) {
+        // Find and update the corresponding duplicate product
+        const allProducts = await storage.getProducts();
+        const targetSubcategoryId = product.subcategoryId === MOTION_SENSOR_LIGHTING_ID ? MOTION_SENSOR_SECURITY_ID : MOTION_SENSOR_LIGHTING_ID;
+        const duplicateProduct = allProducts.find(p => 
+          p.name === product.name && 
+          p.subcategoryId === targetSubcategoryId &&
+          p.id !== product.id
+        );
+        
+        if (duplicateProduct) {
+          const duplicateUpdateData = {
+            ...productData,
+            subcategoryId: targetSubcategoryId,
+            categoryId: targetSubcategoryId === MOTION_SENSOR_SECURITY_ID ? 6 : 1
+          };
+          await storage.updateProduct(duplicateProduct.id, duplicateUpdateData);
+        }
+      }
+      
       res.json(product);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -411,11 +459,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/products/:id", async (req, res) => {
     try {
       console.log(`Attempting to delete product with ID: ${req.params.id}`);
+      
+      // Get the product before deletion to check if it's a Motion Sensor Light
+      const product = await storage.getProduct(parseInt(req.params.id));
+      
       const success = await storage.deleteProduct(parseInt(req.params.id));
       console.log(`Delete operation result: ${success}`);
       if (!success) {
         return res.status(404).json({ message: "Product not found" });
       }
+      
+      // Auto-delete duplicate from Motion Sensor Lights subcategories
+      const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
+      const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
+      
+      if (product && (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID)) {
+        // Find and delete the corresponding duplicate product
+        const allProducts = await storage.getProducts();
+        const targetSubcategoryId = product.subcategoryId === MOTION_SENSOR_LIGHTING_ID ? MOTION_SENSOR_SECURITY_ID : MOTION_SENSOR_LIGHTING_ID;
+        const duplicateProduct = allProducts.find(p => 
+          p.name === product.name && 
+          p.subcategoryId === targetSubcategoryId &&
+          p.id !== product.id
+        );
+        
+        if (duplicateProduct) {
+          await storage.deleteProduct(duplicateProduct.id);
+          console.log(`Also deleted duplicate product with ID: ${duplicateProduct.id}`);
+        }
+      }
+      
       res.json({ message: "Product deleted successfully" });
     } catch (error) {
       console.error("Delete product error:", error);

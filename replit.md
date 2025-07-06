@@ -99,6 +99,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 5, 2025: Implemented automatic Motion Sensor product synchronization
+  - Products added to "Motion Sensor Lights" subcategory automatically appear in both categories
+  - Synchronization works between Lighting Solutions and Safety & Security categories
+  - Updates, deletions, and creations are automatically mirrored between both subcategories
+  - Existing Motion Sensor product already duplicated to both categories
+
 - July 5, 2025: Removed flip card animation for mobile version
   - Disabled flip card animation completely on mobile devices
   - Mobile cards now show only the front side with no flip behavior
