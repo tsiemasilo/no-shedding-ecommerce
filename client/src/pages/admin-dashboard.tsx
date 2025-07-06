@@ -243,18 +243,18 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="products" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="products" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-2 bg-white border border-[#0A2342]">
+            <TabsTrigger value="products" className="flex items-center gap-2 data-[state=active]:bg-[#0A2342] data-[state=active]:text-white text-[#0A2342]">
               <Box className="w-4 h-4" />
               Products
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 bg-[#FFC300] text-[#0A2342]">
                 {products.length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger value="support" className="flex items-center gap-2">
+            <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#0A2342] data-[state=active]:text-white text-[#0A2342]">
               <MessageSquare className="w-4 h-4" />
               Support Requests
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 bg-[#FFC300] text-[#0A2342]">
                 {supportRequests.length}
               </Badge>
               {getUnreadCount() > 0 && (
@@ -276,7 +276,7 @@ export default function AdminDashboard() {
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button>
+                      <Button className="bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none">
                         <Plus className="w-4 h-4 mr-2" />
                         Add Product
                       </Button>
@@ -327,12 +327,12 @@ export default function AdminDashboard() {
                             <TableCell>{subcategory?.name || 'None'}</TableCell>
                             <TableCell>R{product.price}</TableCell>
                             <TableCell>
-                              <Badge variant={product.featured ? "default" : "secondary"}>
+                              <Badge variant={product.featured ? "default" : "secondary"} className={product.featured ? "bg-[#FFC300] text-[#0A2342] hover:bg-[#FF6F00]" : "bg-[#333333] text-white"}>
                                 {product.featured ? "Featured" : "Regular"}
                               </Badge>
                             </TableCell>
                             <TableCell>
-                              <Badge variant={product.inStock ? "default" : "destructive"}>
+                              <Badge variant={product.inStock ? "default" : "destructive"} className={product.inStock ? "bg-[#333333] text-white" : "bg-[#FF6F00] text-white"}>
                                 {product.inStock ? "In Stock" : "Out of Stock"}
                               </Badge>
                             </TableCell>
@@ -344,6 +344,7 @@ export default function AdminDashboard() {
                                       variant="outline"
                                       size="sm"
                                       onClick={() => setEditingProduct(product)}
+                                      className="border-[#0A2342] text-[#0A2342] hover:bg-[#0A2342] hover:text-white"
                                     >
                                       <Edit className="w-4 h-4" />
                                     </Button>
@@ -365,6 +366,7 @@ export default function AdminDashboard() {
                                     }
                                   }}
                                   disabled={deleteProductMutation.isPending}
+                                  className="border-[#FF6F00] text-[#FF6F00] hover:bg-[#FF6F00] hover:text-white"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -574,6 +576,7 @@ export default function AdminDashboard() {
                                             setReplyingTo(null);
                                             setReplyMessage('');
                                           }}
+                                          className="border-[#333333] text-[#333333] hover:bg-[#333333] hover:text-white"
                                         >
                                           Cancel
                                         </Button>
@@ -587,6 +590,7 @@ export default function AdminDashboard() {
                                             }
                                           }}
                                           disabled={!replyMessage.trim() || replyMutation.isPending}
+                                          className="bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342] border-none"
                                         >
                                           <Send className="w-4 h-4 mr-2" />
                                           Send Reply
