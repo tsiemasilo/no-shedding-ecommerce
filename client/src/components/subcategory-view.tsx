@@ -7,6 +7,7 @@ import { ArrowLeft, Lightbulb, Sun, Battery, Radar, Star, ShoppingCart, Smartpho
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import type { Subcategory, Product } from '@shared/schema';
+import { formatPrice } from '@/lib/utils';
 
 interface SubcategoryViewProps {
   categoryId: number;
@@ -168,7 +169,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                         </div>
                         <div className="bg-white p-4 rounded-b-lg border-t flex flex-col justify-center z-10 relative">
                           <h3 className="font-semibold text-navy text-center text-sm line-clamp-2 mb-1 opacity-100">{product.name}</h3>
-                          <p className="text-charcoal text-center text-sm font-medium mb-2 opacity-100">R{product.price}</p>
+                          <p className="text-charcoal text-center text-sm font-medium mb-2 opacity-100">R{formatPrice(product.price)}</p>
                           
                           {/* Mobile Add to Cart Button - only visible on mobile */}
                           <div className="md:hidden">
@@ -194,7 +195,7 @@ export function SubcategoryView({ categoryId, categoryName, onBack }: Subcategor
                         <div className="text-center mb-4">
                           <h3 className="font-bold text-xl mb-3 text-electric">{product.name}</h3>
                           <div className="flex items-center justify-center mb-3">
-                            <span className="text-2xl font-bold text-white">R{product.price}</span>
+                            <span className="text-2xl font-bold text-white">R{formatPrice(product.price)}</span>
                           </div>
                           <div className="flex items-center justify-center mb-3">
                             {renderStars(product.rating)}

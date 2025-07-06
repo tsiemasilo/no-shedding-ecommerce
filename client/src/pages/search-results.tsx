@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Search, Star, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import type { Product } from '@shared/schema';
+import { formatPrice } from '@/lib/utils';
 
 export default function SearchResults() {
   const [, setLocation] = useLocation();
@@ -135,7 +136,7 @@ export default function SearchResults() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-2xl font-bold text-electric">
-                          R{product.price}
+                          R{formatPrice(product.price)}
                         </span>
                         <div className="flex items-center gap-1">
                           <Star className="w-4 h-4 fill-electric text-electric" />

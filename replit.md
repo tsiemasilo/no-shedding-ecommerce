@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Implemented comprehensive price formatting system with space separators for thousands
+  - Created shared formatPrice utility function supporting both number and string inputs
+  - Applied consistent price formatting across all product displays (R1 000, R10 000, R100 000)
+  - Updated admin dashboard, product details, search results, featured products, and subcategory views
+  - Fixed price input field to clear default "0" when clicked for easier editing
+  - Moved Key Features section under Product Description in admin form for better workflow
+  - Added professional "Out of Stock" radio button functionality with orange styling
+  - All product prices now display with proper space formatting throughout the website
+
 - July 6, 2025: Completely redesigned admin dashboard with professional website-matching color scheme
   - Changed background from yellow gradient to clean light sand (#FDF6EC) matching main website
   - Updated header to navy blue (#0A2342) with yellow (#FFC300) border accents

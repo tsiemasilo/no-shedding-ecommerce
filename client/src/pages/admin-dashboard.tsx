@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { format } from 'date-fns';
 import type { Product, Category, Subcategory, InsertProduct, SupportRequest } from '@shared/schema';
+import { formatPrice } from '@/lib/utils';
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -325,7 +326,7 @@ export default function AdminDashboard() {
                             <TableCell className="font-medium">{product.name}</TableCell>
                             <TableCell>{category?.name || 'None'}</TableCell>
                             <TableCell>{subcategory?.name || 'None'}</TableCell>
-                            <TableCell>R{product.price}</TableCell>
+                            <TableCell>R{formatPrice(product.price)}</TableCell>
                             <TableCell>
                               <Badge variant={product.featured ? "default" : "secondary"} className={product.featured ? "bg-[#FFC300] text-[#0A2342] hover:bg-[#FF6F00]" : "bg-[#333333] text-white"}>
                                 {product.featured ? "Featured" : "Regular"}
@@ -697,11 +698,16 @@ function ProductDialog({
               <Input
                 id="price"
                 type="number"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                value={formData.price || ''}
+                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) || 0 })}
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = '';
+                  }
+                }}
                 required
                 className="mt-2 h-12 text-base border-[#333333]/20 focus:border-[#FFC300] focus:ring-[#FFC300]"
-                placeholder="0.00"
+                placeholder="Enter price"
               />
             </div>
           </div>

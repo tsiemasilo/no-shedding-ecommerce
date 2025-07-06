@@ -9,6 +9,7 @@ import { Header } from "@/components/header";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Product } from "@shared/schema";
+import { formatPrice } from "@/lib/utils";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -253,7 +254,7 @@ export default function ProductDetails() {
 
                 <div className="bg-gradient-to-r from-navy/5 to-electric/5 rounded-lg p-3 border border-gray-100">
                   <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl font-bold text-navy">R{product.price}</span>
+                    <span className="text-3xl font-bold text-navy">R{formatPrice(product.price)}</span>
                     <span className="text-gray-500 text-sm">ZAR</span>
                   </div>
                   <p className="text-xs text-gray-600 mt-1">Competitive pricing • Free delivery on orders over R500</p>
