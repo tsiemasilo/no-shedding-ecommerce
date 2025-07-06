@@ -99,6 +99,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Completely redesigned admin dashboard with professional website-matching color scheme
+  - Changed background from yellow gradient to clean light sand (#FDF6EC) matching main website
+  - Updated header to navy blue (#0A2342) with yellow (#FFC300) border accents
+  - Enhanced all tabs, buttons, and UI elements to use consistent brand colors
+  - Fixed "Mark as Read" functionality for support requests (now working properly)
+  - Applied professional color scheme to all badges, action buttons, and status indicators
+  - Support request cards now use sand/white backgrounds with navy/orange borders
+  - Product management section fully styled with yellow primary buttons and navy/orange accents
+  - Dialog forms and reply interface updated with consistent website color palette
+
 - July 6, 2025: Enhanced admin support dashboard with professional design and status tracking
   - Added read/unread status indicators for all support requests
   - Implemented reply status tracking (replied/pending) with visual badges

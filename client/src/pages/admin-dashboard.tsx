@@ -206,7 +206,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FDF6EC] to-[#FFC300]">
+    <div className="min-h-screen bg-[#FDF6EC]">
       {/* Header */}
       <div className="bg-[#0A2342] shadow-sm border-b border-[#FFC300]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
