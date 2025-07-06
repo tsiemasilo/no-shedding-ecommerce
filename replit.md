@@ -99,12 +99,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 5, 2025: Implemented automatic Motion Sensor product synchronization
-  - Products added to "Motion Sensor Lights" subcategory automatically appear in both categories
-  - Synchronization works between Lighting Solutions and Safety & Security categories
-  - Updates, deletions, and creations are automatically mirrored between both subcategories
+- July 5, 2025: Extended automatic product synchronization to include Alarms subcategory
+  - Motion Sensor products now automatically appear in three subcategories: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
+  - Three-way synchronization ensures products appear in both Lighting Solutions and Safety & Security categories
+  - Updates, deletions, and creations are automatically mirrored across all three subcategories
   - Featured products filter removes duplicates to show each product only once
-  - Existing Motion Sensor product already duplicated to both categories
+  - Existing Motion Sensor product now duplicated to all three subcategories
 
 - July 5, 2025: Removed flip card animation for mobile version
   - Disabled flip card animation completely on mobile devices
