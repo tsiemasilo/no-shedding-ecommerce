@@ -237,7 +237,20 @@ export class MemStorage implements IStorage {
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(product => product.featured);
+    const featuredProducts = Array.from(this.products.values()).filter(product => product.featured);
+    
+    // Remove duplicates by product name (for Motion Sensor products that appear in both categories)
+    const uniqueProducts: Product[] = [];
+    const seenNames = new Set<string>();
+    
+    for (const product of featuredProducts) {
+      if (!seenNames.has(product.name)) {
+        seenNames.add(product.name);
+        uniqueProducts.push(product);
+      }
+    }
+    
+    return uniqueProducts;
   }
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
@@ -587,7 +600,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
-    return await db.select().from(products).where(eq(products.featured, true));
+    const featuredProducts = await db.select().from(products).where(eq(products.featured, true));
+    
+    // Remove duplicates by product name (for Motion Sensor products that appear in both categories)
+    const uniqueProducts: Product[] = [];
+    const seenNames = new Set<string>();
+    
+    for (const product of featuredProducts) {
+      if (!seenNames.has(product.name)) {
+        seenNames.add(product.name);
+        uniqueProducts.push(product);
+      }
+    }
+    
+    return uniqueProducts;
   }
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {

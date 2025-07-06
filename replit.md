@@ -103,6 +103,7 @@ Preferred communication style: Simple, everyday language.
   - Products added to "Motion Sensor Lights" subcategory automatically appear in both categories
   - Synchronization works between Lighting Solutions and Safety & Security categories
   - Updates, deletions, and creations are automatically mirrored between both subcategories
+  - Featured products filter removes duplicates to show each product only once
   - Existing Motion Sensor product already duplicated to both categories
 
 - July 5, 2025: Removed flip card animation for mobile version
