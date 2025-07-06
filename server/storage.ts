@@ -416,8 +416,18 @@ export class DatabaseStorage implements IStorage {
       pool, 
       createTableIfMissing: true 
     });
-    // Don't call seedData() in constructor - it's async and blocks initialization
-    this.seedData().catch(console.error);
+    // Initialize database seeding with proper error handling
+    this.initializeDatabase();
+  }
+
+  private async initializeDatabase() {
+    try {
+      await this.seedData();
+    } catch (error) {
+      console.error('Database initialization error:', error);
+      // Don't throw the error to prevent app from crashing
+      // The app should still start even if seeding fails
+    }
   }
 
   private async seedData() {
