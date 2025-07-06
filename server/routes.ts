@@ -373,7 +373,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/products", async (req, res) => {
     try {
       const products = await storage.getProducts();
-      res.json(products);
+      const categories = await storage.getCategories();
+      const subcategories = await storage.getSubcategories();
+      
+      // Create category and subcategory maps for efficient lookup
+      const categoryMap = new Map(categories.map(cat => [cat.id, cat.name]));
+      const subcategoryMap = new Map(subcategories.map(sub => [sub.id, sub.name]));
+      
+      // Sort products by category name, then subcategory name, then product name
+      const sortedProducts = products.sort((a, b) => {
+        const categoryA = categoryMap.get(a.categoryId) || '';
+        const categoryB = categoryMap.get(b.categoryId) || '';
+        
+        if (categoryA !== categoryB) {
+          return categoryA.localeCompare(categoryB);
+        }
+        
+        const subcategoryA = a.subcategoryId ? (subcategoryMap.get(a.subcategoryId) || '') : '';
+        const subcategoryB = b.subcategoryId ? (subcategoryMap.get(b.subcategoryId) || '') : '';
+        
+        if (subcategoryA !== subcategoryB) {
+          return subcategoryA.localeCompare(subcategoryB);
+        }
+        
+        return a.name.localeCompare(b.name);
+      });
+      
+      res.json(sortedProducts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
     }

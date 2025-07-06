@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Button } from '@/components/ui/button';
@@ -187,54 +187,84 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => {
-                  const category = categories.find(c => c.id === product.categoryId);
-                  const subcategory = subcategories.find(s => s.id === product.subcategoryId);
-                  return (
-                    <TableRow key={product.id}>
-                      <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell>{category?.name || 'Unknown'}</TableCell>
-                      <TableCell>{subcategory?.name || '-'}</TableCell>
-                      <TableCell>R{product.price}</TableCell>
-                      <TableCell>{product.featured ? 'Yes' : 'No'}</TableCell>
-                      <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Dialog open={editingProduct?.id === product.id} onOpenChange={(open) => !open && setEditingProduct(null)}>
-                            <DialogTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setEditingProduct(product)}
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                            </DialogTrigger>
-                            <ProductDialog
-                              categories={categories}
-                              subcategories={subcategories}
-                              product={editingProduct}
-                              onSubmit={(data) => updateProductMutation.mutate({ id: product.id, data })}
-                              isLoading={updateProductMutation.isPending}
-                            />
-                          </Dialog>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              if (confirm('Are you sure you want to delete this product?')) {
-                                deleteProductMutation.mutate(product.id);
-                              }
-                            }}
-                            disabled={deleteProductMutation.isPending}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {(() => {
+                  // Group products by category
+                  const productsByCategory = new Map<string, Product[]>();
+                  products.forEach(product => {
+                    const category = categories.find(c => c.id === product.categoryId);
+                    const categoryName = category?.name || 'Unknown';
+                    if (!productsByCategory.has(categoryName)) {
+                      productsByCategory.set(categoryName, []);
+                    }
+                    productsByCategory.get(categoryName)!.push(product);
+                  });
+
+                  // Sort categories alphabetically
+                  const sortedCategories = Array.from(productsByCategory.keys()).sort();
+
+                  return sortedCategories.map(categoryName => {
+                    const categoryProducts = productsByCategory.get(categoryName)!;
+                    return (
+                      <React.Fragment key={categoryName}>
+                        {/* Category Header */}
+                        <TableRow className="bg-sand/20 hover:bg-sand/30">
+                          <TableCell colSpan={7} className="font-bold text-navy py-4 px-6">
+                            {categoryName} ({categoryProducts.length} products)
+                          </TableCell>
+                        </TableRow>
+                        {/* Products in this category */}
+                        {categoryProducts.map((product) => {
+                          const category = categories.find(c => c.id === product.categoryId);
+                          const subcategory = subcategories.find(s => s.id === product.subcategoryId);
+                          return (
+                            <TableRow key={product.id} className="hover:bg-sand/10">
+                              <TableCell className="font-medium pl-8">{product.name}</TableCell>
+                              <TableCell>{category?.name || 'Unknown'}</TableCell>
+                              <TableCell>{subcategory?.name || '-'}</TableCell>
+                              <TableCell>R{product.price}</TableCell>
+                              <TableCell>{product.featured ? 'Yes' : 'No'}</TableCell>
+                              <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
+                              <TableCell>
+                                <div className="flex gap-2">
+                                  <Dialog open={editingProduct?.id === product.id} onOpenChange={(open) => !open && setEditingProduct(null)}>
+                                    <DialogTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setEditingProduct(product)}
+                                      >
+                                        <Edit className="w-4 h-4" />
+                                      </Button>
+                                    </DialogTrigger>
+                                    <ProductDialog
+                                      categories={categories}
+                                      subcategories={subcategories}
+                                      product={editingProduct}
+                                      onSubmit={(data) => updateProductMutation.mutate({ id: product.id, data })}
+                                      isLoading={updateProductMutation.isPending}
+                                    />
+                                  </Dialog>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      if (confirm('Are you sure you want to delete this product?')) {
+                                        deleteProductMutation.mutate(product.id);
+                                      }
+                                    }}
+                                    disabled={deleteProductMutation.isPending}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </React.Fragment>
+                    );
+                  });
+                })()}
               </TableBody>
             </Table>
           </CardContent>
