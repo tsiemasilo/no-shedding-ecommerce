@@ -40,11 +40,17 @@ export function Header() {
       .map((product: any) => product.name)
     : [];
 
+  // Test suggestion - add a simple test if user types "test"
+  const testSuggestions = searchQuery.toLowerCase().includes('test') && searchQuery.length >= 2 ? 
+    ['Test Suggestion 1', 'Test Suggestion 2'] : [];
+
   // Debug logging
-  console.log('Search query:', searchQuery);
-  console.log('Products available:', products.length);
-  console.log('Suggestions generated:', suggestions);
-  console.log('Show suggestions:', showSuggestions);
+  if (searchQuery.length > 0) {
+    console.log('Search query:', searchQuery);
+    console.log('Products available:', products.length);
+    console.log('Suggestions generated:', suggestions);
+    console.log('Show suggestions:', showSuggestions);
+  }
 
   // Handle clicking outside search to close suggestions
   useEffect(() => {
@@ -147,9 +153,9 @@ export function Header() {
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-electric w-5 h-5" />
               
               {/* Search Suggestions Dropdown */}
-              {showSuggestions && suggestions.length > 0 && (
+              {showSuggestions && (suggestions.length > 0 || testSuggestions.length > 0) && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-                  {suggestions.map((suggestion, index) => (
+                  {[...suggestions, ...testSuggestions].map((suggestion, index) => (
                     <div
                       key={index}
                       className={`px-4 py-3 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0 ${
