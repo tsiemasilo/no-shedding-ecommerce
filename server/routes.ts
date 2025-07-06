@@ -444,10 +444,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/admin/products", async (req, res) => {
+  app.post("/api/admin/products", upload.single('image'), async (req, res) => {
     try {
-      const productData = insertProductSchema.parse(req.body);
-      const product = await storage.createProduct(productData);
+      console.log('Creating product with form data:', req.body);
+      // Parse form data and convert types appropriately
+      const formData = req.body;
+      
+      // Convert numeric fields from strings
+      const productData = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        image: formData.image,
+        categoryId: parseInt(formData.categoryId),
+        subcategoryId: formData.subcategoryId ? parseInt(formData.subcategoryId) : null,
+        featured: formData.featured === 'true',
+        rating: formData.rating || "0",
+        inStock: formData.inStock === 'true',
+        keyFeatures: formData.keyFeatures ? JSON.parse(formData.keyFeatures) : []
+      };
+      
+      const validatedData = insertProductSchema.parse(productData);
+      const product = await storage.createProduct(validatedData);
       
       // Auto-duplicate products between Motion Sensor Lights subcategories only
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
@@ -475,17 +493,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(201).json(product);
     } catch (error) {
+      console.error('Product creation error:', error);
       if (error instanceof z.ZodError) {
+        console.error('Validation errors:', error.errors);
         return res.status(400).json({ message: "Invalid product data", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create product" });
+      res.status(500).json({ message: "Failed to create product", error: error.message });
     }
   });
 
-  app.put("/api/admin/products/:id", async (req, res) => {
+  app.put("/api/admin/products/:id", upload.single('image'), async (req, res) => {
     try {
-      const productData = insertProductSchema.partial().parse(req.body);
-      const product = await storage.updateProduct(parseInt(req.params.id), productData);
+      // Parse form data and convert types appropriately
+      const formData = req.body;
+      
+      // Convert numeric fields from strings, only include provided fields
+      const productData: any = {};
+      
+      if (formData.name) productData.name = formData.name;
+      if (formData.description) productData.description = formData.description;
+      if (formData.price) productData.price = formData.price;
+      if (formData.image) productData.image = formData.image;
+      if (formData.categoryId) productData.categoryId = parseInt(formData.categoryId);
+      if (formData.subcategoryId) productData.subcategoryId = parseInt(formData.subcategoryId);
+      if (formData.featured !== undefined) productData.featured = formData.featured === 'true';
+      if (formData.rating) productData.rating = formData.rating;
+      if (formData.inStock !== undefined) productData.inStock = formData.inStock === 'true';
+      if (formData.keyFeatures) productData.keyFeatures = JSON.parse(formData.keyFeatures);
+      
+      const validatedData = insertProductSchema.partial().parse(productData);
+      const product = await storage.updateProduct(parseInt(req.params.id), validatedData);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
