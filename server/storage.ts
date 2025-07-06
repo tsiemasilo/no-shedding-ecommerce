@@ -1,6 +1,6 @@
 import { categories, products, cartItems, newsletters, subcategories, users, customers, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type Customer, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser, type InsertCustomer } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import session from "express-session";
 import MemoryStore from "memorystore";
 
@@ -617,7 +617,7 @@ export class DatabaseStorage implements IStorage {
   async getFeaturedProducts(): Promise<Product[]> {
     const featuredProducts = await db.select().from(products).where(eq(products.featured, true));
     
-    // Remove duplicates by product name (for Motion Sensor products that appear in both categories)
+    // Remove duplicates by product name (for synchronized products like Motion Sensor and Surge Protectors)
     const uniqueProducts: Product[] = [];
     const seenNames = new Set<string>();
     
@@ -722,7 +722,46 @@ export class DatabaseStorage implements IStorage {
 
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newProduct] = await db.insert(products).values(product).returning();
+    
+    // Handle automatic synchronization for Surge Protectors
+    await this.handleSurgeProtectorSync(newProduct);
+    
     return newProduct;
+  }
+
+  private async handleSurgeProtectorSync(product: Product) {
+    // Surge Protectors synchronization: subcategory IDs 13 (Comfort & Utility Kits) and 19 (Safety & Security)
+    const surgeProtectorSubcategories = [13, 19];
+    
+    if (surgeProtectorSubcategories.includes(product.subcategoryId || 0)) {
+      const otherSubcategoryId = product.subcategoryId === 13 ? 19 : 13;
+      
+      // Check if product already exists in other subcategory to avoid duplicates
+      const allProducts = await db.select().from(products);
+      const existingProduct = allProducts.find(p => 
+        p.name === product.name && p.subcategoryId === otherSubcategoryId
+      );
+      
+      if (!existingProduct) {
+        // Create duplicate in other subcategory
+        const duplicateProduct = {
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          image: product.image,
+          images: product.images,
+          categoryId: otherSubcategoryId === 13 ? 4 : 6, // Comfort & Utility Kits or Safety & Security
+          subcategoryId: otherSubcategoryId,
+          featured: product.featured,
+          rating: product.rating,
+          inStock: product.inStock,
+          keyFeatures: product.keyFeatures,
+        };
+        
+        await db.insert(products).values(duplicateProduct);
+        console.log(`Sync: Created Surge Protector product in subcategory ${otherSubcategoryId}`);
+      }
+    }
   }
 
   async updateProduct(id: number, productUpdate: Partial<InsertProduct>): Promise<Product | undefined> {
@@ -730,16 +769,52 @@ export class DatabaseStorage implements IStorage {
       .set(productUpdate)
       .where(eq(products.id, id))
       .returning();
+    
+    if (updatedProduct) {
+      // Handle synchronization for Surge Protectors
+      await this.handleSurgeProtectorUpdateSync(updatedProduct, productUpdate);
+    }
+    
     return updatedProduct;
+  }
+
+  private async handleSurgeProtectorUpdateSync(product: Product, updates: Partial<InsertProduct>) {
+    const surgeProtectorSubcategories = [13, 19];
+    
+    if (surgeProtectorSubcategories.includes(product.subcategoryId || 0)) {
+      const otherSubcategoryId = product.subcategoryId === 13 ? 19 : 13;
+      
+      // Find the synchronized product in the other subcategory
+      const allProducts = await db.select().from(products);
+      const syncedProduct = allProducts.find(p => 
+        p.name === product.name && p.subcategoryId === otherSubcategoryId
+      );
+      
+      if (syncedProduct) {
+        // Update the synchronized product with the same changes
+        await db.update(products)
+          .set(updates)
+          .where(eq(products.id, syncedProduct.id));
+        console.log(`Sync: Updated Surge Protector product in subcategory ${otherSubcategoryId}`);
+      }
+    }
   }
 
   async deleteProduct(id: number): Promise<boolean> {
     try {
       console.log(`DatabaseStorage: Deleting product with ID ${id}`);
       
+      // Get the product before deletion for sync purposes
+      const [productToDelete] = await db.select().from(products).where(eq(products.id, id));
+      
       // First delete any cart items that reference this product
       console.log(`DatabaseStorage: Removing cart items for product ${id}`);
       await db.delete(cartItems).where(eq(cartItems.productId, id));
+      
+      // Handle Surge Protector synchronization before deletion
+      if (productToDelete) {
+        await this.handleSurgeProtectorDeleteSync(productToDelete);
+      }
       
       // Then delete the product
       const result = await db.delete(products).where(eq(products.id, id));
@@ -750,6 +825,29 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error(`DatabaseStorage: Delete error for product ${id}:`, error);
       throw error;
+    }
+  }
+
+  private async handleSurgeProtectorDeleteSync(product: Product) {
+    const surgeProtectorSubcategories = [13, 19];
+    
+    if (surgeProtectorSubcategories.includes(product.subcategoryId || 0)) {
+      const otherSubcategoryId = product.subcategoryId === 13 ? 19 : 13;
+      
+      // Find and delete the synchronized product in the other subcategory
+      const allProducts = await db.select().from(products);
+      const syncedProduct = allProducts.find(p => 
+        p.name === product.name && p.subcategoryId === otherSubcategoryId
+      );
+      
+      if (syncedProduct) {
+        // Delete cart items for the synchronized product first
+        await db.delete(cartItems).where(eq(cartItems.productId, syncedProduct.id));
+        
+        // Delete the synchronized product
+        await db.delete(products).where(eq(products.id, syncedProduct.id));
+        console.log(`Sync: Deleted Surge Protector product from subcategory ${otherSubcategoryId}`);
+      }
     }
   }
 }
