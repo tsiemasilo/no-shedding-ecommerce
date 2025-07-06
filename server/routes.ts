@@ -1,9 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCartItemSchema, insertNewsletterSchema, insertProductSchema, insertCustomerSchema } from "@shared/schema";
+import { insertCartItemSchema, insertNewsletterSchema, insertProductSchema, insertCustomerSchema, insertSupportRequestSchema } from "@shared/schema";
 import { z } from "zod";
 import { setupAuth } from "./auth";
+import { emailService } from "./email";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -240,12 +241,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const newsletter = insertNewsletterSchema.parse(req.body);
       const subscription = await storage.subscribeToNewsletter(newsletter);
+      
+      // Send welcome email
+      try {
+        await emailService.sendNewsletterWelcome(newsletter.email);
+      } catch (emailError) {
+        console.error('Failed to send newsletter welcome email:', emailError);
+        // Don't fail the subscription if email fails
+      }
+      
       res.json({ message: "Successfully subscribed to newsletter" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid email address", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  // Support requests
+  app.post("/api/support", async (req, res) => {
+    try {
+      const supportRequest = insertSupportRequestSchema.parse(req.body);
+      const request = await storage.createSupportRequest(supportRequest);
+      
+      // Send support emails
+      try {
+        await emailService.sendSupportRequest({
+          name: supportRequest.name,
+          email: supportRequest.email,
+          phone: supportRequest.phone || undefined,
+          supportType: supportRequest.supportType,
+          description: supportRequest.description
+        });
+      } catch (emailError) {
+        console.error('Failed to send support emails:', emailError);
+        // Don't fail the request if email fails
+      }
+      
+      res.json({ message: "Support request submitted successfully" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid request data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to submit support request" });
     }
   });
 

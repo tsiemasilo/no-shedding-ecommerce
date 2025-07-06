@@ -67,6 +67,17 @@ export const customers = pgTable("customers", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const supportRequests = pgTable("support_requests", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  supportType: text("support_type").notNull(),
+  description: text("description").notNull(),
+  status: text("status").default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
 });
@@ -97,6 +108,12 @@ export const insertCustomerSchema = createInsertSchema(customers).omit({
   createdAt: true,
 });
 
+export const insertSupportRequestSchema = createInsertSchema(supportRequests).omit({
+  id: true,
+  createdAt: true,
+  status: true,
+});
+
 export type Category = typeof categories.$inferSelect;
 export type Subcategory = typeof subcategories.$inferSelect;
 export type Product = typeof products.$inferSelect;
@@ -104,6 +121,7 @@ export type CartItem = typeof cartItems.$inferSelect;
 export type Newsletter = typeof newsletters.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type Customer = typeof customers.$inferSelect;
+export type SupportRequest = typeof supportRequests.$inferSelect;
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertSubcategory = z.infer<typeof insertSubcategorySchema>;
@@ -112,3 +130,4 @@ export type InsertCartItem = z.infer<typeof insertCartItemSchema>;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
+export type InsertSupportRequest = z.infer<typeof insertSupportRequestSchema>;

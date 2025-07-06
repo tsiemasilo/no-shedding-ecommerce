@@ -1,11 +1,77 @@
-import { Phone, Mail, MessageCircle, FileText, Wrench, Shield, Clock, Award, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Phone, Mail, MessageCircle, FileText, Wrench, Shield, Clock, Award, ArrowLeft, ExternalLink, Send, User, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Header } from '@/components/header';
 import { useLocation } from 'wouter';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Support() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    supportType: '',
+    description: ''
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.supportType || !formData.description) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/support', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Support Request Submitted",
+          description: "We'll get back to you within 24 hours."
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          supportType: '',
+          description: ''
+        });
+      } else {
+        throw new Error('Failed to submit request');
+      }
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Please try again or contact us directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const supportChannels = [
     {
@@ -129,6 +195,156 @@ export default function Support() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Support Form */}
+      <div className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-navy mb-4">Submit a Support Request</h2>
+            <p className="text-charcoal text-lg">
+              Get personalized assistance from our technical experts. Fill out the form below and we'll respond within 24 hours.
+            </p>
+          </div>
+
+          <Card className="border-2 border-gray-200 shadow-lg">
+            <CardHeader className="bg-navy text-white">
+              <CardTitle className="flex items-center space-x-2 text-xl">
+                <Zap className="w-6 h-6 text-electric" />
+                <span>Technical Support Request</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-navy font-semibold">
+                      Full Name *
+                    </Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      className="border-2 border-gray-300 focus:border-electric"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-navy font-semibold">
+                      Email Address *
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="your.email@example.com"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      className="border-2 border-gray-300 focus:border-electric"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-navy font-semibold">
+                      Phone Number
+                    </Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+27 11 123 4567"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      className="border-2 border-gray-300 focus:border-electric"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="supportType" className="text-navy font-semibold">
+                      Support Type *
+                    </Label>
+                    <Select value={formData.supportType} onValueChange={(value) => handleInputChange('supportType', value)}>
+                      <SelectTrigger className="border-2 border-gray-300 focus:border-electric">
+                        <SelectValue placeholder="Select support type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="technical">Technical Support</SelectItem>
+                        <SelectItem value="installation">Installation Help</SelectItem>
+                        <SelectItem value="product-info">Product Information</SelectItem>
+                        <SelectItem value="warranty">Warranty Claim</SelectItem>
+                        <SelectItem value="billing">Billing Question</SelectItem>
+                        <SelectItem value="general">General Inquiry</SelectItem>
+                        <SelectItem value="emergency">Emergency Support</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description" className="text-navy font-semibold">
+                    Problem Description *
+                  </Label>
+                  <Textarea
+                    id="description"
+                    placeholder="Please describe your issue or question in detail. Include any error messages, model numbers, or specific symptoms you're experiencing..."
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    className="border-2 border-gray-300 focus:border-electric min-h-[120px]"
+                    required
+                  />
+                  <p className="text-sm text-gray-600">
+                    The more details you provide, the better we can assist you.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <Shield className="w-4 h-4" />
+                    <span>Your information is secure and confidential</span>
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-electric hover:bg-electric/90 text-navy font-semibold px-8 py-3 min-w-[140px]"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-navy border-t-transparent rounded-full animate-spin"></div>
+                        <span>Sending...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <Send className="w-4 h-4" />
+                        <span>Submit Request</span>
+                      </div>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+              <Clock className="w-8 h-8 text-electric mx-auto mb-2" />
+              <h3 className="font-semibold text-navy mb-1">Quick Response</h3>
+              <p className="text-sm text-charcoal">Most requests answered within 24 hours</p>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+              <User className="w-8 h-8 text-electric mx-auto mb-2" />
+              <h3 className="font-semibold text-navy mb-1">Expert Support</h3>
+              <p className="text-sm text-charcoal">Certified electrical technicians</p>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+              <Award className="w-8 h-8 text-electric mx-auto mb-2" />
+              <h3 className="font-semibold text-navy mb-1">Satisfaction Guaranteed</h3>
+              <p className="text-sm text-charcoal">We solve your problems effectively</p>
+            </div>
           </div>
         </div>
       </div>

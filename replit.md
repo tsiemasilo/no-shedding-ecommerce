@@ -99,6 +99,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Integrated comprehensive SMTP email system for customer communication
+  - Added nodemailer integration with Gmail SMTP (nosheddingsupp@gmail.com)
+  - Newsletter subscriptions now send professional welcome emails with 15% discount code
+  - Comprehensive support form with 7 support types (Technical, Installation, Product Info, Warranty, Billing, General, Emergency)
+  - Support form sends dual emails: admin notification and customer confirmation
+  - Professional HTML email templates with brand colors and responsive design
+  - Support request database storage with automatic email notifications
+  - Enhanced support page with interactive form and validation
+  - Secure email handling with proper error management and fallback
+
 - July 6, 2025: Updated website zoom level to 80% standard across all pages
   - Changed default zoom from 90% to 80% for desktop screens (768px and above)
   - Increased base font size from 18px to 20px for better readability at 80% zoom

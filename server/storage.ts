@@ -1,4 +1,4 @@
-import { categories, products, cartItems, newsletters, subcategories, users, customers, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type Customer, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser, type InsertCustomer } from "@shared/schema";
+import { categories, products, cartItems, newsletters, subcategories, users, customers, supportRequests, type Category, type Product, type CartItem, type Newsletter, type Subcategory, type User, type Customer, type SupportRequest, type InsertCategory, type InsertProduct, type InsertCartItem, type InsertNewsletter, type InsertSubcategory, type InsertUser, type InsertCustomer, type InsertSupportRequest } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 import session from "express-session";
@@ -31,6 +31,9 @@ export interface IStorage {
   // Newsletter
   subscribeToNewsletter(newsletter: InsertNewsletter): Promise<Newsletter>;
   
+  // Support
+  createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest>;
+  
   // Users/Auth
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -60,6 +63,7 @@ export class MemStorage implements IStorage {
   private newsletters: Map<number, Newsletter>;
   private users: Map<number, User>;
   private customers: Map<number, Customer>;
+  private supportRequests: Map<number, SupportRequest>;
   private currentCategoryId: number;
   private currentSubcategoryId: number;
   private currentProductId: number;
@@ -67,6 +71,7 @@ export class MemStorage implements IStorage {
   private currentNewsletterId: number;
   private currentUserId: number;
   private currentCustomerId: number;
+  private currentSupportRequestId: number;
 
   constructor() {
     this.sessionStore = null; // Initialize sessionStore for interface compliance
@@ -77,6 +82,7 @@ export class MemStorage implements IStorage {
     this.newsletters = new Map();
     this.users = new Map();
     this.customers = new Map();
+    this.supportRequests = new Map();
     this.currentCategoryId = 1;
     this.currentSubcategoryId = 1;
     this.currentProductId = 1;
@@ -84,6 +90,7 @@ export class MemStorage implements IStorage {
     this.currentNewsletterId = 1;
     this.currentUserId = 1;
     this.currentCustomerId = 1;
+    this.currentSupportRequestId = 1;
     
     this.seedData();
   }
@@ -315,6 +322,18 @@ export class MemStorage implements IStorage {
     };
     this.newsletters.set(newSubscription.id, newSubscription);
     return newSubscription;
+  }
+
+  async createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest> {
+    const newRequest: SupportRequest = {
+      ...request,
+      id: this.currentSupportRequestId++,
+      phone: request.phone || null,
+      status: "pending",
+      createdAt: new Date()
+    };
+    this.supportRequests.set(newRequest.id, newRequest);
+    return newRequest;
   }
 
   // User/Auth methods
@@ -677,6 +696,11 @@ export class DatabaseStorage implements IStorage {
       subscribedAt: new Date().toISOString()
     }).returning();
     return newSubscription;
+  }
+
+  async createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest> {
+    const [newRequest] = await db.insert(supportRequests).values(request).returning();
+    return newRequest;
   }
 
   async getUser(id: number): Promise<User | undefined> {
