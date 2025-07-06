@@ -13,7 +13,7 @@ import { ImageUpload } from '@/components/ui/image-upload';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { useLocation } from 'wouter';
-import { Loader2, Plus, Edit, Trash2, LogOut, Home, MessageSquare, Mail, Reply, Calendar, User, Phone, AlertCircle, Eye, EyeOff, CheckCircle, Clock, Send } from 'lucide-react';
+import { Loader2, Plus, Edit, Trash2, LogOut, Home, MessageSquare, Mail, Reply, Calendar, User, Phone, AlertCircle, Eye, EyeOff, CheckCircle, Clock, Send, Box } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { format } from 'date-fns';
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
         <Tabs defaultValue="products" className="space-y-8">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="products" className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
+              <Box className="w-4 h-4" />
               Products
               <Badge variant="secondary" className="ml-2">
                 {products.length}
