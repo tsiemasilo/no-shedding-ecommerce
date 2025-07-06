@@ -99,6 +99,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Prepared application for Netlify + Supabase deployment
+  - Created netlify.toml configuration for static site deployment
+  - Set up basic Netlify Functions for API endpoints (products, categories, subcategories)
+  - Added serverless-http and @netlify/functions packages for function deployment
+  - Created comprehensive deployment guide (NETLIFY_DEPLOYMENT.md)
+  - Configured build process for Netlify static hosting
+  - Prepared for Supabase PostgreSQL database integration
+  - Basic frontend-only deployment ready, full backend requires additional hosting
+
 - July 6, 2025: Removed search autocomplete feature and restored simple search functionality
   - Removed dropdown suggestions and all autocomplete functionality per user request
   - Simplified search bar to basic text input without suggestions

@@ -1,13 +1,13 @@
 [build]
   publish = "dist/public"
-  command = "npm run build"
+  command = "vite build"
 
 [build.environment]
   NODE_VERSION = "18"
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/.netlify/functions/api"
   status = 200
 
 [[redirects]]
@@ -17,3 +17,4 @@
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
