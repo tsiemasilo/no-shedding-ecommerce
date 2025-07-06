@@ -99,6 +99,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Fixed admin product creation system and implemented automatic website refresh
+  - Resolved "Failed to add product" error by fixing FormData handling in server endpoints
+  - Updated authentication middleware to properly protect admin routes
+  - Fixed API request calls to use correct parameters for form data uploads
+  - Added comprehensive cache invalidation so website automatically refreshes when products are added/updated/deleted in admin
+  - Enhanced error logging for better debugging of product creation issues
+  - Product creation, editing, and deletion now work seamlessly with instant website updates
+
 - July 6, 2025: Implemented comprehensive price formatting system with space separators for thousands
   - Created shared formatPrice utility function supporting both number and string inputs
   - Applied consistent price formatting across all product displays (R1 000, R10 000, R100 000)

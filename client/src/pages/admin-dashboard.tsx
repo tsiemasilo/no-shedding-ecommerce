@@ -77,6 +77,9 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast({ title: "Product created successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/subcategories'] });
     },
     onError: () => {
       toast({ title: "Failed to create product", variant: "destructive" });
@@ -110,6 +113,9 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast({ title: "Product updated successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/subcategories'] });
       setEditingProduct(null);
     },
     onError: () => {
@@ -124,6 +130,9 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast({ title: "Product deleted successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/subcategories'] });
     },
     onError: () => {
       toast({ title: "Failed to delete product", variant: "destructive" });
