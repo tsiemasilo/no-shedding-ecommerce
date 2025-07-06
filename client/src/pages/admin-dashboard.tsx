@@ -112,10 +112,18 @@ export default function AdminDashboard() {
   // Mark as read mutation
   const markAsReadMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/admin/support-read/${id}`, { method: 'POST' });
+      const response = await fetch(`/api/admin/support-read/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to mark as read');
+      }
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/support-requests'] });
+      toast({ title: "Marked as read successfully" });
     },
     onError: () => {
       toast({ title: "Failed to mark as read", variant: "destructive" });
@@ -144,14 +152,14 @@ export default function AdminDashboard() {
   // Helper functions
   const getSupportTypeColor = (type: string) => {
     switch (type) {
-      case 'technical': return 'bg-blue-600';
-      case 'installation': return 'bg-green-600';
-      case 'product-info': return 'bg-purple-600';
-      case 'warranty': return 'bg-yellow-600';
-      case 'billing': return 'bg-orange-600';
-      case 'general': return 'bg-gray-600';
-      case 'emergency': return 'bg-red-600';
-      default: return 'bg-gray-600';
+      case 'technical': return 'bg-[#0A2342]';
+      case 'installation': return 'bg-[#333333]';
+      case 'product-info': return 'bg-[#0A2342]';
+      case 'warranty': return 'bg-[#FFC300]';
+      case 'billing': return 'bg-[#FF6F00]';
+      case 'general': return 'bg-[#333333]';
+      case 'emergency': return 'bg-[#FF6F00]';
+      default: return 'bg-[#333333]';
     }
   };
 
@@ -198,9 +206,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#FDF6EC] to-[#FFC300]">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-[#0A2342] shadow-sm border-b border-[#FFC300]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -208,20 +216,21 @@ export default function AdminDashboard() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLocation('/')}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-[#FFC300] hover:text-white hover:bg-[#0A2342]/80"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Back to Website
               </Button>
-              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+              <h1 className="text-xl font-semibold text-white">Admin Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {user.username}</span>
+              <span className="text-sm text-[#FDF6EC]">Welcome, {user.username}</span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => logoutMutation.mutate()}
                 disabled={logoutMutation.isPending}
+                className="border-[#FFC300] text-[#FFC300] hover:bg-[#FFC300] hover:text-[#0A2342]"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -407,9 +416,9 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {supportRequests.map((request) => (
                       <Card key={request.id} className={`transition-all hover:shadow-md ${
-                        request.supportType === 'emergency' ? 'border-l-4 border-l-red-500 bg-red-50' : 
-                        !request.isRead ? 'border-l-4 border-l-blue-500 bg-blue-50' : 
-                        'border-l-4 border-l-gray-300 bg-white'
+                        request.supportType === 'emergency' ? 'border-l-4 border-l-[#FF6F00] bg-[#FDF6EC]' : 
+                        !request.isRead ? 'border-l-4 border-l-[#0A2342] bg-[#FDF6EC]' : 
+                        'border-l-4 border-l-[#333333] bg-white'
                       }`}>
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">
@@ -428,11 +437,11 @@ export default function AdminDashboard() {
                                   {/* Read/Unread Status */}
                                   <div className="flex items-center gap-1">
                                     {request.isRead ? (
-                                      <Eye className="w-4 h-4 text-gray-500" />
+                                      <Eye className="w-4 h-4 text-[#333333]" />
                                     ) : (
-                                      <EyeOff className="w-4 h-4 text-blue-500" />
+                                      <EyeOff className="w-4 h-4 text-[#0A2342]" />
                                     )}
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-[#333333]">
                                       {request.isRead ? 'Read' : 'Unread'}
                                     </span>
                                   </div>
@@ -440,11 +449,11 @@ export default function AdminDashboard() {
                                   {/* Reply Status */}
                                   <div className="flex items-center gap-1">
                                     {request.hasReplied ? (
-                                      <CheckCircle className="w-4 h-4 text-green-500" />
+                                      <CheckCircle className="w-4 h-4 text-[#333333]" />
                                     ) : (
-                                      <Clock className="w-4 h-4 text-orange-500" />
+                                      <Clock className="w-4 h-4 text-[#FF6F00]" />
                                     )}
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-[#333333]">
                                       {request.hasReplied ? 'Replied' : 'Pending'}
                                     </span>
                                   </div>
@@ -492,7 +501,7 @@ export default function AdminDashboard() {
                                   }
                                 }}
                                 disabled={request.isRead || markAsReadMutation.isPending}
-                                className={request.isRead ? 'opacity-50' : ''}
+                                className={`${request.isRead ? 'opacity-50' : ''} border-[#0A2342] text-[#0A2342] hover:bg-[#0A2342] hover:text-white`}
                               >
                                 {request.isRead ? (
                                   <>
@@ -514,7 +523,7 @@ export default function AdminDashboard() {
                                     variant={request.hasReplied ? "outline" : "default"}
                                     size="sm"
                                     onClick={() => setReplyingTo(request)}
-                                    className={request.hasReplied ? 'text-gray-600' : ''}
+                                    className={request.hasReplied ? 'text-[#333333] border-[#333333]' : 'bg-[#FFC300] hover:bg-[#FF6F00] text-[#0A2342]'}
                                   >
                                     {request.hasReplied ? (
                                       <>
