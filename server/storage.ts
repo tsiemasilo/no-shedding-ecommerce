@@ -2,8 +2,7 @@ import { categories, products, cartItems, newsletters, subcategories, users, cus
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import session from "express-session";
-import connectPg from "connect-pg-simple";
-import { pool } from "./db";
+import MemoryStore from "memorystore";
 
 export interface IStorage {
   // Categories
@@ -406,15 +405,14 @@ export class MemStorage implements IStorage {
   }
 }
 
-const PostgresSessionStore = connectPg(session);
+const MemoryStoreClass = MemoryStore(session);
 
 export class DatabaseStorage implements IStorage {
   sessionStore: any;
 
   constructor() {
-    this.sessionStore = new PostgresSessionStore({ 
-      pool, 
-      createTableIfMissing: true 
+    this.sessionStore = new MemoryStoreClass({
+      checkPeriod: 86400000 // prune expired entries every 24h
     });
     // Initialize database seeding with proper error handling
     this.initializeDatabase();
