@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set website to 90% zoom level with increased font size for desktop */
+/* Set website to 80% zoom level with increased font size for desktop */
 body {
-  font-size: 18px; /* Increased from default 16px */
+  font-size: 20px; /* Increased from default 16px for better readability at 80% zoom */
   line-height: 1.6;
 }
 
 /* Apply zoom only on larger screens */
 @media (min-width: 768px) {
   body {
-    zoom: 0.9;
+    zoom: 0.8;
     transform-origin: 0 0;
   }
 }

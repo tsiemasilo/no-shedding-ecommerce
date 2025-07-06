@@ -99,6 +99,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Updated website zoom level to 80% standard across all pages
+  - Changed default zoom from 90% to 80% for desktop screens (768px and above)
+  - Increased base font size from 18px to 20px for better readability at 80% zoom
+  - Maintained mobile-specific styling without zoom changes for optimal mobile experience
+  - Applied zoom only to larger screens while preserving mobile usability
+
+- July 6, 2025: Added Rechargeable Flash Lights subcategory under Lighting Solutions
+  - Created new subcategory "Rechargeable Flash Lights" under Lighting Solutions (ID: 18)
+  - Added comprehensive description for portable rechargeable flashlights
+  - Assigned Flashlight icon for easy identification
+  - Available at slug: rechargeable-flash-lights
+  - Ready for flashlight products to be added to this category
+
 - July 6, 2025: Added Motion Sensor Alarms subcategory and fixed synchronization
   - Created new subcategory "Motion Sensor Alarms" under Safety & Security (ID: 17)
   - Added comprehensive description for motion detection alarm systems
