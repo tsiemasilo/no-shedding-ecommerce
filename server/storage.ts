@@ -35,6 +35,8 @@ export interface IStorage {
   createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest>;
   getAllSupportRequests(): Promise<SupportRequest[]>;
   getSupportRequest(id: number): Promise<SupportRequest | undefined>;
+  markSupportRequestAsRead(id: number): Promise<void>;
+  markSupportRequestAsReplied(id: number): Promise<void>;
   
   // Users/Auth
   getUser(id: number): Promise<User | undefined>;
@@ -332,10 +334,28 @@ export class MemStorage implements IStorage {
       id: this.currentSupportRequestId++,
       phone: request.phone || null,
       status: "pending",
+      isRead: false,
+      hasReplied: false,
       createdAt: new Date()
     };
     this.supportRequests.set(newRequest.id, newRequest);
     return newRequest;
+  }
+
+  async markSupportRequestAsRead(id: number): Promise<void> {
+    const request = this.supportRequests.get(id);
+    if (request) {
+      request.isRead = true;
+      this.supportRequests.set(id, request);
+    }
+  }
+
+  async markSupportRequestAsReplied(id: number): Promise<void> {
+    const request = this.supportRequests.get(id);
+    if (request) {
+      request.hasReplied = true;
+      this.supportRequests.set(id, request);
+    }
   }
 
   async getAllSupportRequests(): Promise<SupportRequest[]> {
@@ -716,6 +736,14 @@ export class DatabaseStorage implements IStorage {
   async createSupportRequest(request: InsertSupportRequest): Promise<SupportRequest> {
     const [newRequest] = await db.insert(supportRequests).values(request).returning();
     return newRequest;
+  }
+
+  async markSupportRequestAsRead(id: number): Promise<void> {
+    await db.update(supportRequests).set({ isRead: true }).where(eq(supportRequests.id, id));
+  }
+
+  async markSupportRequestAsReplied(id: number): Promise<void> {
+    await db.update(supportRequests).set({ hasReplied: true }).where(eq(supportRequests.id, id));
   }
 
   async getAllSupportRequests(): Promise<SupportRequest[]> {

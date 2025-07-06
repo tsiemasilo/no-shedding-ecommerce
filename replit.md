@@ -99,6 +99,18 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 6, 2025: Enhanced admin support dashboard with professional design and status tracking
+  - Added read/unread status indicators for all support requests
+  - Implemented reply status tracking (replied/pending) with visual badges
+  - Enhanced support request cards with professional layout and color-coded status indicators
+  - Emergency requests highlighted with red borders and animated warning icons
+  - Added one-click "Mark as Read" functionality for better notification management
+  - Support requests automatically marked as replied when admin sends response
+  - Added unread count and pending replies count to dashboard header
+  - Improved grid layout with customer details, timestamps, and clear action buttons
+  - Professional status badges showing read/unread and replied/pending states
+  - Database schema updated with isRead and hasReplied boolean fields for tracking
+
 - July 6, 2025: Integrated comprehensive SMTP email system for customer communication
   - Added nodemailer integration with Gmail SMTP (nosheddingsupp@gmail.com)
   - Newsletter subscriptions now send professional welcome emails with 15% discount code

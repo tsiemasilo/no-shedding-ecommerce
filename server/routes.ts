@@ -602,10 +602,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         replyMessage: message
       });
 
+      // Mark as replied
+      await storage.markSupportRequestAsReplied(supportRequestId);
+
       res.json({ message: "Reply sent successfully" });
     } catch (error) {
       console.error('Error sending support reply:', error);
       res.status(500).json({ message: "Failed to send reply" });
+    }
+  });
+
+  // Mark support request as read
+  app.post("/api/admin/support-read/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.markSupportRequestAsRead(id);
+      res.json({ message: "Marked as read" });
+    } catch (error) {
+      console.error("Error marking support request as read:", error);
+      res.status(500).json({ error: "Failed to mark as read" });
     }
   });
 

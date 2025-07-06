@@ -75,6 +75,8 @@ export const supportRequests = pgTable("support_requests", {
   supportType: text("support_type").notNull(),
   description: text("description").notNull(),
   status: text("status").default("pending").notNull(),
+  isRead: boolean("is_read").default(false),
+  hasReplied: boolean("has_replied").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
