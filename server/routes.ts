@@ -388,9 +388,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
+      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
       
       if (productData.subcategoryId === MOTION_SENSOR_LIGHTING_ID) {
-        // Create duplicates in Security subcategories (Motion Sensor Lights and Alarms)
+        // Create duplicates in Security subcategories (Motion Sensor Lights, Alarms, and Motion Sensor Alarms)
         const motionSensorSecurityData = {
           ...productData,
           subcategoryId: MOTION_SENSOR_SECURITY_ID,
@@ -404,6 +405,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(alarmsData);
+        
+        const motionSensorAlarmsData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_ALARMS_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(motionSensorAlarmsData);
       } else if (productData.subcategoryId === MOTION_SENSOR_SECURITY_ID) {
         // Create duplicates in Lighting and Alarms subcategories
         const lightingData = {
@@ -419,6 +427,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(alarmsData);
+        
+        const motionSensorAlarmsData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_ALARMS_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(motionSensorAlarmsData);
       } else if (productData.subcategoryId === ALARMS_ID) {
         // Create duplicates in Motion Sensor subcategories
         const lightingData = {
@@ -434,6 +449,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
           categoryId: 6 // Safety & Security category
         };
         await storage.createProduct(motionSensorSecurityData);
+        
+        const motionSensorAlarmsData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_ALARMS_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(motionSensorAlarmsData);
+      } else if (productData.subcategoryId === MOTION_SENSOR_ALARMS_ID) {
+        // Create duplicates in all other Motion Sensor subcategories
+        const lightingData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_LIGHTING_ID,
+          categoryId: 1 // Lighting Solutions category
+        };
+        await storage.createProduct(lightingData);
+        
+        const motionSensorSecurityData = {
+          ...productData,
+          subcategoryId: MOTION_SENSOR_SECURITY_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(motionSensorSecurityData);
+        
+        const alarmsData = {
+          ...productData,
+          subcategoryId: ALARMS_ID,
+          categoryId: 6 // Safety & Security category
+        };
+        await storage.createProduct(alarmsData);
       }
       
       res.status(201).json(product);
@@ -457,14 +501,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
+      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
       
-      if (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID) {
+      if (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID || product.subcategoryId === MOTION_SENSOR_ALARMS_ID) {
         // Find and update all corresponding duplicate products
         const allProducts = await storage.getProducts();
         const duplicateProducts = allProducts.filter(p => 
           p.name === product.name && 
           p.id !== product.id &&
-          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID)
+          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID || p.subcategoryId === MOTION_SENSOR_ALARMS_ID)
         );
         
         for (const duplicateProduct of duplicateProducts) {
@@ -508,14 +553,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const MOTION_SENSOR_LIGHTING_ID = 5; // Motion Sensor Lights under Lighting Solutions
       const MOTION_SENSOR_SECURITY_ID = 16; // Motion Sensor Lights under Safety & Security
       const ALARMS_ID = 15; // Alarms under Safety & Security
+      const MOTION_SENSOR_ALARMS_ID = 17; // Motion Sensor Alarms under Safety & Security
       
-      if (product && (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID)) {
+      if (product && (product.subcategoryId === MOTION_SENSOR_LIGHTING_ID || product.subcategoryId === MOTION_SENSOR_SECURITY_ID || product.subcategoryId === ALARMS_ID || product.subcategoryId === MOTION_SENSOR_ALARMS_ID)) {
         // Find and delete all corresponding duplicate products
         const allProducts = await storage.getProducts();
         const duplicateProducts = allProducts.filter(p => 
           p.name === product.name && 
           p.id !== product.id &&
-          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID)
+          (p.subcategoryId === MOTION_SENSOR_LIGHTING_ID || p.subcategoryId === MOTION_SENSOR_SECURITY_ID || p.subcategoryId === ALARMS_ID || p.subcategoryId === MOTION_SENSOR_ALARMS_ID)
         );
         
         for (const duplicateProduct of duplicateProducts) {
