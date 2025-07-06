@@ -106,9 +106,10 @@ Preferred communication style: Simple, everyday language.
   - Available at slug: motion-sensor-alarms
   - Excluded Motion Sensor Alarms from automatic synchronization system
   - Motion Sensor Alarms now operates independently from other Motion Sensor subcategories
-  - Three-way sync maintained between: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
-  - Motion Sensor Alarms products are managed separately to prevent unwanted cross-posting
+  - Two-way sync maintained between: Motion Sensor Lights (Lighting) and Motion Sensor Lights (Security)
+  - Motion Sensor Alarms and Alarms products are managed separately to prevent unwanted cross-posting
   - Fixed issue where products added to Motion Sensor Lights were appearing in Motion Sensor Alarms
+  - Products added to either Motion Sensor Lights subcategory now appear in both categories automatically
 
 - July 5, 2025: Extended automatic product synchronization to include Alarms subcategory
   - Motion Sensor products now automatically appear in three subcategories: Motion Sensor Lights (Lighting), Motion Sensor Lights (Security), and Alarms
