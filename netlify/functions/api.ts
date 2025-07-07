@@ -3,8 +3,8 @@ import { Handler } from '@netlify/functions';
 // Use @neondatabase/serverless which works with Supabase and is already installed
 import { neon } from '@neondatabase/serverless';
 
-// Direct Supabase connection string with correct hostname
-const databaseUrl = 'postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres';
+// Get database URL from environment variable or fallback
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres';
 const sql = neon(databaseUrl);
 
 export const handler: Handler = async (event, context) => {
@@ -32,17 +32,35 @@ export const handler: Handler = async (event, context) => {
     // Debug: Test database connection first
     if (path === '/api/health' && event.httpMethod === 'GET') {
       console.log('Testing database connection...');
-      const testQuery = await sql`SELECT 1 as test`;
-      console.log('Database test result:', testQuery);
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ 
-          status: 'OK', 
-          database: 'connected',
-          testResult: testQuery[0] 
-        }),
-      };
+      console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+      console.log('Using URL:', databaseUrl.substring(0, 50) + '...');
+      
+      try {
+        const testQuery = await sql`SELECT 1 as test`;
+        console.log('Database test result:', testQuery);
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            status: 'OK', 
+            database: 'connected',
+            hasEnvVar: !!process.env.DATABASE_URL,
+            testResult: testQuery[0] 
+          }),
+        };
+      } catch (dbError) {
+        console.error('Database connection failed:', dbError);
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ 
+            status: 'ERROR', 
+            database: 'failed',
+            hasEnvVar: !!process.env.DATABASE_URL,
+            error: dbError.message 
+          }),
+        };
+      }
     }
     
     // Products endpoint
