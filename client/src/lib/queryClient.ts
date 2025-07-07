@@ -24,7 +24,11 @@ export async function apiRequest(
     headers["Authorization"] = `Bearer ${adminToken}`;
   }
 
-  const res = await fetch(url, {
+  // Use Netlify functions in production
+  const baseUrl = import.meta.env.DEV ? '' : 'https://noshedding.netlify.app/.netlify/functions/supabase-test';
+  const fullUrl = import.meta.env.DEV ? url : `${baseUrl}${url}`;
+  
+  const res = await fetch(fullUrl, {
     method,
     headers,
     body: data ? JSON.stringify(data) : undefined,
@@ -49,7 +53,12 @@ export const getQueryFn: <T>(options: {
       headers["Authorization"] = `Bearer ${adminToken}`;
     }
 
-    const res = await fetch(queryKey[0] as string, {
+    // Use Netlify functions in production
+  const baseUrl = import.meta.env.DEV ? '' : 'https://noshedding.netlify.app/.netlify/functions/supabase-test';
+  const url = queryKey[0] as string;
+  const fullUrl = import.meta.env.DEV ? url : `${baseUrl}${url}`;
+  
+  const res = await fetch(fullUrl, {
       credentials: "include",
       headers,
     });
