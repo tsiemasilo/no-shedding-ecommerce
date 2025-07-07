@@ -1,7 +1,8 @@
 import { Handler } from '@netlify/functions';
 import express from 'express';
 import serverless from 'serverless-http';
-import { storage } from '../../server/storage.js';
+import session from 'express-session';
+import { registerRoutes } from '../../server/routes.js';
 
 const app = express();
 
@@ -22,33 +23,20 @@ app.use((req, res, next) => {
   }
 });
 
-// Basic API routes for Netlify
-app.get('/api/products', async (req, res) => {
-  try {
-    const products = await storage.getProducts();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch products' });
+// Session configuration for Netlify
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'netlify-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
-});
+}));
 
-app.get('/api/categories', async (req, res) => {
-  try {
-    const categories = await storage.getCategories();
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch categories' });
-  }
-});
-
-app.get('/api/subcategories', async (req, res) => {
-  try {
-    const subcategories = await storage.getSubcategories();
-    res.json(subcategories);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch subcategories' });
-  }
-});
+// Register all routes
+registerRoutes(app);
 
 // Export handler
 export const handler: Handler = serverless(app);
