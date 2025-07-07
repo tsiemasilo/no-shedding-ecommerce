@@ -1,11 +1,19 @@
 import { Handler } from '@netlify/functions';
 
-// Use @neondatabase/serverless which works with Supabase and is already installed
-import { neon } from '@neondatabase/serverless';
+// Try using postgres package instead of @neondatabase/serverless
+import postgres from 'postgres';
 
 // Get database URL from environment variable or fallback
 const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres';
-const sql = neon(databaseUrl);
+
+// Create postgres client with specific configuration for Netlify Functions
+const sql = postgres(databaseUrl, {
+  max: 1, // Limit connection pool size
+  idle_timeout: 20,
+  connect_timeout: 10,
+  prepare: false,
+  ssl: { rejectUnauthorized: false }
+});
 
 export const handler: Handler = async (event, context) => {
   // CORS headers
@@ -26,6 +34,8 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
+    console.log('Handler called, event:', JSON.stringify(event, null, 2));
+    console.log('Context:', JSON.stringify(context, null, 2));
     const path = event.path.replace('/.netlify/functions/api', '');
     console.log('Netlify function called with path:', path, 'method:', event.httpMethod);
     
@@ -38,6 +48,10 @@ export const handler: Handler = async (event, context) => {
       try {
         const testQuery = await sql`SELECT 1 as test`;
         console.log('Database test result:', testQuery);
+        
+        // Close connection after use to avoid hanging
+        await sql.end();
+        
         return {
           statusCode: 200,
           headers,
@@ -50,6 +64,10 @@ export const handler: Handler = async (event, context) => {
         };
       } catch (dbError) {
         console.error('Database connection failed:', dbError);
+        
+        // Try to close connection even on error
+        try { await sql.end(); } catch {}
+        
         return {
           statusCode: 500,
           headers,
@@ -81,7 +99,7 @@ export const handler: Handler = async (event, context) => {
           key_features as "keyFeatures"
         FROM products
       `;
-      
+      await sql.end();
       return {
         statusCode: 200,
         headers,
@@ -95,7 +113,7 @@ export const handler: Handler = async (event, context) => {
         SELECT id, name, description, image, slug
         FROM categories
       `;
-      
+      await sql.end();
       return {
         statusCode: 200,
         headers,
