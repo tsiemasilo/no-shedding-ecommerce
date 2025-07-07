@@ -99,6 +99,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 7, 2025: Fixed critical Netlify deployment database connection issue
+  - Corrected Supabase hostname from `api.` to `db.` in Netlify function
+  - Fixed "ENOTFOUND api.izkihpjkykultfshgqve.supabase.co" error
+  - Hardcoded connection string in Netlify function to ensure reliability
+  - Products and admin authentication should now work on deployed Netlify site
+
 - July 7, 2025: Completed Supabase integration and deployment preparation
   - Successfully connected to user's Supabase project (https://izkihpjkykultfshgqve.supabase.co)
   - Configured DATABASE_URL with user's PostgreSQL connection string

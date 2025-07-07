@@ -1,8 +1,9 @@
 import { Handler } from '@netlify/functions';
 import { neon } from '@neondatabase/serverless';
 
-// Simple direct database connection for Netlify
-const sql = neon(process.env.DATABASE_URL!);
+// Hardcode the correct Supabase connection string to avoid environment variable issues
+const databaseUrl = 'postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres';
+const sql = neon(databaseUrl);
 
 export const handler: Handler = async (event, context) => {
   // CORS headers
