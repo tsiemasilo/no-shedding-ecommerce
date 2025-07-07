@@ -1,9 +1,25 @@
 import { Handler } from '@netlify/functions';
-import { neon } from '@neondatabase/serverless';
 
-// Hardcode the correct Supabase connection string to avoid environment variable issues
-const databaseUrl = 'postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres';
-const sql = neon(databaseUrl);
+// For Supabase, we need to use the postgres package instead of @neondatabase/serverless
+let sql: any;
+
+// Initialize database connection  
+const initDb = async () => {
+  if (!sql) {
+    try {
+      // Try to import postgres for Supabase
+      const { default: postgres } = await import('postgres');
+      sql = postgres('postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres', {
+        ssl: 'require'
+      });
+    } catch (e) {
+      // Fallback to neon if postgres fails
+      const { neon } = await import('@neondatabase/serverless');
+      sql = neon('postgresql://postgres:0852Tsie*@db.izkihpjkykultfshgqve.supabase.co:5432/postgres');
+    }
+  }
+  return sql;
+};
 
 export const handler: Handler = async (event, context) => {
   // CORS headers
@@ -24,12 +40,31 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
+    // Initialize database connection
+    const sqlClient = await initDb();
+    
     const path = event.path.replace('/.netlify/functions/api', '');
     console.log('Netlify function called with path:', path, 'method:', event.httpMethod);
     
+    // Debug: Test database connection first
+    if (path === '/api/health' && event.httpMethod === 'GET') {
+      console.log('Testing database connection...');
+      const testQuery = await sqlClient`SELECT 1 as test`;
+      console.log('Database test result:', testQuery);
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          status: 'OK', 
+          database: 'connected',
+          testResult: testQuery[0] 
+        }),
+      };
+    }
+    
     // Products endpoint
     if (path === '/api/products' && event.httpMethod === 'GET') {
-      const products = await sql`
+      const products = await sqlClient`
         SELECT 
           id, 
           name, 
@@ -55,7 +90,7 @@ export const handler: Handler = async (event, context) => {
 
     // Categories endpoint
     if (path === '/api/categories' && event.httpMethod === 'GET') {
-      const categories = await sql`
+      const categories = await sqlClient`
         SELECT id, name, description, image, slug
         FROM categories
       `;
@@ -69,7 +104,7 @@ export const handler: Handler = async (event, context) => {
 
     // Subcategories endpoint
     if (path === '/api/subcategories' && event.httpMethod === 'GET') {
-      const subcategories = await sql`
+      const subcategories = await sqlClient`
         SELECT 
           id, 
           name, 
@@ -89,7 +124,7 @@ export const handler: Handler = async (event, context) => {
 
     // Featured products endpoint
     if (path === '/api/products/featured' && event.httpMethod === 'GET') {
-      const products = await sql`
+      const products = await sqlClient`
         SELECT 
           id, 
           name, 
