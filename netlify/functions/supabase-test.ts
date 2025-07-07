@@ -19,6 +19,7 @@ export const handler: Handler = async (event, context) => {
     
     // Use Supabase REST API instead of direct PostgreSQL
     const supabaseUrl = 'https://izkihpjkykultfshgqve.supabase.co';
+    // Using service role key for backend access
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6a2locGpreWt1bHRmc2hncXZlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNTY3OTE4NywiZXhwIjoyMDUxMjU1MTg3fQ.NVfq7BMNMGMY8LcwCVyq8d4VG-8_fO9-Pr1rIrfC8l4';
     
     // Health check
