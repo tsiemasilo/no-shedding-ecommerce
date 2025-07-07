@@ -24,6 +24,7 @@ export const handler: Handler = async (event, context) => {
 
   try {
     const path = event.path.replace('/.netlify/functions/api', '');
+    console.log('Netlify function called with path:', path, 'method:', event.httpMethod);
     
     // Products endpoint
     if (path === '/api/products' && event.httpMethod === 'GET') {
@@ -112,11 +113,69 @@ export const handler: Handler = async (event, context) => {
       };
     }
 
+    // Admin login endpoint
+    if (path === '/api/admin/login' && event.httpMethod === 'POST') {
+      const body = JSON.parse(event.body || '{}');
+      const { username, password } = body;
+      
+      // Simple hardcoded admin check for Netlify
+      if (username === 'admin' && password === 'admin123') {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            success: true, 
+            user: { id: 1, username: 'admin', role: 'admin' },
+            token: 'admin-token-' + Date.now()
+          }),
+        };
+      }
+      
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ success: false, message: 'Invalid credentials' }),
+      };
+    }
+
+    // Admin user check endpoint  
+    if (path === '/api/admin/user' && event.httpMethod === 'GET') {
+      // For Netlify, we'll use a simple token check from headers
+      const authHeader = event.headers.authorization || event.headers.Authorization;
+      if (authHeader && authHeader.includes('admin-token')) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ id: 1, username: 'admin', role: 'admin' }),
+        };
+      }
+      
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ message: 'Not authenticated' }),
+      };
+    }
+
+    // Health check endpoint
+    if (path === '/api/health' && event.httpMethod === 'GET') {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ status: 'OK', timestamp: new Date().toISOString() }),
+      };
+    }
+
     // Default 404 response
     return {
       statusCode: 404,
       headers,
-      body: JSON.stringify({ message: 'Not found' }),
+      body: JSON.stringify({ 
+        message: 'Not found', 
+        requestedPath: path,
+        method: event.httpMethod,
+        availableEndpoints: ['/api/products', '/api/categories', '/api/subcategories', '/api/products/featured', '/api/health']
+      }),
     };
 
   } catch (error) {

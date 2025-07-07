@@ -34,7 +34,14 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
       const res = await apiRequest("POST", "/api/admin/login", credentials);
-      return await res.json();
+      const data = await res.json();
+      
+      // Store the token for Netlify compatibility
+      if (data.token) {
+        localStorage.setItem('adminToken', data.token);
+      }
+      
+      return data.user;
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/admin/user"], user);
@@ -54,7 +61,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      await apiRequest("POST", "/api/admin/logout");
+      // For Netlify, just clear the token
+      localStorage.removeItem('adminToken');
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/admin/user"], null);
