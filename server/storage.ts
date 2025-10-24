@@ -484,9 +484,14 @@ export class DatabaseStorage implements IStorage {
 
   private async seedData() {
     // Check if categories already exist to avoid duplicate seeding
-    const existingCategories = await db.select().from(categories).limit(1);
-    if (existingCategories.length > 0) {
-      return; // Data already seeded
+    try {
+      const existingCategories = await db.select().from(categories).limit(1);
+      if (existingCategories && existingCategories.length > 0) {
+        return; // Data already seeded
+      }
+    } catch (error) {
+      // If query fails, continue with seeding
+      console.log('Checking for existing data failed, proceeding with seeding');
     }
 
     // Seed categories
