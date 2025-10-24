@@ -468,8 +468,8 @@ export class DatabaseStorage implements IStorage {
     this.sessionStore = new MemoryStoreClass({
       checkPeriod: 86400000 // prune expired entries every 24h
     });
-    // Initialize database seeding with proper error handling
-    this.initializeDatabase();
+    // Auto-seeding is disabled - database should be managed manually or through migrations
+    // this.initializeDatabase();
   }
 
   private async initializeDatabase() {
