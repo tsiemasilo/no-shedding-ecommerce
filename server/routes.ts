@@ -65,6 +65,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files statically
   app.use('/uploads', express.static(uploadsDir));
 
+  // Serve attached assets statically (for stock images and other assets)
+  const attachedAssetsDir = path.join(process.cwd(), 'attached_assets');
+  app.use('/attached_assets', express.static(attachedAssetsDir));
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
